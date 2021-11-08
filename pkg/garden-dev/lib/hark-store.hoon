@@ -167,15 +167,6 @@
 ++  dejs
   =,  dejs:format
   |%
-  :: TODO: fix +stab 
-  ::
-  ++  pa
-    |=  j=json
-    ^-  path
-    ?>  ?=(%s -.j)
-    ?:  =('/' p.j)  /
-    (stab p.j)
-  ::
   ++  place
     %-  ot
     :~  desk+so
@@ -193,15 +184,6 @@
     :~  place+place
         path+pa
     ==
-  ::
-  ::  parse date as @ud
-  ::    TODO: move to zuse
-  ++  sd
-    |=  jon=json 
-    ^-  @da
-    ?>  ?=(%s -.jon)
-    `@da`(rash p.jon dem:ag)
-  ::
   ++  lid
     %-  of
     :~  archive+sd

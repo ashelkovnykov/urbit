@@ -3,11 +3,6 @@
 =<  [sur .]
 =,  sur
 |%
-++  nu                                              ::  parse number as hex
-  |=  jon=json
-  ?>  ?=([%s *] jon)
-  (rash p.jon hex)
-::
 ++  enjs
   =,  enjs:format
   |%

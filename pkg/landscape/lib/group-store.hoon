@@ -337,16 +337,6 @@
         resource+dejs-path:resource
         tag+so
     ==
-
-  ::  move to zuse also
-  ++  oj
-    |*  =fist
-    ^-  $-(json (jug cord _(fist *json)))
-    (om (as fist))
-  ++  tags
-    ^-  $-(json ^tags)
-    *$-(json ^tags)
-  :: TODO: move to zuse
   ++  ship
     (su ;~(pfix sig fed:ag))
   ++  policy

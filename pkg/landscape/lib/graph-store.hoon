@@ -13,35 +13,12 @@
     %mention    ship+ship.content
     %url        text+url.content
     %code       text+'A code excerpt'
-    %reference  text+'A reference'       
+    %reference  text+'A reference'
   ==
 ::
 ++  hark-contents
   |=  cs=(list content) 
   (turn cs hark-content)
-::  NOTE: move these functions to zuse
-++  nu                                              ::  parse number as hex
-  |=  jon=json
-  ?>  ?=([%s *] jon)
-  (rash p.jon hex)
-::
-++  re                                                ::  recursive reparsers
-  |*  [gar=* sef=_|.(fist:dejs-soft:format)]
-  |=  jon=json
-  ^-  (unit _gar)
-  =-  ~!  gar  ~!  (need -)  -
-  ((sef) jon)
-::
-++  dank                                              ::  tank
-  ^-  $-(json (unit tank))
-  =,  ^?  dejs-soft:format
-  %+  re  *tank  |.  ~+
-  %-  of  :~
-    leaf+sa
-    palm+(ot style+(ot mid+sa cap+sa open+sa close+sa ~) lines+(ar dank) ~)
-    rose+(ot style+(ot mid+sa open+sa close+sa ~) lines+(ar dank) ~)
-  ==
-::
 ++  orm      ((on atom node) gth)
 ++  orm-log  ((on time logged-update) gth)
 ::
@@ -489,13 +466,6 @@
       ^-  [resource update-log]
       [*resource *update-log]
     --
-  ++  pa
-    |=  j=json
-    ^-  path
-    ?>  ?=(%s -.j)
-    ?:  =('/' p.j)  /
-    (stab p.j)
-  ::
   --
 ::
 ++  create

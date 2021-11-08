@@ -191,11 +191,6 @@
         [%resource md-resource]
     ==
   ::
-  ++  nu
-    |=  jon=json
-    ?>  ?=([%s *] jon)
-    (rash p.jon hex)
-  ::
   ++  vip
     %-  su
     %-  perk
