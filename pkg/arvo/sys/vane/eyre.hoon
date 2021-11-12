@@ -122,10 +122,10 @@
       ::  %poke: pokes an application, translating :json to :mark.
       ::
       [%poke request-id=@ud ship=@p app=term mark=@tas =json]
-      ::  %watch: subscribes to an application path
+      ::  %subscribe: subscribes to an application path
       ::
       [%subscribe request-id=@ud ship=@p app=term =path]
-      ::  %leave: unsubscribes from an application path
+      ::  %unsubscribe: unsubscribes from an application path
       ::
       [%unsubscribe request-id=@ud subscription-id=@ud]
       ::  %delete: kills a channel
@@ -215,25 +215,43 @@
   |=  item=json
   ^-  (unit channel-request)
   ::
-  ?~  maybe-key=((ot action+so ~) item)
-    ~
-  ?:  =('ack' u.maybe-key)
-    ((pe %ack (ot event-id+ni ~)) item)
-  ?:  =('poke' u.maybe-key)
-    ((pe %poke (ot id+ni ship+(su fed:ag) app+so mark+(su sym) json+some ~)) item)
-  ?:  =('subscribe' u.maybe-key)
-    %.  item
-    %+  pe  %subscribe
-    (ot id+ni ship+(su fed:ag) app+so path+(su stap) ~)
-  ?:  =('unsubscribe' u.maybe-key)
-    %.  item
-    %+  pe  %unsubscribe
-    (ot id+ni subscription+ni ~)
-  ?:  =('delete' u.maybe-key)
-    `[%delete ~]
-  ::  if we reached this, we have an invalid action key. fail parsing.
-  ::
-  ~
+  %+  biff  ((ot action+so ~) item)
+  |=  key=@t
+    ?+  key  ~
+    %ack          %.  item
+                  %+  pe  %ack
+                  %-  ot
+                  :~
+                    [%event-id ni]
+                  ==
+      %poke         %.  item
+                    %+  pe  %poke
+                    %-  ot
+                    :~
+                      [%id ni]
+                      [%ship (su fed:ag)]
+                      [%app so]
+                      [%mark (su sym)]
+                      [%json some]
+                    ==
+      %subscribe    %.  item
+                    %+  pe  %subscribe
+                    %-  ot
+                    :~
+                      [%id ni]
+                      [%ship (su fed:ag)]
+                      [%app so]
+                      [%path (su stap)]
+                    ==
+      %unsubscribe  %.  item
+                    %+  pe  %unsubscribe
+                    %-  ot
+                    :~
+                      [%id ni]
+                      [%subscription ni]
+                    ==
+      %delete       `[%delete ~]
+    ==
 ::  +login-page: internal page to login to an Urbit
 ::
 ++  login-page

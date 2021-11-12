@@ -298,12 +298,7 @@
       |=  a=json
       ^-  ^graph
       =/  or-mp  ((on atom ^node) gth)
-      %+  gas:or-mp  ~
-      %+  turn  ~(tap by ((om node) a))
-      |*  [b=cord c=*]
-      ^-  [atom ^node]
-      =>  .(+< [b c]=+<)
-      [(rash b dem) c]
+      (gas:or-mp ~ ~(tap by ((op dem node) a)))
     ::
     ++  remove-graph  (ot [%resource dejs:res]~)
     ++  archive-graph  (ot [%resource dejs:res]~)
@@ -335,7 +330,7 @@
       ^-  ^maybe-post
       ?~  jon    !!
       ?+  -.jon  !!
-        %s  [%| (nu jon)]
+        %n  [%| (nu jon)]
         %o  [%& (post jon)]
       ==
     ::
@@ -345,7 +340,7 @@
           [%index index]
           [%time-sent di]
           [%contents (ar content)]
-          [%hash (mu nu)]
+          [%hash (mu (su hex))]
           [%signatures (as signature)]
       ==
     ::
@@ -424,7 +419,7 @@
     ::
     ++  signature
       %-  ot
-      :~  [%hash nu]
+      :~  [%hash (su hex)]
           [%ship (su ;~(pfix sig fed:ag))]
           [%life ni]
       ==

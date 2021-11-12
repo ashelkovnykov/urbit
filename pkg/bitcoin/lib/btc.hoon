@@ -537,9 +537,9 @@
     %.  jon
     =,  dejs:format
     =-  (ou -)
-    :~  ['id' (uf ~ (mu so))]
-        ['result' (uf ~ (mu same))]
-        ['error' (uf ~ (mu same))]
+    :~  ['id' (lift so)]
+        ['result' (lift same)]
+        ['error' (lift same)]
     ==
   ?:  ?=([^ * ~] res)
     `[%result [u.id.res ?~(res.res ~ u.res.res)]]
@@ -563,12 +563,13 @@
   %.  json
   =,  dejs:format
   =-  (ou -)
-  :~  =-  ['id' (uf '' (cu - (mu so)))]
-      |*(a=(unit) ?~(a '' u.a))
-      :-  'error'
-      =-  (uf ['' ''] -)
-      =-  (cu |*(a=(unit) ?~(a ['' ''] u.a)) (mu (ou -)))
-      :~  ['code' (uf '' no)]
-          ['message' (uf '' so)]
-  ==  ==
+  :~
+    ['id' (uf '' so)]
+    :-  'error'
+    =-  (uf ['' ''] (ou -))
+    :~
+      ['code' (uf '' no)]
+      ['message' (uf '' so)]
+    ==
+  ==
 --

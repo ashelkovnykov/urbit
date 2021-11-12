@@ -157,6 +157,23 @@
         [%edit edit]
     ==
   ::
+  ++  add
+    %-  ot
+    :~  [%group dejs-path:resource]
+        [%resource md-resource]
+        [%metadata metadatum]
+    ==
+  ::
+  ++  remove
+    %-  ot
+    :~  [%group dejs-path:resource]
+        [%resource md-resource]
+    ==
+  ::
+  ++  initial-group
+    |=  json
+    [*resource *associations]
+  ::
   ++  edit
     %-  ot
     :~  [%group dejs-path:resource]
@@ -175,30 +192,11 @@
         [%vip vip]
     ==
   ::
-  ++  initial-group
-    |=  json
-    [*resource *associations]
-  ::
-  ++  add
+  ++  md-resource
+    ^-  $-(json ^md-resource)
     %-  ot
-    :~  [%group dejs-path:resource]
-        [%resource md-resource]
-        [%metadata metadatum]
-    ==
-  ++  remove
-    %-  ot
-    :~  [%group dejs-path:resource]
-        [%resource md-resource]
-    ==
-  ::
-  ++  vip
-    %-  su
-    %-  perk
-    :~  %reader-comments
-        %member-metadata
-        %admin-feed
-        %host-feed
-        %$
+    :~  [%app-name so]
+        [%resource dejs-path:resource]
     ==
   ::
   ++  metadatum
@@ -207,7 +205,7 @@
     :~  [%title so]
         [%description so]
         [%color nu]
-        [%date-created (se %da)]
+        [%date-created (cu da-slav so)]
         [%creator (su ;~(pfix sig fed:ag))]
         [%config config]
         [%picture so]
@@ -244,11 +242,18 @@
     =/  res=^json  (~(got by p.jin) 'resource')
     (dejs-path:resource res)
   ::
-  ++  md-resource
-    ^-  $-(json ^md-resource)
-    %-  ot
-    :~  [%app-name so]
-        [%resource dejs-path:resource]
+  ++  da-slav
+    |=  [txt=@ta]
+    (need (slaw %da txt))
+  ::
+  ++  vip
+    %-  su
+    %-  perk
+    :~  %reader-comments
+        %member-metadata
+        %admin-feed
+        %host-feed
+        %$
     ==
   --
 --

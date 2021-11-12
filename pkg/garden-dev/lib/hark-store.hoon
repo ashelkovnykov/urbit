@@ -186,7 +186,7 @@
     ==
   ++  lid
     %-  of
-    :~  archive+sd
+    :~  archive+(cu |=(a=@ `@da`a) (su dem:ag))
         unseen+ul
         seen+ul
     ==

@@ -283,10 +283,10 @@
   ==
 ::  dejs - recursive processing of `json` values
 ::
-::    This version crashes when used on improper input. Prefer using
-::    dejs-soft (also tested below) which returns units instead.
+::    This version crashes when used on improper input. Prefer using dejs-soft
+::    (tested below) which returns units instead.
 ::
-::  decoding from null, booleans, numbers, strings
+::  decoders for nulls, booleans, numbers, and strings
 ::
 ++  test-dejs-primitives
   =,  dejs
@@ -295,46 +295,40 @@
     ::
     %+  expect-eq
       !>  ~
-      !>  (ul `json`~)
-    ::  booleans
-    ::
-    ::  bo extracts as-is, bu negates it
+      !>  (ul nul:ex)
+    %-  expect-fail
+      |.  (ul num:ex)
+    ::  boolean
     ::
     %+  expect-eq
       !>  &
       !>  (bo tru:ex)
     %+  expect-eq
       !>  |
-      !>  (bu tru:ex)
+      !>  (bo [%b |])
     %-  expect-fail
-      |.  (bo num:ex)
-    %-  expect-fail
-      |.  (bu num:ex)
-    ::  integers
-    ::
-    ::  as @
+      |.  (bo [%n '0'])
+    ::  number as integer
     ::
     %+  expect-eq
       !>  101
       !>  (ni num:ex)
     %-  expect-fail
       |.  (ni tru:ex)
-    ::  as cord
+    ::  number as hex
+    ::
+    %+  expect-eq
+      !>  257
+      !>  (nu num:ex)
+    %-  expect-fail
+      |.  (nu tru:ex)
+    ::  number as cord
     ::
     %+  expect-eq
       !>  '101'
       !>  (no num:ex)
     %-  expect-fail
       |.  (no tru:ex)
-    ::  timestamp - ms since the unix epoch
-    ::
-    %+  expect-eq
-      !>  ~1970.1.1..00.00.01
-      !>  (di [%n ~.1000])
-    %-  expect-fail
-      |.  (di tru:ex)
-    :: strings
-    ::
     :: string as tape
     ::
     %+  expect-eq
@@ -349,120 +343,26 @@
       !>  (so str:ex)
     %-  expect-fail
       |.  (so tru:ex)
-    :: string with custom parser
-    ::
-    %+  expect-eq
-      !>  ' '
-      !>  ((su (just ' ')) [%s ' '])
-    %-  expect-fail
-      |.  ((su (just ' ')) tru:ex)
-  ==
-::  decoding arrays
-::
-++  test-dejs-arrays
-  =,  dejs
-  ;:  weld
-    ::  ar - as list
-    ::
-    %+  expect-eq
-      !>  ~[1 2 3]
-      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
-    %-  expect-fail
-      |.  ((ar ni) str:ex)
-    %-  expect-fail
-      |.  ((ar ni) [%a ~[str:ex]])
-    ::  at - as tuple
-    ::
-    ::  handlers must match exactly
-    ::
-    %+  expect-eq
-      !>  [1 'hey']
-      !>  ((at ~[ni so]) [%a ~[[%n '1'] [%s 'hey']]])
-    ::  too few or many handlers crash
-    ::
-    %-  expect-fail
-      |.  ((at ~[ni so]) [%a ~])
-    %-  expect-fail
-      |.  ((at ~[ni so]) [%a ~[[%n '1'] [%s 'hey'] [%b &]]])
-    ::  a nested error will crash
-    ::
-    %-  expect-fail
-      |.  ((at ~[ni]) [%a ~[[%s 'hey']]])
-  ==
-::  decoding objects
-::
-++  test-dejs-objects
-  =,  dejs
-  ;:  weld
-    ::  of - single-property objects
-    ::
-    %+  expect-eq
-      !>  ['foo' 101]
-      !>  ((of ~[['foo' ni]]) obj:ex)
-    %+  expect-eq
-      !>  ['foo' 'e']
-      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
-    %-  expect-fail
-      ::  the handler needs to apply properly to the value
-      ::
-      |.  ((of ~[['foo' ni]]) num:ex)
-    %-  expect-fail
-      ::  the key of the frond needs to exist in the handler list
-      ::
-      |.  ((of ~[['bar' so]]) obj:ex)
-    %-  expect-fail
-      ::  an object with multiple properties is an error
-      ::
-      |.  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
-    ::  ot - exact-shape objects to tuple
-    ::
-    %+  expect-eq
-      !>  [101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
-    %-  expect-fail
-      ::  it checks it's called on an actual object
-      ::
-      |.  ((ot ~[['foo' ni]]) num:ex)
-    %-  expect-fail
-      ::  missing property on the object
-      ::
-      |.  ((ot ~[['foo' ni] ['baz' so]]) pai:ex)
-    ::  ou - object to tuple, with optional properties. value handlers
-    ::
-    ::  are passed (unit json)
-    ::
-    %+  expect-eq
-      !>  [101 14]
-      !>  ((ou ~[['foo' (uf 14 ni)] ['baz' (uf 14 ni)]]) pai:ex)
-    ::  om - simple object as map
-    ::
-    %+  expect-eq
-      !>  (molt ~[['foo' num:ex] ['bar' str:ex]])
-      !>  ((om same) pai:ex)
-    ::  op - object to map, but run a parsing function on the keys
-    ::
-    %+  expect-eq
-      !>  (molt ~[[12 num:ex] [14 str:ex]])
-      !>  ((op dem same) (pr:enjs ~[['12' num:ex] ['14' str:ex]]))
   ==
 ::  decoder transformers
 ::
 ++  test-dejs-transformers
   =,  dejs
   ;:  weld
-    ::  cu - decode, then transform
+    ::  generic transformer
     ::
     %+  expect-eq
-      !>  11
-      !>  ((cu dec ni) [%n ~.12])
-    ::  ci - decode, then assert a transformation succeeds
-    ::
+      !>  100
+      !>  ((cu dec ni) num:ex)
     %+  expect-eq
-      !>  101
-      !>  ((ci some ni) num:ex)
-    %-  expect-fail
-      |.  ((ci |=(* ~) ni) num:ex)
-    ::  mu - decode if not null
+      !>  1
+      !>  ((cu |=(a=@u (mod a 10)) ni) num:ex)
+    %+  expect-eq
+      !>  10
+      !>  ((cu |=(a=@u (div a 10)) ni) num:ex)
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((cu |=(a=@u (div a 10)) ni) tru:ex)
+    ::  parse to unit
     ::
     %+  expect-eq
       !>  ~
@@ -470,82 +370,169 @@
     %+  expect-eq
       !>  (some 101)
       !>  ((mu ni) num:ex)
-    ::  pe - add prefix to decoded value
+    %-  expect-fail
+      |.  ((mu ni) tru:ex)
+    ::  generic string parser
+    ::
+    %+  expect-eq
+      !>  'hey'
+      !>  ((su (jest 'hey')) str:ex)
+    %+  expect-eq
+      !>  "hey"
+      !>  ((su (stun [3 3] alf)) str:ex)
+    %-  expect-fail
+      |.  ((su nix) tru:ex)
+  ==
+::  transformed primitive decoders
+::
+++  test-dejs-transformed-primitives
+  =,  dejs
+  ;:  weld
+    ::  date as unix ms timestamp
+    ::
+    %+  expect-eq
+      !>  ~1970.1.1..00.00.01
+      !>  (di tms:ex)
+    %-  expect-fail
+      |.  (di tru:ex)
+    ::  date as unix ms timestamp
+    ::
+    %+  expect-eq
+      !>  ~1970.1.1..00.00.01
+      !>  (du tsc:ex)
+    %-  expect-fail
+      |.  (du tru:ex)
+    ::  add prefix to decoded value
     ::
     %+  expect-eq
       !>  ['a' 101]
       !>  ((pe 'a' ni) num:ex)
-    ::  uf - defaults for empty (unit json)
-    ::
-    %+  expect-eq
-      !>  'nah'
-      !>  ((uf 'nah' ni) ~)
-    %+  expect-eq
-      !>  'e'
-      !>  ((uf 'nah' ni) (some num:ex))
-    ::  un - dangerous ensure a (unit json)
-    ::
-    %+  expect-eq
-      !>  101
-      !>  ((un ni) (some num:ex))
     %-  expect-fail
-      |.  ((un ni) ~)
+      |.  ((pe 'a' ni) tru:ex)
+    ::  path
+    ::
+    %+  expect-eq
+      !>  ~[%a %b %c]
+      !>  (pa [%s '/a/b/c'])
+    %-  expect-fail
+      |.  (pa tru:ex)
   ==
-::  various unit/collection helpers
+::  array decoders
 ::
-++  test-dejs-helpers
+++  test-dejs-arrays
   =,  dejs
-  =+  all=`(list (unit @))`~[(some 1) (some 2) (some 3)]
-  =+  nall=`(list (unit @))`~[(some 1) ~ (some 3)]
   ;:  weld
-    ::  za - are all units in this list full?
+    ::  array as list of single type
     ::
     %+  expect-eq
-      !>  &
-      !>  (za ~)
+      !>  ~[101]
+      !>  ((ar ni) [%a ~[num:ex]])
     %+  expect-eq
-      !>  &
-      !>  (za all)
-    %+  expect-eq
-      !>  |
-      !>  (za nall)
-    ::  zl - collapse (list (unit)) -> (unit (list))
-    ::
-    %+  expect-eq
-      !>  (some ~[1 2 3])
-      !>  (zl all)
-    %+  expect-eq
-      !>  ~
-      !>  (zl nall)
-    %+  expect-eq
-      !>  (some ~)
-      !>  (zl ~)
-    ::  zp - force unwrap a (list (unit)) as tuple
-    ::
-    %+  expect-eq
-      !>  [1 2 3]
-      !>  (zp all)
+      !>  ~[1 2 3]
+      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
     %-  expect-fail
-      |.  (zp nall)
+      |.  ((ar ni) num:ex)
     %-  expect-fail
-      |.  (zp ~)
-    ::  zm - collapse a (map @tas (unit *)) -> (unit (map @tas *))
+      |.  ((ar ni) [%a ~[str:ex]])
+    %-  expect-fail
+      |.  ((ar ni) [%a ~[num:ex str:ex]])
+    ::  array as set of single type
+    ::
+    ::    `as` is just a transformed `ar`
     ::
     %+  expect-eq
-      !>  (some (molt ~[['a' 1] ['b' 2]]))
-      !>  (zm (molt ~[['a' (some 1)] ['b' (some 2)]]))
+      !>  (silt ~[101])
+      !>  ((as ni) [%a ~[num:ex]])
+    ::  array as tuple of any types
+    ::
+    ::    Decoders must match exactly
+    ::
     %+  expect-eq
-      !>  ~
-      !>  (zm (molt ~[['a' `(unit @)`(some 1)] ['b' ~]]))
-    %+  expect-eq
-      !>  (some ~)
-      !>  (zm ~)
+      !>  [101 'hey']
+      !>  ((at ~[ni so]) [%a ~[num:ex str:ex]])
+    %-  expect-fail                               ::  crash on too many decoders
+      |.  ((at ~[ni so]) [%a ~[num:ex]])
+    %-  expect-fail                               ::  crash on too few decoders
+      |.  ((at ~[ni]) [%a ~[num:ex str:ex]])
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((at ~[ni so]) [%a ~[str:ex num:ex]])
   ==
+::  object decoders
 ::
-::  dejs-soft recursive processing of `json` values
+++  test-dejs-objects
+  =,  dejs
+  ;:  weld
+    ::  single-property object XOR
+    ::
+    %+  expect-eq
+      !>  ['foo' 101]
+      !>  ((of ~[['foo' ni]]) obj:ex)
+    %+  expect-eq
+      !>  ['foo' 101]
+      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+    %-  expect-fail
+      |.  ((of ~[['foo' ni]]) num:ex)
+    %-  expect-fail                               ::  crash if no matching key
+      |.  ((of ~[['bar' so]]) obj:ex)
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((of ~[['foo' so]]) obj:ex)
+    %-  expect-fail                               ::  crash if 2+ properties
+      |.  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
+    ::  exact-shape object to tuple
+    ::
+    %+  expect-eq
+      !>  [101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  ['hey' 101]
+      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+    %+  expect-eq
+      !>  ['hey']
+      !>  ((ot ~[['bar' so]]) pai:ex)
+    %-  expect-fail
+      |.  ((ot ~[['foo' ni]]) num:ex)
+    %-  expect-fail                               ::  crash if no matching key
+      |.  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
+    ::  simple object to map (arbitrary keys, single type)
+    ::
+    %+  expect-eq
+      !>  `(tree [p=@t q=@])`~
+      !>  ((om ni) [%o ~])
+    %+  expect-eq
+      !>  (malt ~[['foo' 101]])
+      !>  ((om ni) obj:ex)
+    %+  expect-eq
+      !>  (malt ~[['a' 101] ['b' 101]])
+      !>  ((om ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((om ni) pai:ex)
+    ::  simple bject to map, but keys must match rule
+    ::
+    %+  expect-eq
+      !>  `(tree [p=@t q=@])`~
+      !>  ((op nix ni) [%o ~])
+    %+  expect-eq
+      !>  (malt ~[['foo' 101]])
+      !>  ((op nix ni) obj:ex)
+    %+  expect-eq
+      !>  (malt ~[['foo' 101]])
+      !>  ((op (jest 'foo') ni) obj:ex)
+    %+  expect-eq
+      !>  (malt ~[['a' 101] ['b' 101]])
+      !>  ((op alf ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((op nix so) obj:ex)
+    %-  expect-fail                               ::  crash on rule mismatch
+      |.  ((op (jest 'bar') ni) obj:ex)
+  ==
+::  dejs-soft - recursive processing of `json` values
 ::
-::    These functions return units, which will be nil if the input
-::    doesn't match the defined structure.
+::    These functions return units, which will be nil if the input doesn't match
+::    the defined structure.
+::
+::  decoders for nulls, booleans, numbers, and strings
 ::
 ++  test-dejs-soft-primitives
   =,  dejs-soft
@@ -554,25 +541,22 @@
     ::
     %+  expect-eq
       !>  `~
-      !>  (ul `json`~)
-    ::  booleans
-    ::
-    ::  bo extracts as-is, bu negates it
+      !>  (ul nul:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (ul num:ex)
+    ::  boolean
     ::
     %+  expect-eq
       !>  `&
       !>  (bo tru:ex)
     %+  expect-eq
       !>  `|
-      !>  (bu tru:ex)
+      !>  (bo [%b |])
     %+  expect-eq
       !>  ~
-      !>  (bo num:ex)
-    %+  expect-eq
-      !>  ~
-      !>  (bu num:ex)
-    ::  integers
-    ::  as @
+      !>  (bo [%n '0'])
+    ::  number as integer
     ::
     %+  expect-eq
       !>  `101
@@ -580,7 +564,7 @@
     %+  expect-eq
       !>  ~
       !>  (ni tru:ex)
-    ::  as cord
+    ::  number as cord
     ::
     %+  expect-eq
       !>  `'101'
@@ -588,14 +572,6 @@
     %+  expect-eq
       !>  ~
       !>  (no tru:ex)
-    ::  timestamp - ms since the unix epoch
-    ::
-    %+  expect-eq
-      !>  `~1970.1.1..00.00.01
-      !>  (di [%n ~.1000])
-    %+  expect-eq
-      !>  ~
-      !>  (di tru:ex)
     :: string as tape
     ::
     %+  expect-eq
@@ -612,142 +588,88 @@
     %+  expect-eq
       !>  ~
       !>  (so tru:ex)
-    :: string with custom parser
-    ::
-    %+  expect-eq
-      !>  `' '
-      !>  ((su (just ' ')) [%s ' '])
-    %+  expect-eq
-      !>  ~
-      !>  ((su (just ' ')) tru:ex)
-  ==
-::  decoding arrays
-::
-++  test-dejs-soft-arrays
-  =,  dejs-soft
-  ;:  weld
-    ::  ar - as list
-    ::
-    %+  expect-eq
-      !>  `~[1 2 3]
-      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
-    %+  expect-eq
-      !>  ~
-      !>  ((ar ni) str:ex)
-    %+  expect-eq
-      !>  ~
-      !>  ((ar ni) [%a ~[str:ex]])
-    ::  at - as tuple
-    ::
-    ::  handlers must match exactly
-    ::
-    %+  expect-eq
-      !>  `[1 'hey']
-      !>  ((at ~[ni so]) [%a ~[[%n '1'] [%s 'hey']]])
-    ::  too few or many handlers won't match
-    ::
-    %+  expect-eq
-      !>  ~
-      !>  ((at ~[ni so]) [%a ~])
-    %+  expect-eq
-      !>  ~
-      !>  ((at ~[ni so]) [%a ~[[%n '1'] [%s 'hey'] [%b &]]])
-    ::  a nested failure to match will propagate upwards
-    ::
-    %+  expect-eq
-      !>  ~
-      !>  ((at ~[ni]) [%a ~[[%s 'hey']]])
-  ==
-::  decoding objects
-::
-++  test-dejs-soft-objects
-  =,  dejs-soft
-  ;:  weld
-    ::  of - single-property objects
-    ::
-    %+  expect-eq
-      !>  `['foo' 101]
-      !>  ((of ~[['foo' ni]]) obj:ex)
-    %+  expect-eq
-      !>  `['foo' 'e']
-      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
-    %+  expect-eq
-      !>  ~
-      ::  the handler needs to apply properly to the value
-      ::
-      !>  ((of ~[['foo' ni]]) num:ex)
-    %+  expect-eq
-      !>  ~
-      ::  the key of the frond needs to exist in the handler list
-      ::
-      !>  ((of ~[['bar' so]]) obj:ex)
-    %+  expect-eq
-      !>  ~
-      ::  an object with multiple properties is an error
-      ::
-      !>  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
-    ::  ot - exact-shape objects to tuple
-    ::
-    %+  expect-eq
-      !>  `[101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
-    %+  expect-eq
-      !>  ~
-      ::  missing property on the object
-      ::
-      !>  ((ot ~[['foo' ni] ['baz' so]]) pai:ex)
-    ::  om - simple object as map
-    ::
-    %+  expect-eq
-      !>  `(molt ~[['foo' num:ex] ['bar' str:ex]])
-      !>  ((om some) pai:ex)
-    ::  op - object to map, but run a parsing function on the keys
-    ::
-    %+  expect-eq
-      !>  `(molt ~[[12 num:ex] [14 str:ex]])
-      !>  ((op dem some) (pr:enjs ~[['12' num:ex] ['14' str:ex]]))
   ==
 ::  decoder transformers
 ::
 ++  test-dejs-soft-transformers
   =,  dejs-soft
   ;:  weld
-    ::  cu - decode, then transform
+    ::  generic transformer (gate returns unit)
     ::
     %+  expect-eq
-      !>  `11
-      !>  ((cu dec ni) [%n ~.12])
-    ::  ci - decode, then transform, adapting the transformer to return a
-    ::  unit
-    ::
+      !>  `100
+      !>  ((ci |=(a=@u (some (dec a))) ni) num:ex)
     %+  expect-eq
-      !>  `101
-      !>  ((ci some ni) num:ex)
+      !>  `1
+      !>  ((ci |=(a=@u (some (mod a 10))) ni) num:ex)
+    %+  expect-eq
+      !>  `10
+      !>  ((ci |=(a=@u (some (div a 10))) ni) num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((ci |=(a=@u (some (div a 10))) ni) tru:ex)
     %+  expect-eq
       !>  ~
       !>  ((ci |=(* ~) ni) num:ex)
-    ::  mu - decode if not null
+    ::  generic transformer (gate returns non-unit)
     ::
     %+  expect-eq
-      !>  `~
-      !>  ((mu ni) nul:ex)
+      !>  `100
+      !>  ((cu dec ni) num:ex)
     %+  expect-eq
-      !>  `(some 101)
-      !>  ((mu ni) num:ex)
-    ::  pe - add prefix to decoded value
+      !>  `1
+      !>  ((cu |=(a=@u (mod a 10)) ni) num:ex)
+    %+  expect-eq
+      !>  `10
+      !>  ((cu |=(a=@u (div a 10)) ni) num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((cu |=(a=@u (div a 10)) ni) tru:ex)
+    ::  generic string parser
+    ::
+    %+  expect-eq
+      !>  `'hey'
+      !>  ((su (jest 'hey')) str:ex)
+    %+  expect-eq
+      !>  `"hey"
+      !>  ((su (stun [3 3] alf)) str:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((su nix) tru:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((su ace) str:ex)
+  ==
+::  transformed primitive decoders
+::
+++  test-dejs-soft-transformed-primitives
+  =,  dejs-soft
+  ;:  weld
+    ::  date as unix ms timestamp
+    ::
+    %+  expect-eq
+      !>  `~1970.1.1..00.00.01
+      !>  (di tms:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (di tru:ex)
+    ::  add prefix to decoded value
     ::
     %+  expect-eq
       !>  `['a' 101]
       !>  ((pe 'a' ni) num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((pe 'a' ni) tru:ex)
   ==
-::  various unit/collection helpers
+::  unit/collection decoder helpers
 ::
 ++  test-dejs-soft-helpers
   =,  dejs-soft
   =+  all=`(list (unit @))`~[(some 1) (some 2) (some 3)]
   =+  nall=`(list (unit @))`~[(some 1) ~ (some 3)]
   ;:  weld
-    ::  za - are all units in this list full?
+    ::  collapse list of units to boolean (true if all full, false otherwise)
     ::
     %+  expect-eq
       !>  &
@@ -758,18 +680,29 @@
     %+  expect-eq
       !>  |
       !>  (za nall)
-    ::  zl - collapse (list (unit)) -> (unit (list))
+    ::  collapse (list (unit)) -> (unit (list))
     ::
     %+  expect-eq
       !>  (some ~[1 2 3])
       !>  (zl all)
     %+  expect-eq
-      !>  ~
-      !>  (zl nall)
-    %+  expect-eq
       !>  (some ~)
       !>  (zl ~)
-    ::  zp - force unwrap a (list (unit)) as tuple
+    %+  expect-eq
+      !>  ~
+      !>  (zl nall)
+    ::  collapse (map * (unit *)) -> (unit (map * *))
+    ::
+    %+  expect-eq
+      !>  (some (malt ~[['a' 1] ['b' 2]]))
+      !>  (zm (malt (limo ~[['a' (some 1)] ['b' (some 2)]])))
+    %+  expect-eq
+      !>  (some ~)
+      !>  (zm ~)
+    %+  expect-eq
+      !>  ~
+      !>  (zm (malt (limo ~[['a' (some 1)] ['b' ~]])))
+    ::  collapse (pole (unit)) -> (unit (pole))
     ::
     %+  expect-eq
       !>  [1 2 3]
@@ -778,16 +711,138 @@
       |.  (zp nall)
     %-  expect-fail
       |.  (zp ~)
-    ::  zm - collapse a (map @tas (unit *)) -> (unit (map @tas *))
+    ::  collapse (set (unit *)) -> (unit (set *))
     ::
     %+  expect-eq
-      !>  (some (molt ~[['a' 1] ['b' 2]]))
-      !>  (zm (molt ~[['a' (some 1)] ['b' (some 2)]]))
-    %+  expect-eq
-      !>  ~
-      !>  (zm (molt ~[['a' `(unit @)`(some 1)] ['b' ~]]))
+      !>  (some (silt ~[1 2]))
+      !>  (zs (silt (limo ~[(some 1) (some 2)])))
     %+  expect-eq
       !>  (some ~)
-      !>  (zm ~)
+      !>  (zs ~)
+    %+  expect-eq
+      !>  ~
+      !>  (zs (silt (limo ~[(some 1) ~])))
+  ==
+::  array decoders
+::
+++  test-dejs-soft-arrays
+  =,  dejs-soft
+  ;:  weld
+    ::  array as list of single type
+    ::
+    %+  expect-eq
+      !>  `~[101]
+      !>  ((ar ni) [%a ~[num:ex]])
+    %+  expect-eq
+      !>  `~[1 2 3]
+      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
+    %+  expect-eq
+      !>  ~
+      !>  ((ar ni) num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((ar ni) [%a ~[str:ex]])
+    %+  expect-eq
+      !>  ~
+      !>  ((ar ni) [%a ~[num:ex str:ex]])
+    ::  array as tuple of any types
+    ::
+    ::    Decoders must match exactly
+    ::
+    %+  expect-eq
+      !>  `[101 'hey']
+      !>  ((at ~[ni so]) [%a ~[num:ex str:ex]])
+    %+  expect-eq                                 ::  too many decoders
+      !>  ~
+      !>  ((at ~[ni so]) [%a ~[num:ex]])
+    %+  expect-eq                                 ::  too few decoders
+      !>  ~
+      !>  ((at ~[ni]) [%a ~[num:ex str:ex]])
+    %+  expect-eq                                 ::  decoder order mismatch
+      !>  ~
+      !>  ((at ~[ni so]) [%a ~[str:ex num:ex]])
+  ==
+::  decoding objects
+::
+++  test-dejs-soft-objects
+  =,  dejs-soft
+  ;:  weld
+    ::  single-property object XOR
+    ::
+    %+  expect-eq
+      !>  `['foo' 101]
+      !>  ((of ~[['foo' ni]]) obj:ex)
+    %+  expect-eq
+      !>  `['foo' 101]
+      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((of ~) num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((of ~[['foo' ni]]) num:ex)
+    %+  expect-eq                                 ::  no matching key
+      !>  ~
+      !>  ((of ~[['bar' so]]) obj:ex)
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((of ~[['foo' so]]) obj:ex)
+    %+  expect-eq                                 ::  >1 property
+      !>  ~
+      !>  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
+    ::  exact-shape object to tuple
+    ::
+    %+  expect-eq
+      !>  `[101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  `['hey' 101]
+      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+    %+  expect-eq
+      !>  `['hey']
+      !>  ((ot ~[['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((ot ~[['foo' ni]]) num:ex)
+    %+  expect-eq                                 ::  no matching key
+      !>  ~
+      !>  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
+    ::  simple object to map (arbitrary keys, single type)
+    ::
+    %+  expect-eq
+      !>  [~ `(tree [p=@t q=@])`~]
+      !>  ((om ni) [%o ~])
+    %+  expect-eq
+      !>  `(malt ~[['foo' 101]])
+      !>  ((om ni) obj:ex)
+    %+  expect-eq
+      !>  `(malt ~[['a' 101] ['b' 101]])
+      !>  ((om ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((om ni) pai:ex)
+    ::  simple object to map, but keys must match rule
+    ::
+    %+  expect-eq
+      !>  [~ `(tree [p=@t q=@])`~]
+      !>  ((op nix ni) [%o ~])
+    %+  expect-eq
+      !>  `(malt ~[['foo' 101]])
+      !>  ((op nix ni) obj:ex)
+    %+  expect-eq
+      !>  `(malt ~[['foo' 101]])
+      !>  ((op (jest 'foo') ni) obj:ex)
+    %+  expect-eq
+      !>  `(malt ~[['a' 101] ['b' 101]])
+      !>  ((op alf ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((op nix so) obj:ex)
+    %+  expect-eq                                 ::  rule mismatch
+      !>  ~
+      !>  ((op (jest 'bar') ni) obj:ex)
   ==
 --
