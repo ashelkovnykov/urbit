@@ -80,7 +80,6 @@
       !>  (of-wall ~["hey" "" "there"])
   ==
 ::  encoding and decoding of beams <-> paths
-
 ::    (a beam is a fully-qualified file reference. ship, desk, version,
 ::    path)
 ::
@@ -130,65 +129,89 @@
   |%
   ++  nul  `json`~
   ++  tru  `json`[%b &]
-  ++  num  `json`[%n ~.12]
+  ++  num  `json`[%n '101']
+  ++  tms  `json`[%n '1000']
+  ++  tsc  `json`[%n '1']
+  ++  shp  `json`[%s 'zod']
   ++  str  `json`[%s 'hey']
-  ++  frond  `json`(frond:enjs 'foo' num)
-  ++  obj  `json`(pairs:enjs ~[['foo' num] ['bar' str]])
+  ++  wal  `json`[%s 'hello\0Aworld\0A']
+  ++  foo  ['foo' num]
+  ++  bar  ['bar' str]
+  ++  obj  `json`(frond:enjs foo)
+  ++  pai  `json`(pairs:enjs ~[foo bar])
   --
 ::  functions for creating `json` values
 ::
 ++  test-enjs
   =,  enjs
   ;:  weld
-    ::  numbers
+    ::  frond
     ::
     %+  expect-eq
-      !>  num:ex
-      !>  (numb 12)
+      !>  [%o (molt ~[foo:ex])]
+      !>  (frond foo:ex)
+    ::  pairs
+    ::
     %+  expect-eq
-      !>  num:ex
-      !>  (numb 0xc)
-    %+  expect-eq
-      !>  [%n '0']
-      !>  (numb 0)
-    :: strings
+      !>  [%o (molt ~[foo:ex bar:ex])]
+      !>  (pairs ~[foo:ex bar:ex])
+    ::  tape
     ::
     %+  expect-eq
       !>  str:ex
       !>  (tape "hey")
+    ::  wall
+    ::
     %+  expect-eq
       ::  uses of-wall, so adds the trailing newline
       ::
-      !>  [%s 'hi\0athere\0a']
-      !>  (wall ~["hi" "there"])
-    ::  objects
+      !>  wal:ex
+      !>  (wall ~["hello" "world"])
+    ::  ship
     ::
     %+  expect-eq
-      !>  [%o (molt ~[['foo' num:ex]])]
-      !>  (frond 'foo' num:ex)
-    =+  props=~[['foo' num:ex] ['bar' tru:ex]]
-    %+  expect-eq
-      !>  [%o (molt props)]
-      !>  (pairs props)
-    ::  sect - stored as integer number of seconds since the unix epoch
-    %+  expect-eq
-      !>  [%n '1']
-      !>  (sect ~1970.1.1..0.0.1)
-    ::  time - stored as integer number of milliseconds since the unix epoch
-    ::
-    %+  expect-eq
-      !>  [%n '1000']
-      !>  (time ~1970.1.1..0.0.1)
-    ::  timestamps should invert
-    ::
-    %+  expect-eq
-      !>  [%n '1001']
-      !>  (time (from-unix-ms:chrono:userlib 1.001))
-    :: ship - store ship identity as a string
-    ::
-    %+  expect-eq
-      !>  [%n '"zod"']
+      !>  shp:ex
       !>  (ship ~zod)
+    ::  numb
+    ::
+    %+  expect-eq
+      !>  [%n '0']
+      !>  (numb 0)
+    %+  expect-eq
+      !>  [%n '10']
+      !>  (numb 10)
+    %+  expect-eq
+      !>  num:ex
+      !>  (numb 101)
+    ::  sect
+    ::
+    %+  expect-eq
+      !>  tsc:ex
+      !>  (sect ~1970.1.1..0.0.1)
+    ::  time
+    ::
+    %+  expect-eq
+      !>  tms:ex
+      !>  (time ~1970.1.1..0.0.1)
+    %+  expect-eq
+      !>  tms:ex
+      !>  (time (from-unix-ms:chrono:userlib 1.000))
+    ::  path
+    ::
+    %+  expect-eq
+      !>  [%s (crip "/~zod/base")]
+      !>  (path [~.~zod ~.base ~])
+    ::  tank
+    ::
+    %+  expect-eq
+      !>  [%a ~[[%s 'abc']]]
+      !>  (tank leaf+"abc")
+    %+  expect-eq
+      !>  [%a ~[[%s '[a b c]']]]
+      !>  (tank [%rose [" " "[" "]"] leaf+"a" leaf+"b" leaf+"c" ~])
+    %+  expect-eq
+      !>  [%a ~[[%s '!(a:b:c)']]]
+      !>  (tank [%palm [":" "!" "(" ")"] leaf+"a" leaf+"b" leaf+"c" ~])
   ==
 ::  dejs - recursive processing of `json` values
 ::
@@ -224,14 +247,14 @@
     ::  as @
     ::
     %+  expect-eq
-      !>  12
+      !>  101
       !>  (ni num:ex)
     %-  expect-fail
       |.  (ni tru:ex)
     ::  as cord
     ::
     %+  expect-eq
-      !>  '12'
+      !>  '101'
       !>  (no num:ex)
     %-  expect-fail
       |.  (no tru:ex)
@@ -306,11 +329,11 @@
     ::  of - single-property objects
     ::
     %+  expect-eq
-      !>  ['foo' 12]
-      !>  ((of ~[['foo' ni]]) frond:ex)
+      !>  ['foo' 101]
+      !>  ((of ~[['foo' ni]]) obj:ex)
     %+  expect-eq
-      !>  ['foo' 12]
-      !>  ((of ~[['bar' so] ['foo' ni]]) frond:ex)
+      !>  ['foo' 'e']
+      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
     %-  expect-fail
       ::  the handler needs to apply properly to the value
       ::
@@ -318,16 +341,16 @@
     %-  expect-fail
       ::  the key of the frond needs to exist in the handler list
       ::
-      |.  ((of ~[['bar' so]]) frond:ex)
+      |.  ((of ~[['bar' so]]) obj:ex)
     %-  expect-fail
       ::  an object with multiple properties is an error
       ::
-      |.  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+      |.  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
     ::  ot - exact-shape objects to tuple
     ::
     %+  expect-eq
-      !>  [12 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) obj:ex)
+      !>  [101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
     %-  expect-fail
       ::  it checks it's called on an actual object
       ::
@@ -335,19 +358,19 @@
     %-  expect-fail
       ::  missing property on the object
       ::
-      |.  ((ot ~[['foo' ni] ['baz' so]]) obj:ex)
+      |.  ((ot ~[['foo' ni] ['baz' so]]) pai:ex)
     ::  ou - object to tuple, with optional properties. value handlers
     ::
     ::  are passed (unit json)
     ::
     %+  expect-eq
-      !>  [12 14]
-      !>  ((ou ~[['foo' (uf 14 ni)] ['baz' (uf 14 ni)]]) obj:ex)
+      !>  [10 14]
+      !>  ((ou ~[['foo' (uf 14 ni)] ['baz' (uf 14 ni)]]) pai:ex)
     ::  om - simple object as map
     ::
     %+  expect-eq
       !>  (molt ~[['foo' num:ex] ['bar' str:ex]])
-      !>  ((om same) obj:ex)
+      !>  ((om same) pai:ex)
     ::  op - object to map, but run a parsing function on the keys
     ::
     %+  expect-eq
@@ -367,7 +390,7 @@
     ::  ci - decode, then assert a transformation succeeds
     ::
     %+  expect-eq
-      !>  12
+      !>  101
       !>  ((ci some ni) num:ex)
     %-  expect-fail
       |.  ((ci |=(* ~) ni) num:ex)
@@ -377,12 +400,12 @@
       !>  ~
       !>  ((mu ni) nul:ex)
     %+  expect-eq
-      !>  (some 12)
+      !>  (some 101)
       !>  ((mu ni) num:ex)
     ::  pe - add prefix to decoded value
     ::
     %+  expect-eq
-      !>  ['a' 12]
+      !>  ['a' 101]
       !>  ((pe 'a' ni) num:ex)
     ::  uf - defaults for empty (unit json)
     ::
@@ -390,12 +413,12 @@
       !>  'nah'
       !>  ((uf 'nah' ni) ~)
     %+  expect-eq
-      !>  12
+      !>  'e'
       !>  ((uf 'nah' ni) (some num:ex))
     ::  un - dangerous ensure a (unit json)
     ::
     %+  expect-eq
-      !>  12
+      !>  101
       !>  ((un ni) (some num:ex))
     %-  expect-fail
       |.  ((un ni) ~)
@@ -484,7 +507,7 @@
     ::  as @
     ::
     %+  expect-eq
-      !>  `12
+      !>  `101
       !>  (ni num:ex)
     %+  expect-eq
       !>  ~
@@ -492,7 +515,7 @@
     ::  as cord
     ::
     %+  expect-eq
-      !>  `'12'
+      !>  `'101'
       !>  (no num:ex)
     %+  expect-eq
       !>  ~
@@ -575,11 +598,11 @@
     ::  of - single-property objects
     ::
     %+  expect-eq
-      !>  `['foo' 12]
-      !>  ((of ~[['foo' ni]]) frond:ex)
+      !>  `['foo' 101]
+      !>  ((of ~[['foo' ni]]) obj:ex)
     %+  expect-eq
-      !>  `['foo' 12]
-      !>  ((of ~[['bar' so] ['foo' ni]]) frond:ex)
+      !>  `['foo' 'e']
+      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
     %+  expect-eq
       !>  ~
       ::  the handler needs to apply properly to the value
@@ -589,27 +612,27 @@
       !>  ~
       ::  the key of the frond needs to exist in the handler list
       ::
-      !>  ((of ~[['bar' so]]) frond:ex)
+      !>  ((of ~[['bar' so]]) obj:ex)
     %+  expect-eq
       !>  ~
       ::  an object with multiple properties is an error
       ::
-      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+      !>  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
     ::  ot - exact-shape objects to tuple
     ::
     %+  expect-eq
-      !>  `[12 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) obj:ex)
+      !>  `[101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
     %+  expect-eq
       !>  ~
       ::  missing property on the object
       ::
-      !>  ((ot ~[['foo' ni] ['baz' so]]) obj:ex)
+      !>  ((ot ~[['foo' ni] ['baz' so]]) pai:ex)
     ::  om - simple object as map
     ::
     %+  expect-eq
       !>  `(molt ~[['foo' num:ex] ['bar' str:ex]])
-      !>  ((om some) obj:ex)
+      !>  ((om some) pai:ex)
     ::  op - object to map, but run a parsing function on the keys
     ::
     %+  expect-eq
@@ -630,7 +653,7 @@
     ::  unit
     ::
     %+  expect-eq
-      !>  `12
+      !>  `101
       !>  ((ci some ni) num:ex)
     %+  expect-eq
       !>  ~
@@ -641,12 +664,12 @@
       !>  `~
       !>  ((mu ni) nul:ex)
     %+  expect-eq
-      !>  `(some 12)
+      !>  `(some 101)
       !>  ((mu ni) num:ex)
     ::  pe - add prefix to decoded value
     ::
     %+  expect-eq
-      !>  `['a' 12]
+      !>  `['a' 101]
       !>  ((pe 'a' ni) num:ex)
   ==
 ::  various unit/collection helpers

@@ -3393,17 +3393,12 @@
     ++  ship                                            ::  string from ship
       |=  a=^ship
       ^-  json
-      [%n (rap 3 '"' (rsh [3 1] (scot %p a)) '"' ~)]
+      [%s (rsh [3 1] (scot %p a))]
     ::                                                  ::  ++numb:enjs:format
-    ++  numb                                            ::  number from unsigned
+    ++  numb                                            ::  number to int
       |=  a=@u
       ^-  json
-      :-  %n
-      ?:  =(0 a)  '0'
-      %-  crip
-      %-  flop
-      |-  ^-  ^tape
-      ?:(=(0 a) ~ [(add '0' (mod a 10)) $(a (div a 10))])
+      [%n (crip (a-co:co a))]
     ::                                                  ::  ++sect:enjs:format
     ++  sect                                            ::  s timestamp
       |=  a=^time
