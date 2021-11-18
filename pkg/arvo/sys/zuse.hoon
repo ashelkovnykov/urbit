@@ -3376,9 +3376,30 @@
       [%o [[p q] ~ ~]]
     ::                                                  ::  ++pairs:enjs:format
     ++  pairs                                           ::  object from k-v list
-      |=  a=(list [p=@t q=json])
+      |=  a=(^list [p=@t q=json])
       ^-  json
       [%o (~(gas by *(map @t json)) a)]
+    ::                                                  ::  ++list:enjs:format
+    ++  list                                            ::  array from list
+      |*  [lst=(^list) jon=$-(* json)]
+      ^-  json
+      :-  %a
+      (turn lst jon)
+    ::                                                  ::  ++set:enjs:format
+    ++  set                                             ::  array from set
+      |*  [sit=(^set) jon=$-(* json)]
+      ^-  json
+      (list ~(tap in sit) jon)
+    ::                                                  ::  ++bool:enjs:format
+    ++  bool                                            ::  boolean
+      |=  a=?
+      ^-  json
+      [%b a]
+    ::                                                  ::  ++cord:enjs:format
+    ++  cord                                            ::  string from cord
+      |=  a=@t
+      ^-  json
+      [%s a]
     ::                                                  ::  ++tape:enjs:format
     ++  tape                                            ::  string from tape
       |=  a=^tape
@@ -3399,6 +3420,16 @@
       |=  a=@u
       ^-  json
       [%n (crip (a-co:co a))]
+    ::                                                  ::  ++numc:enjs:format
+    ++  numc                                            ::  number as string
+      |=  a=@u
+      ^-  json
+      [%s (crip (a-co:co a))]
+    ::                                                  ::  ++numx:enjs:format
+    ++  numx                                            ::  hoon num as string
+      |=  [t=@tas a=@]
+      ^-  json
+      [%s (scot t a)]
     ::                                                  ::  ++sect:enjs:format
     ++  sect                                            ::  s timestamp
       |=  a=^time
@@ -3407,6 +3438,11 @@
     ++  time                                            ::  ms timestamp
       |=  a=^time
       (numb (unm:chrono:userlib a))
+    ::                                                  ::  ++date:enjs:format
+    ++  date                                            ::  date as string
+      |=  a=@da
+      ^-  json
+      [%s (scot %da a)]
     ::                                                  ::  ++path:enjs:format
     ++  path                                            ::  string from path
       |=  a=^path
@@ -3417,6 +3453,12 @@
       |=  a=^tank
       ^-  json
       [%a (turn (wash [0 80] a) tape)]
+    ::                                                  ::  ++nuor:enjs:format
+    ++  nuor                                            ::  unit
+      |*  [a=(unit) r=$-(* json)]
+      ^-  json
+      ?~  a  ~
+      (r u.a)
     --  ::enjs
   ::                                                    ::  ++dejs:format
   ++  dejs                                              ::  json reparser

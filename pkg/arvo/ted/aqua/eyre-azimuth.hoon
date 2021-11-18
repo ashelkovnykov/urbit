@@ -91,7 +91,7 @@
     =/  hash  (number-to-hash number)
     =/  parent-hash  (number-to-hash ?~(number number (dec number)))
     %-  malt
-    ^-  (list (pair term json))
+    ^-  (^list (pair term json))
     :~  hash+s+(crip (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
         number+s+(crip (num-to-hex:ethereum number))
         'parentHash'^s+(crip (num-to-hex:ethereum parent-hash))
@@ -175,7 +175,7 @@
           jsonrpc+s+'2.0'
           result+result
       ==
-    =/  events=(list aqua-event)
+    =/  events=(^list aqua-event)
       :_  ~
       :*  %event
           her
@@ -219,10 +219,10 @@
     (logs-by-range number number)
   ::
   ++  logs-to-json
-    |=  [count=@ud selected-logs=(list az-log)]
+    |=  [count=@ud selected-logs=(^list az-log)]
     ^-  json
     :-  %a
-    |-  ^-  (list json)
+    |-  ^-  (^list json)
     ?~  selected-logs
       ~
     :_  $(selected-logs t.selected-logs, count +(count))

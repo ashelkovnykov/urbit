@@ -245,7 +245,7 @@
   =,  enjs:format
   |%
   ++  vats
-    |=  v=(list ^vat)
+    |=  v=(^list ^vat)
     ^-  json
     %-  pairs
     %+  turn  v

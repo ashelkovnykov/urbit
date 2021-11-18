@@ -68,10 +68,10 @@
         %tab
       :-  %a
       %+  turn  p.sef
-      |=  [=cord =^tank]
+      |=  [c=^cord =^tank]
       %+  frond  %tab
       %-  pairs
-      :~  match+s+cord
+      :~  match+s+c
           info+(tape ~(ram re tank))
       ==
     ::

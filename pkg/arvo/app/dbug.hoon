@@ -248,7 +248,7 @@
     ::
     ++  build-thread-tree
       %+  roll  tree:threads
-      |=  [stack=(list tid:spider) =tree]
+      |=  [stack=(^list tid:spider) =tree]
       ?~  stack  tree
       %+  ~(put by tree)  i.stack
       %_  $
@@ -266,7 +266,7 @@
     ::  /ames/peer.json
     ::
       [%ames %peer ~]
-    =/  [known=(list [^ship *]) alien=(list [^ship *])]
+    =/  [known=(^list [^ship *]) alien=(^list [^ship *])]
       %+  skid  ~(tap by peers:v-ames)
       |=  [^ship kind=?(%alien %known)]
       ?=(%known kind)
@@ -616,12 +616,12 @@
           ==
         ::
           :-  'flows'
-          |^  =/  mix=(list flow)
+          |^  =/  mix=(^list flow)
                 =-  (sort - dor)
                 %+  welp
                   (turn ~(tap by snd) (tack %snd))
                 (turn ~(tap by rcv) (tack %rcv))
-              =/  [forward=(list flow) backward=(list flow)]
+              =/  [forward=(^list flow) backward=(^list flow)]
                 %+  skid  mix
                 |=  [=bone *]
                 =(0 (mod bone 2))
@@ -750,7 +750,7 @@
     ::
     ++  bone-to-pairs
       |=  [=bone ossuary]
-      ^-  (list [@t json])
+      ^-  (^list [@t json])
       :~  'bone'^(numb bone)
           'duct'^(from-duct (~(gut by by-bone) bone ~))
       ==
@@ -762,9 +762,9 @@
       (enjs u.unit)
     ::
     ++  set-array
-      |*  [set=(set) enjs=$-(* json)]
+      |*  [sit=(^set) enjs=$-(* json)]
       ^-  json
-      a+(turn ~(tap in set) enjs)
+      a+(turn ~(tap in sit) enjs)
     ::
     ++  from-duct
       |=  =duct

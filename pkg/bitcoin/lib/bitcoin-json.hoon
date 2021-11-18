@@ -217,7 +217,7 @@
     ==
   ::
   ++  vals
-    |=  vl=(list [=val:tx:bitcoin s=(unit @p)])
+    |=  vl=(^list [=val:tx:bitcoin s=(unit @p)])
     ^-  json
     :-  %a
     %+  turn  vl

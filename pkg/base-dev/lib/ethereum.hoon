@@ -687,7 +687,7 @@
     |=  [riq=(unit @t) req=request]
     ^-  json
     %-  pairs
-    =;  r=[met=@t pas=(list json)]
+    =;  r=[met=@t pas=(^list json)]
       ::TODO  should use request-to-json:rpc:jstd,
       ::      and probably (fall riq -.req)
       :*  jsonrpc+s+'2.0'
@@ -712,7 +712,7 @@
       :_  ~
       :-  %o  %-  ~(gas by *(map @t json))
       =-  (murn - same)
-      ^-  (list (unit (pair @t json)))
+      ^-  (^list (unit (pair @t json)))
       :~  ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
         ::
@@ -745,7 +745,7 @@
       :_  ~
       :-  %o  %-  ~(gas by *(map @t json))
       =-  (murn - same)
-      ^-  (list (unit (pair @t json)))
+      ^-  (^list (unit (pair @t json)))
       :~  ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
         ::
@@ -768,7 +768,7 @@
       :_  ~  :-  %o
       %-  ~(gas by *(map @t json))
       =-  (murn - same)
-      ^-  (list (unit (pair @t json)))
+      ^-  (^list (unit (pair @t json)))
       :~  `['blockHash' (tape (transaction-to-hex has.req))]
         ::
           ?:  =(0 (lent adr.req))  ~
@@ -813,7 +813,7 @@
     ^-  json
     :-  %o  %-  ~(gas by *(map @t json))
     =-  (murn - same)
-    ^-  (list (unit (pair @t json)))
+    ^-  (^list (unit (pair @t json)))
     :~  ?~  from.cal  ~
         `['from' (tape (address-to-hex u.from.cal))]
       ::

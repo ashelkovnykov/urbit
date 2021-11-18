@@ -40,7 +40,7 @@
 ++  changes-jon
   ^-  json
   :-  %a
-  ^-  (list json)
+  ^-  (^list json)
   [change-jon ~]
 ::
 ++  text-document-item

@@ -155,6 +155,26 @@
     %+  expect-eq
       !>  [%o (molt ~[foo:ex bar:ex])]
       !>  (pairs ~[foo:ex bar:ex])
+    ::  list
+    ::
+    %+  expect-eq
+      !>  [%a ~[num:ex num:ex num:ex]]
+      !>  (list ~[101 101 101] numb)
+    ::  set
+    ::
+    %+  expect-eq
+      !>  [%a ~[[%s 'c'] [%s 'a'] [%s 'b']]]
+      !>  (set (silt ~['a' 'b' 'c' 'c' 'b' 'a']) cord)
+    ::  boolean
+    ::
+    %+  expect-eq
+      !>  tru:ex
+      !>  (bool &)
+    ::  cord
+    ::
+    %+  expect-eq
+      !>  str:ex
+      !>  (cord 'hey')
     ::  tape
     ::
     %+  expect-eq
@@ -183,6 +203,37 @@
     %+  expect-eq
       !>  num:ex
       !>  (numb 101)
+    %+  expect-eq
+      !>  [%n '1000']
+      !>  (numb 1.000)
+    ::  numc
+    ::
+    %+  expect-eq
+      !>  [%s '0']
+      !>  (numc 0)
+    %+  expect-eq
+      !>  [%s '10']
+      !>  (numc 10)
+    %+  expect-eq
+      !>  [%s '100']
+      !>  (numc 100)
+    %+  expect-eq
+      !>  [%s '1000']
+      !>  (numc 1.000)
+    ::  numx
+    ::
+    %+  expect-eq
+      !>  [%s '0']
+      !>  (numx %u 0)
+    %+  expect-eq
+      !>  [%s '1.000']
+      !>  (numx %ud 1.000)
+    %+  expect-eq
+      !>  [%s '0xa.baca']
+      !>  (numx %ux 0xa.baca)
+    %+  expect-eq
+      !>  [%s '384.319.963']
+      !>  (numx %u 0vb.egger)
     ::  sect
     ::
     %+  expect-eq
@@ -196,6 +247,11 @@
     %+  expect-eq
       !>  tms:ex
       !>  (time (from-unix-ms:chrono:userlib 1.000))
+    ::  date
+    ::
+    %+  expect-eq
+      !>  [%s '~2016.11.9..07.47.00']
+      !>  (date (from-unix:chrono:userlib 1.478.677.620))
     ::  path
     ::
     %+  expect-eq
@@ -212,6 +268,14 @@
     %+  expect-eq
       !>  [%a ~[[%s '!(a:b:c)']]]
       !>  (tank [%palm [":" "!" "(" ")"] leaf+"a" leaf+"b" leaf+"c" ~])
+    ::  nuor
+    ::
+    %+  expect-eq
+      !>  ~
+      !>  (nuor ~ numb)
+    %+  expect-eq
+      !>  num:ex
+      !>  (nuor (some 101) numb)
   ==
 ::  dejs - recursive processing of `json` values
 ::
@@ -364,7 +428,7 @@
     ::  are passed (unit json)
     ::
     %+  expect-eq
-      !>  [10 14]
+      !>  [101 14]
       !>  ((ou ~[['foo' (uf 14 ni)] ['baz' (uf 14 ni)]]) pai:ex)
     ::  om - simple object as map
     ::

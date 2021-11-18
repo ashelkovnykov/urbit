@@ -1693,7 +1693,7 @@
       =*  sign  u.jsyn
       =,  enjs:format
       %-  pairs
-      ^-  (list [@t json])
+      ^-  (^list [@t json])
       :-  ['id' (numb request-id)]
       ?-    -.sign
           %poke-ack

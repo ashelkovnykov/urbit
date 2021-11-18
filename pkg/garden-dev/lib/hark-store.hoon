@@ -3,7 +3,6 @@
 =,  sur
 =<  [. sur]
 |%
-
 ++  enjs
   =,  enjs:format
   |%
@@ -58,7 +57,7 @@
     |=  places=(map ^place ^stats)
     ^-  json 
     :-  %a
-    ^-  (list json)
+    ^-  (^list json)
     %+  turn  ~(tap by places)
     |=  [p=^place s=^stats]
     %-  pairs
@@ -76,7 +75,7 @@
         count+(numb count.s)
     ==
   ++  more
-    |=  upds=(list ^update)
+    |=  upds=(^list ^update)
     ^-  json
     a+(turn upds update)
   ::
@@ -102,12 +101,12 @@
         body+(bodies body)
     ==
   ++  bodies
-    |=  bs=(list ^body)
+    |=  bs=(^list ^body)
     ^-  json
     a+(turn bs body)
   ::
   ++  contents
-    |=  cs=(list ^content)
+    |=  cs=(^list ^content)
     ^-  json
     a+(turn cs content)
   ::
@@ -146,7 +145,7 @@
     ==
   ::
   ++  timebox
-    |=  [li=^lid l=(list ^notification)]
+    |=  [li=^lid l=(^list ^notification)]
     ^-  json
     %-  pairs
     :~  lid+(lid li)

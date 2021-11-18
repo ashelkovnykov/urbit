@@ -147,9 +147,7 @@
   ++  num
     |=  a=@u
     ^-  ^tape
-    =/  p=json  (numb a)
-    ?>  ?=(%n -.p)
-    (trip p.p)
+    ~(rend co [%$ %ud a])
   ::
   ++  version
     |=  v=^version

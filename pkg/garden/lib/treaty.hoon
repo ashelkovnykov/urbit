@@ -30,7 +30,7 @@
     ==
   ++  foreign-desk
     |=  [s=^ship =desk]
-    ^-  cord
+    ^-  ^cord
     (crip "{(scow %p s)}/{(trip desk)}")
   ::
   ++  alliance

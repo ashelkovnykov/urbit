@@ -65,7 +65,7 @@
     ^-  json
     (frond:enjs:format (dekebab p) q)
   ++  pairs
-    |=  a=(list [p=@t q=json])
+    |=  a=(^list [p=@t q=json])
     ^-  json
     %-  pairs:enjs:format
     %+  turn  a
@@ -102,7 +102,7 @@
     |=  =^initial
     ?>  ?=(%initial -.initial)
     %-  pairs
-    ^-  (list [@t json])
+    ^-  (^list [@t json])
     %+  turn
       ~(tap by groups.initial)
     |=  [rid=resource grp=^group]
@@ -114,16 +114,12 @@
     |=  =^group
     ^-  json
     %-  pairs
-    :~  members+(set ship members.group)
+    :~  members+(set members.group ship)
         policy+(policy policy.group)
         tags+(tags tags.group)
         hidden+b+hidden.group
     ==
   ::
-  ++  rank
-    |=  =rank:title
-    ^-  json
-    [%s rank]
   ++  tags
     |=  =^tags
     ^-  json
@@ -131,21 +127,13 @@
     %+  turn  ~(tap by tags)
     |=  [=^tag ships=(^set ^ship)]
     ^-  [@t json]
-    :_  (set ship ships)
+    :_  (set ships ship)
     ?@  tag  tag
     ;:  (cury cat 3)
       app.tag  '\\'
       tag.tag  '\\'
       (enjs-path:resource resource.tag)
     ==
-  ::
-  ++  set
-    |*  [item=$-(* json) sit=(^set)]
-    ^-  json
-    :-  %a
-    %+  turn
-      ~(tap in sit)
-    item
   ::
   ++  tag
     |=  =^tag
@@ -164,11 +152,11 @@
     %-  pairs
     ?-  -.policy
          %invite
-      :~  pending+(set ship pending.policy)
+      :~  pending+(set pending.policy ship)
       ==
          %open
-      :~  banned+(set ship banned.policy)
-          ban-ranks+(set rank ban-ranks.policy)
+      :~  banned+(set banned.policy ship)
+          ban-ranks+(set ban-ranks.policy cord)
       ==
     ==
   ++  policy-diff
@@ -184,17 +172,17 @@
       |=  =diff:open:^policy
       %+  frond  -.diff
       ?-  -.diff
-        %allow-ranks  (set rank ranks.diff)
-        %ban-ranks    (set rank ranks.diff)
-        %allow-ships  (set ship ships.diff)
-        %ban-ships    (set ship ships.diff)
+        %allow-ranks  (set ranks.diff cord)
+        %ban-ranks    (set ranks.diff cord)
+        %allow-ships  (set ships.diff ship)
+        %ban-ships    (set ships.diff ship)
       ==
     ++  invite
       |=  =diff:invite:^policy
       %+  frond  -.diff
       ?-  -.diff
-        %add-invites      (set ship invitees.diff)
-        %remove-invites   (set ship invitees.diff)
+        %add-invites      (set invitees.diff ship)
+        %remove-invites   (set invitees.diff ship)
       ==
     --
   ::
@@ -226,7 +214,7 @@
     ?>  ?=(%add-members -.action)
     %-  pairs
     :~  resource+(enjs:resource resource.action)
-        ships+(set ship ships.action)
+        ships+(set ships.action ship)
     ==
   ::
   ++  remove-members
@@ -235,7 +223,7 @@
     ?>  ?=(%remove-members -.action)
     %-  pairs
     :~  resource+(enjs:resource resource.action)
-        ships+(set ship ships.action)
+        ships+(set ships.action ship)
     ==
   ::
   ++  add-tag
@@ -243,10 +231,10 @@
     ^-  json
     ?>  ?=(%add-tag -.action)
     %-  pairs
-    ^-  (list [p=@t q=json])
+    ^-  (^list [p=@t q=json])
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ship ships.action)
+        ships+(set ships.action ship)
     ==
   ::
   ++  remove-tag
@@ -256,7 +244,7 @@
     %-  pairs
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ship ships.action)
+        ships+(set ships.action ship)
     ==
   ::
   ++  change-policy
@@ -326,12 +314,13 @@
     |=  =json
     ^-  rank:title
     ?>  ?=(%s -.json)
-    ?:  =('czar' p.json)  %czar
-    ?:  =('king' p.json)  %king
-    ?:  =('duke' p.json)  %duke
-    ?:  =('earl' p.json)  %earl
-    ?:  =('pawn' p.json)  %pawn
-    !!
+    ?+  p.json  !!
+      %czar  %czar
+      %king  %king
+      %duke  %duke
+      %earl  %earl
+      %pawn  %pawn
+    ==
   ++  tag
     |=  =json
     ^-  ^tag

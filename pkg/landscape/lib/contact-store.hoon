@@ -17,7 +17,7 @@
     %+  frond  %contact-update
     %-  pairs
     :_  ~
-    ^-  [cord json]
+    ^-  [^cord json]
     ?-  -.upd
         %initial
       :-  %initial
@@ -63,7 +63,7 @@
     %-  pairs
     %+  turn  ~(tap by rolodex)
     |=  [=^ship =contact]
-    ^-  [cord json]
+    ^-  [^cord json]
     [(scot %p ship) (cont contact)]
   ::
   ++  cont

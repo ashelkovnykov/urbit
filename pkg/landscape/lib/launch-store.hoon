@@ -13,7 +13,7 @@
     ::
     ++  encode
       |=  upd=^update
-      ^-  [cord json]
+      ^-  [^cord json]
       ?-  -.upd
           %add
         :-  %add
@@ -80,9 +80,9 @@
       ==
     ::
     ++  terms
-      |=  terms=(list term)
+      |=  terms=(^list term)
       ^-  json
-      [%a (turn terms |=(=term s+term))]
+      (list terms cord)
     --
   --
 ::

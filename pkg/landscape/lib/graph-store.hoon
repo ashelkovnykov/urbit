@@ -100,7 +100,7 @@
       :-  %output
       ::  virtualize output rendering, +tank:enjs:format might crash
       ::
-      =/  result=(each (list json) tang)
+      =/  result=(each (^list json) tang)
         (mule |.((turn output.c tank)))
       ?-  -.result
         %&  a+p.result
@@ -166,7 +166,7 @@
     ::
     ++  encode
       |=  upd=action
-      ^-  [cord json]
+      ^-  [^cord json]
       ?-  -.upd
           %add-graph
         :-  %add-graph
@@ -241,8 +241,8 @@
         :-  %tag-queries
         %-  pairs
         %+  turn  ~(tap by tag-queries.upd)
-        |=  [=term uids=(set ^uid)]
-        ^-  [cord json]
+        |=  [=term uids=(^set ^uid)]
+        ^-  [^cord json]
         [term [%a (turn ~(tap in uids) uid)]]
       ==
     ::
@@ -284,7 +284,7 @@
       p.idx
     ::
     ++  indices
-      |=  i=(set ^index)
+      |=  i=(^set ^index)
       ^-  json
       [%a (turn ~(tap in i) index)]
     ::

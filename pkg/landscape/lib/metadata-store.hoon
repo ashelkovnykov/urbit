@@ -17,12 +17,11 @@
   ::
   ++  associations
     |=  =^associations
-    =,  enjs:format
     ^-  json
     %-  pairs
     %+  turn  ~(tap by associations)
     |=  [=md-resource [group=resource =^metadatum]]
-    ^-  [cord json]
+    ^-  [^cord json]
     :-  %:  rap  3
             (spat (en-path:resource group))
             '/'

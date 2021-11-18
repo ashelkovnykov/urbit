@@ -13,7 +13,7 @@
     ::
     ++  encode
       |=  upd=^update
-      ^-  [cord json]
+      ^-  [^cord json]
       ?-  -.upd
           %configuration
         =*  prefix  landscape-homepage-prefix.configuration.upd

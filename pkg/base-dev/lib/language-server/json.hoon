@@ -199,7 +199,7 @@
           (text-document--publish-diagnostics notification)
         ==
     ~!  -.notification
-    =/  method=cord  (crip (unparse-method -.notification))
+    =/  method=^cord  (crip (unparse-method -.notification))
     %:  pairs
       method+s+method
       params+params
@@ -216,7 +216,7 @@
       ==
       ::
       ++  wrap-in-id
-        |=  [id=cord res=json]
+        |=  [id=^cord res=json]
         %:  pairs
           id+s+id
           result+res
@@ -236,13 +236,13 @@
         [%a (turn completion.com completion-item)]
       --
   ++  unparse-method
-    |=  =cord
+    |=  c=^cord
     ^-  ^tape
-    %+  rash  cord
-    %+  cook  |=(l=(list ^tape) (zing (join "/" l)))
+    %+  rash  c
+    %+  cook  |=(l=(^list ^tape) (zing (join "/" l)))
     %+  more  (jest '--')
     %+  cook
-      |=  tapes=(list ^tape)
+      |=  tapes=(^list ^tape)
       ^-  ^tape
       ?~  tapes  ~
       %-  zing

@@ -40,7 +40,7 @@
         %klr
       :-  %a
       %+  turn  p.blit
-      |=  [=stye text=(list @c)]
+      |=  [=stye text=(^list @c)]
       %-  pairs
       :~  'text'^a+(turn text |=(c=@c s+(tuft c)))
         ::

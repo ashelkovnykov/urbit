@@ -24,7 +24,7 @@
   %-  pairs
   %+  turn  ~(tap by invitatory)
   |=  [=serial =invite]
-  ^-  [cord json]
+  ^-  [^cord json]
   [(scot %uv serial) (invite-to-json invite)]
 ::
 ++  invite-to-json
