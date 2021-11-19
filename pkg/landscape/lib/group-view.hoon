@@ -79,7 +79,7 @@
     |=  req=^request
     %-  pairs
     :~  started+(time started.req)
-        ship+(ship ship.req)
+        ship+(shil ship.req)
         progress+s+progress.req
         'shareContact'^b+share-co.req
         autojoin+b+autojoin.req

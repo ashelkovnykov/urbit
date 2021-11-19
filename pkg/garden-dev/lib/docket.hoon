@@ -187,7 +187,7 @@
     %+  frond  -.loc
     ?-  -.loc
       %http  s+url.loc
-      %ames  s+(scot %p ship.loc)
+      %ames  (ship ship.loc)
     ==
   ::
   ++  charge

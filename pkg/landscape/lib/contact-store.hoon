@@ -29,18 +29,18 @@
         %add
       :-  %add
       %-  pairs
-      :~  [%ship (ship ship.upd)]
+      :~  [%ship (shil ship.upd)]
           [%contact (cont contact.upd)]
       ==
     ::
         %remove
       :-  %remove
-      (pairs [%ship (ship ship.upd)]~)
+      (pairs [%ship (shil ship.upd)]~)
     ::
         %edit
       :-  %edit
       %-  pairs
-      :~  [%ship (ship ship.upd)]
+      :~  [%ship (shil ship.upd)]
           [%edit-field (edit edit-field.upd)]
           [%timestamp (time timestamp.upd)]
       ==
@@ -99,7 +99,7 @@
     |=  =beings
     ^-  json
     ?-  -.beings
-      %ships  [%a (turn ~(tap in ships.beings) |=(s=^ship s+(scot %p s)))]
+      %ships  [%a (turn ~(tap in ships.beings) ship)]
       %group  (enjs:res resource.beings)
     ==
   --

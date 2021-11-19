@@ -132,7 +132,6 @@
   ++  num  `json`[%n '101']
   ++  tms  `json`[%n '1000']
   ++  tsc  `json`[%n '1']
-  ++  shp  `json`[%s 'zod']
   ++  str  `json`[%s 'hey']
   ++  wal  `json`[%s 'hello\0Aworld\0A']
   ++  foo  ['foo' num]
@@ -187,10 +186,15 @@
       ::
       !>  wal:ex
       !>  (wall ~["hello" "world"])
+    ::  shil
+    ::
+    %+  expect-eq
+      !>  [%s 'zod']
+      !>  (shil ~zod)
     ::  ship
     ::
     %+  expect-eq
-      !>  shp:ex
+      !>  [%s '~zod']
       !>  (ship ~zod)
     ::  numb
     ::

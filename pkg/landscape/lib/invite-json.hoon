@@ -32,10 +32,10 @@
   ^-  json
   =,  enjs:format
   %-  pairs
-  :~  [%ship (ship ship.invite)]
+  :~  [%ship (shil ship.invite)]
       [%app [%s app.invite]]
       [%resource (enjs:resource resource.invite)]
-      [%recipient (ship recipient.invite)]
+      [%recipient (shil recipient.invite)]
       [%text [%s text.invite]]
   ==
 ::

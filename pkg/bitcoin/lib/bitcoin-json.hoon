@@ -189,7 +189,7 @@
     ^-  json
     ?~  p  ~
     %-  pairs
-    :~  host+(ship host.u.p)
+    :~  host+(shil host.u.p)
         connected+b+connected.u.p
     ==
   ::
@@ -224,7 +224,7 @@
     |=  [v=val:tx:bitcoin s=(unit @p)]
     %-  pairs
     :~  val+(val v)
-        ship+?~(s ~ (ship u.s))
+        ship+?~(s ~ (shil u.s))
     ==
   ::
   ++  val

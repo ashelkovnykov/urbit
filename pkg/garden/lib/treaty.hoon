@@ -14,7 +14,7 @@
     |=  t=^treaty
     %+  merge  (docket:enjs:dock docket.t)
     %-  pairs
-    :~  ship+s+(scot %p ship.t)
+    :~  ship+(ship ship.t)
         desk+s+desk.t
         cass+(case case.t)
         hash+s+(scot %uv hash.t)
@@ -62,7 +62,7 @@
     ^-  json
     %+  frond  -.u
     ?-  -.u
-      ?(%add %del)  s+(scot %p ship.u)
+      ?(%add %del)  (ship ship.u)
     ::
         %ini
       %-  pairs
@@ -72,7 +72,7 @@
     ::
         %new
       %-  pairs
-      :~  ship+s+(scot %p ship.u)
+      :~  ship+(ship ship.u)
           alliance+(alliance alliance.u)
       ==
     ==

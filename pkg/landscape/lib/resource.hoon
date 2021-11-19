@@ -28,7 +28,7 @@
   ^-  json
   =,  enjs:format
   %-  pairs
-  :~  ship+(ship entity.resource)
+  :~  ship+(shil entity.resource)
       name+s+name.resource
   ==
 ::

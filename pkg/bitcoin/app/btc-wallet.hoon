@@ -1088,7 +1088,7 @@
       %+  frond:enjs:format  'checkPayee'
       %-  pairs:enjs:format
       :~  ['hasWallet' b+?=(^ curr-xpub)]
-          ['payee' (ship:enjs:format our.bowl)]
+          ['payee' (shil:enjs:format our.bowl)]
       ==
     :_  this
     [%give %fact ~ %json !>(response)]~

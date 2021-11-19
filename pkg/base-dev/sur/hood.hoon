@@ -304,7 +304,7 @@
   ++  rail
     |=  r=^rail
     %-  pairs
-    :~  ship+s+(scot %p ship.r)
+    :~  ship+(ship ship.r)
         publisher+?~(publisher.r ~ s+(scot %p u.publisher.r))
         desk+s+desk.r
         paused+b+paused.r

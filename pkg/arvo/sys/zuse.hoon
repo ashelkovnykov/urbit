@@ -3410,11 +3410,16 @@
       |=  a=^wall
       ^-  json
       (tape (of-wall a))
+    ::                                                  ::  ++shil:enjs:format
+    ++  shil                                            ::  string from ship
+      |=  a=^ship
+      ^-  json
+      [%s (rsh [3 1] (scot %p a))]
     ::                                                  ::  ++ship:enjs:format
     ++  ship                                            ::  string from ship
       |=  a=^ship
       ^-  json
-      [%s (rsh [3 1] (scot %p a))]
+      [%s (scot %p a)]
     ::                                                  ::  ++numb:enjs:format
     ++  numb                                            ::  number to int
       |=  a=@u

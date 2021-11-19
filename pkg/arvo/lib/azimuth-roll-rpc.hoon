@@ -211,7 +211,7 @@
           ::
             :-  'from'
             %-  pairs
-            ~[['ship' (ship ship.from.tx)] ['proxy' s+proxy.from.tx]]
+            ~[['ship' (shil ship.from.tx)] ['proxy' s+proxy.from.tx]]
         ==
         ::
         ++  parse-tx
@@ -261,7 +261,7 @@
             ['status' s+status.q]
             ['hash' (hex (as-octs:mimes:html hash.q))]
             ['type' s+type.q]
-            ['ship' (ship ship.q)]
+            ['ship' (shil ship.q)]
         ==
       ::
       ++  point
@@ -315,7 +315,7 @@
         %+  turn  points
         |=  [ship=@p =point:naive]
         %-  pairs
-        :~  ['ship' (^ship ship)]
+        :~  ['ship' (shil ship)]
             ['point' (^point point)]
         ==
       ::
@@ -339,7 +339,7 @@
         %+  turn  children
         |=  [child=@p address=@ux]
         %-  pairs
-        :~  ['ship' (ship child)]
+        :~  ['ship' (shil child)]
             (en-address address)
         ==
       ::

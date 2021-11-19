@@ -114,7 +114,7 @@
     |=  =^group
     ^-  json
     %-  pairs
-    :~  members+(set members.group ship)
+    :~  members+(set members.group shil)
         policy+(policy policy.group)
         tags+(tags tags.group)
         hidden+b+hidden.group
@@ -127,7 +127,7 @@
     %+  turn  ~(tap by tags)
     |=  [=^tag ships=(^set ^ship)]
     ^-  [@t json]
-    :_  (set ships ship)
+    :_  (set ships shil)
     ?@  tag  tag
     ;:  (cury cat 3)
       app.tag  '\\'
@@ -152,10 +152,10 @@
     %-  pairs
     ?-  -.policy
          %invite
-      :~  pending+(set pending.policy ship)
+      :~  pending+(set pending.policy shil)
       ==
          %open
-      :~  banned+(set banned.policy ship)
+      :~  banned+(set banned.policy shil)
           ban-ranks+(set ban-ranks.policy cord)
       ==
     ==
@@ -174,15 +174,15 @@
       ?-  -.diff
         %allow-ranks  (set ranks.diff cord)
         %ban-ranks    (set ranks.diff cord)
-        %allow-ships  (set ships.diff ship)
-        %ban-ships    (set ships.diff ship)
+        %allow-ships  (set ships.diff shil)
+        %ban-ships    (set ships.diff shil)
       ==
     ++  invite
       |=  =diff:invite:^policy
       %+  frond  -.diff
       ?-  -.diff
-        %add-invites      (set invitees.diff ship)
-        %remove-invites   (set invitees.diff ship)
+        %add-invites      (set invitees.diff shil)
+        %remove-invites   (set invitees.diff shil)
       ==
     --
   ::
@@ -214,7 +214,7 @@
     ?>  ?=(%add-members -.action)
     %-  pairs
     :~  resource+(enjs:resource resource.action)
-        ships+(set ships.action ship)
+        ships+(set ships.action shil)
     ==
   ::
   ++  remove-members
@@ -223,7 +223,7 @@
     ?>  ?=(%remove-members -.action)
     %-  pairs
     :~  resource+(enjs:resource resource.action)
-        ships+(set ships.action ship)
+        ships+(set ships.action shil)
     ==
   ::
   ++  add-tag
@@ -234,7 +234,7 @@
     ^-  (^list [p=@t q=json])
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ships.action ship)
+        ships+(set ships.action shil)
     ==
   ::
   ++  remove-tag
@@ -244,7 +244,7 @@
     %-  pairs
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ships.action ship)
+        ships+(set ships.action shil)
     ==
   ::
   ++  change-policy

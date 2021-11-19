@@ -203,7 +203,7 @@
             |=  [d=duct [s=^ship p=^path]]
             %-  pairs
             :~  'duct'^a+(turn d path)
-                'ship'^(ship s)
+                'ship'^(shil s)
                 'path'^(path p)
             ==
           ::
@@ -215,7 +215,7 @@
             |=  [[w=wire s=^ship t=term] [a=? p=^path]]
             %-  pairs
             :~  'wire'^(path w)
-                'ship'^(ship s)
+                'ship'^(shil s)
                 'app'^s+t
                 'acked'^b+a
                 'path'^(path p)
@@ -273,8 +273,8 @@
     %-  some
     %-  pairs
     ::NOTE  would do (cork head ship) but can't get that to compile...
-    :~  'known'^a+(turn (turn known head) ship)
-        'alien'^a+(turn (turn alien head) ship)
+    :~  'known'^a+(turn (turn known head) shil)
+        'alien'^a+(turn (turn alien head) shil)
     ==
   ::
     ::  /ames/peer/[shipname].json
@@ -395,7 +395,7 @@
         |=  [id=@ud [=^ship app=term =^path *]]
         %-  pairs
         :~  'id'^(numb id)
-            'ship'^(^ship ship)
+            'ship'^(shil ship)
             'app'^s+app
             'path'^(^path path)
             'unacked'^(numb (~(gut by unacked) id 0))
@@ -599,7 +599,7 @@
             ::
               :-  'lane'
               ?-  -.lane
-                %&  (ship p.lane)
+                %&  (shil p.lane)
               ::
                   %|
                 %-  tape

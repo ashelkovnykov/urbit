@@ -55,7 +55,7 @@
         [%description s+description.met]
         [%color s+(scot %ux color.met)]
         [%date-created s+(scot %da date-created.met)]
-        [%creator s+(scot %p creator.met)]
+        [%creator (ship creator.met)]
       ::
         :-  %config
         ?+    -.config.met  o+~

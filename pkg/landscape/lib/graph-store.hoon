@@ -59,7 +59,7 @@
     ^-  json
     %-  pairs
     :~  [%signature s+(scot %ux p.s)]
-        [%ship (ship q.s)]
+        [%ship (shil q.s)]
         [%life (numb r.s)]
     ==
   ::
@@ -88,7 +88,7 @@
     |=  c=^content
     ^-  json
     ?-  -.c
-        %mention    (frond %mention (ship ship.c))
+        %mention    (frond %mention (shil ship.c))
         %text       (frond %text s+text.c)
         %url        (frond %url s+url.c)
         %reference  (frond %reference (reference +.c))
@@ -131,9 +131,9 @@
       s+(enjs-path:res grp)
     ::
     ++  app
-      |=  [=^ship =desk p=^path]
+      |=  [s=^ship =desk p=^path]
       %-  pairs
-      :~  ship+s+(scot %p ship)
+      :~  ship+(ship s)
           desk+s+desk
           path+(path p)
       ==
@@ -151,7 +151,7 @@
     |=  p=^post
     ^-  json
     %-  pairs
-    :~  [%author (ship author.p)]
+    :~  [%author (shil author.p)]
         [%index (index index.p)]
         [%time-sent (time time-sent.p)]
         [%contents [%a (turn contents.p content)]]

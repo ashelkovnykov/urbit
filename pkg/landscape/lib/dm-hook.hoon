@@ -27,8 +27,8 @@
     |=  act=^action
     %+  frond  -.act
     ?-  -.act
-      ?(%accept %decline)  (ship +.act)
-      %pendings  a+(turn ~(tap in ships.act) ship)
+      ?(%accept %decline)  (shil +.act)
+      %pendings  a+(turn ~(tap in ships.act) shil)
       %screen   [%b +.act]
     ==
   --
