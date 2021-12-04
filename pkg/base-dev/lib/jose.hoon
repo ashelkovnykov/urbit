@@ -83,6 +83,7 @@
 ::    RSA-only for now
 ::
 ++  jwk
+  =,  enjs:format
   |%
   ::  |en:jwk: encoding of json cryptographic keys
   ::
@@ -98,7 +99,12 @@
     ++  pass
       |=  k=key:rsa
       ^-  json
-      [%o (my kty+s+'RSA' n+s+(numb n.pub.k) e+s+(numb e.pub.k) ~)]
+      %-  pairs
+      :~
+        kty+[%s 'RSA']
+        n+(cord (numb n.pub.k))
+        e+(cord (numb e.pub.k))
+      ==
     ::  +ring:en:jwk: json encode private key
     ::
     ++  ring
@@ -106,13 +112,14 @@
       ^-  json
       ~|  %rsa-need-ring
       ?>  ?=(^ sek.k)
-      :-  %o  %-  my  :~
-        kty+s+'RSA'
-        n+s+(numb n.pub.k)
-        e+s+(numb e.pub.k)
-        d+s+(numb d.u.sek.k)
-        p+s+(numb p.u.sek.k)
-        q+s+(numb q.u.sek.k)
+      %-  pairs
+      :~
+        kty+[%s 'RSA']
+        n+(cord (numb n.pub.k))
+        e+(cord (numb e.pub.k))
+        d+(cord (numb d.u.sek.k))
+        p+(cord (numb p.u.sek.k))
+        q+(cord (numb q.u.sek.k))
       ==
     --
   ::  |de:jwk: decoding of json cryptographic keys
@@ -166,6 +173,7 @@
 ::    Note: flattened signature form only.
 ::
 ++  jws
+  =,  enjs:format
   |%
   ::  +sign:jws: sign json value
   ::
@@ -173,19 +181,20 @@
     |=  [k=key:rsa pro=json lod=json]
     |^  ^-  json
         =.  pro  header
-        =/  protect=cord  (encode pro)
-        =/  payload=cord  (encode lod)
-        :-  %o  %-  my  :~
-          protected+s+protect
-          payload+s+payload
-          signature+s+(sign protect payload)
+        =/  protect=^cord  (encode pro)
+        =/  payload=^cord  (encode lod)
+        %-  pairs
+        :~
+          protected+(cord protect)
+          payload+(cord payload)
+          signature+(cord (sign protect payload))
         ==
     ::  +header:sign:jws: set signature algorithm in header
     ::
     ++  header
       ?>  ?=([%o *] pro)
       ^-  json
-      [%o (~(put by p.pro) %alg s+'RS256')]
+      [%o (~(put by p.pro) %alg [%s 'RS256'])]
     ::  +encode:sign:jws: encode json for signing
     ::
     ::    Alphabetically sort object keys, url-safe base64 encode
@@ -201,7 +210,7 @@
     ::    Url-safe base64 encode in big-endian byte order.
     ::
     ++  sign
-      |=  [protect=cord payload=cord]
+      |=  [protect=^cord payload=^cord]
       =/  msg=@t   (rap 3 ~[protect '.' payload])
       =/  sig=@ud  (~(sign rs256 k) (met 3 msg) msg)
       =/  len=@ud  (met 3 n.pub.k)

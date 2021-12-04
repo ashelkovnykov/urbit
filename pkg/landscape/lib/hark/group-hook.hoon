@@ -16,19 +16,12 @@
 ::
 ++  enjs
   =,  enjs:format
-  |%
-  ++  res
-    (cork enjs-path:resource (lead %s))
-  ::
   ++  update
     |=  upd=^update
     %+  frond  -.upd
     ?-  -.upd
-      ?(%listen %ignore)  (res group.upd)
-      :: 
-        %initial  
-      :-  %a
-      (turn ~(tap in watching.upd) res)
+      ?(%listen %ignore)  (enjs-path:resource group.upd)
+      %initial  (set watching.upd enjs-path:resource)
     ==
   --
 --

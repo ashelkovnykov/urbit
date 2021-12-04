@@ -188,16 +188,16 @@
         |=  pend-tx
         ^-  json
         %-  pairs
-        :~  ['force' b+force]
-            ['time' (^time time)]
+        :~  ['force' (bool force)]
+            ['time' (time ^time)]
             ['rawTx' (^raw-tx raw-tx)]
             (en-address address)
         ==
       ::
       ++  pending-txs
-        |=  pending=(list pend-tx)
+        |=  pending=(^list pend-tx)
         ^-  json
-        a+(turn pending pending-tx)
+        (list pending pending-tx)
       ::
       ++  en-address   |=(a=@ux address+(hex 20 a))
       ::
@@ -206,19 +206,22 @@
         ^-  json
         |^
         %-  pairs
-        :~  ['tx' (parse-tx +.tx)]
-            ['sig' (hex (as-octs:mimes:html sig))]
-          ::
-            :-  'from'
-            %-  pairs
-            ~[['ship' (shil ship.from.tx)] ['proxy' s+proxy.from.tx]]
-        ==
+        :~
+          ['tx' (parse-tx +.tx)]
+          ['sig' (hex (as-octs:mimes:html sig))]
+        ::
+          :-  'from'
+          %-  pairs
+          :~
+            ['ship' (shil ship.from.tx)]
+            ['proxy' (cord proxy.from.tx)]
+        ==  ==
         ::
         ++  parse-tx
           |=  tx=skim-tx:naive
           ^-  json
           %-  pairs
-          :~  ['type' s+-.tx]
+          :~  ['type' (cord -.tx)]
             ::
               :-  'data'
               %-  pairs
@@ -238,29 +241,28 @@
         ::
         ++  en-ship      |=(s=@p ship+(numb `@ud`s))
         ++  en-spawn     |=([s=@p a=@ux] ~[(en-ship s) (en-address a)])
-        ++  en-transfer  |=([a=@ux r=?] ~[(en-address a) reset+b+r])
+        ++  en-transfer  |=([a=@ux r=?] ~[(en-address a) reset+(bool r)])
         ++  en-keys
           |=  [encrypt=@ auth=@ crypto-suite=@ breach=?]
           ^-  (list [@t json])
           :~  ['encrypt' (numb encrypt)]
               ['auth' (numb auth)]
               ['cryptoSuite' (numb crypto-suite)]
-              ['breach' b+breach]
+              ['breach' (bool breach)]
           ==
         --
       ::
       ++  hist-txs
-        |=  txs=(list hist-tx)
+        |=  txs=(^list hist-tx)
         ^-  json
-        :-  %a
-        %+  turn  txs
+        %+  list  txs
         |=  hist-tx
         ^-  json
         %-  pairs
         :~  ['time' (time p)]
-            ['status' s+status.q]
+            ['status' (cord status.q)]
             ['hash' (hex (as-octs:mimes:html hash.q))]
-            ['type' s+type.q]
+            ['type' (cord type.q)]
             ['ship' (shil ship.q)]
         ==
       ::
@@ -268,7 +270,7 @@
         |=  =point:naive
         ^-  json
         %-  pairs
-        :~  ['dominion' s+dominion.point]
+        :~  ['dominion' (cord dominion.point)]
           ::
             :-  'ownership'
             %-  pairs
@@ -284,45 +286,35 @@
             :-  'network'
             %-  pairs
             =*  net  net.point
-            :*  ['rift' s+(json-number rift.net)]
+            :*  ['rift' (nums rift.net)]
               ::
                 :-  'keys'
                 %-  pairs
-                :~  ['life' s+(json-number life.keys.net)]
-                    ['suite' s+(json-number suite.keys.net)]
+                :~  ['life' (nums life.keys.net)]
+                    ['suite' (nums suite.keys.net)]
                     ['auth' (hex 32 auth.keys.net)]
                     ['crypt' (hex 32 crypt.keys.net)]
                 ==
               ::
                 :-  'sponsor'
                 %-  pairs
-                ~[['has' b+has.sponsor.net] ['who' (numb `@ud`who.sponsor.net)]]
+                :~  ['has' (bool has.sponsor.net)]
+                    ['who' (numb `@ud`who.sponsor.net)]
+                ==
               ::
                 ?~  escape.net  ~
                 ['escape' (numb `@ud`u.escape.net)]~
         ==  ==
       ::
-      ++  json-number
-        |=  num=@
-        ^-  @t
-        =/  jon=json  (numb num)
-        ?>(?=([%n *] jon) p.jon)
-      ::
       ++  points
-        |=  points=(list [@p point:naive])
+        |=  points=(^list [@p point:naive])
         ^-  json
-        :-  %a
-        %+  turn  points
-        |=  [ship=@p =point:naive]
+        %+  list  points
+        |=  [s=@p =point:naive]
         %-  pairs
-        :~  ['ship' (shil ship)]
+        :~  ['ship' (shil s)]
             ['point' (^point point)]
         ==
-      ::
-      ++  ships
-        |=  ships=(list @p)
-        ^-  json
-        a+(turn ships (cork @ud numb))
       ::
       ++  ownership
         |=  [=address:naive =nonce:naive]
@@ -333,10 +325,9 @@
         ==
       ::
       ++  spawned
-        |=  children=(list [@p @ux])
+        |=  children=(^list [@p @ux])
         ^-  json
-        :-  %a
-        %+  turn  children
+        %+  list  children
         |=  [child=@p address=@ux]
         %-  pairs
         :~  ['ship' (shil child)]
@@ -344,14 +335,12 @@
         ==
       ::
       ++  sponsored
-        |=  [res=(list @p) req=(list @p)]
+        |=  [res=(^list @p) req=(^list @p)]
         ^-  json
         %-  pairs
-        :~  ['residents' (ships res)]
-            ['requests' (ships req)]
+        :~  ['residents' (list res numb)]
+            ['requests' (list req numb)]
         ==
-      ::
-      ++  tx-status  |=(=^tx-status ^-(json s+status.tx-status))
       ::
       ++  roller-config
         |=  [az=^azimuth-config ro=^roller-config]
@@ -371,13 +360,12 @@
       ++  azimuth-config
         |=  config=^azimuth-config
         ^-  json
-        %-  pairs
-        ['refreshRate' (numb (div refresh-rate.config ~s1))]~
+        (frond 'refreshRate' (nu (div refresh-rate.config ~s1)))
       ::
       ++  hex
         |=  [p=@ q=@]
         ^-  json
-        s+(crip ['0' 'x' ((x-co:co (mul 2 p)) q)])
+        (tape ['0' 'x' ((x-co:co (mul 2 p)) q)])
       ::
       ++  naive-state
         |=  =^state:naive
@@ -386,21 +374,20 @@
         %-  pairs
         :~  ['points' (points (tap:orp points.state))]
             ['operators' (operators operators.state)]
-            ['dns' a+(turn dns.state (lead %s))]
+            ['dns' (list dns.state cord)]
         ==
         ::
-        ++  orp  ((on ^ship point:naive) por:naive)
+        ++  orp  ((on ship point:naive) por:naive)
         ::
         ++  operators
           |=  =operators:naive
           ^-  json
-          :-  %a
-          %+  turn  ~(tap by operators)
+          %+  list  ~(tap by operators)
           |=  [op=@ux addrs=(set @ux)]
           ^-  json
           %-  pairs
           :~  ['operator' (hex 20 op)]
-              ['addresses' a+(turn ~(tap in addrs) (cury hex 20))]
+              ['addresses' (set addrs (cury hex 20))]
           ==
         --
       --
@@ -472,9 +459,10 @@
 ++  get-dns
   |=  [id=@t params=(map @t json) dns=(list @t)]
   ^-  response:rpc
+  =,  enjs:format
   ?.  =((lent ~(tap by params)) 0)
     ~(params error:json-rpc id)
-  [%result id a+(turn dns (cork same (lead %s)))]
+  [%result id (list dns cord)]
 ::
 ++  cancel-tx
   |=  [id=@t params=(map @t json)]
@@ -486,7 +474,7 @@
   =/  data=(unit [l2-tx ship])  (cancel:data:from-json params)
   ?.  &(?=(^ sig) ?=(^ keccak) ?=(^ data))
     [~ ~(parse error:json-rpc id)]
-  :_  [%result id s+'ok']
+  :_  [%result id [%s 'ok']]
   %-  some
   roller-action+!>([%cancel u.sig u.keccak u.data])
 ::

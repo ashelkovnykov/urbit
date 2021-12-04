@@ -8,10 +8,11 @@
   |%
   ++  noun  inst
   ++  json
-    %-  pairs:enjs:format
-    :~  local+s+local.inst
-        desk+s+desk.inst
-        ship+s+(scot %p ship.inst)
+    =,  enjs:format
+    %-  pairs
+    :~  local+(cord local.inst)
+        desk+(cord desk.inst)
+        ship+(ship ship.inst)
     ==
   --
 ++  grab

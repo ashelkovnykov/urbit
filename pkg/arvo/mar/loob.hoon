@@ -3,7 +3,7 @@
 ++  grow
   |%
   ++  noun  loob
-  ++  json  b+loob
+  ++  json  (bool:enjs:format loob)
   --
 ++  grab
   |%

@@ -267,8 +267,8 @@
   ++  vat
     |=  v=^vat
     %-  pairs
-    :~  desk+s+desk.v
-        hash+s+(scot %uv hash.v)
+    :~  desk+(cord desk.v)
+        hash+(numh %uv hash.v)
         cass+(cass cass.v)
         arak+(arak arak.v)
     ==
@@ -276,7 +276,7 @@
   ++  weft
     |=  w=^weft
     %-  pairs
-    :~  name+s+lal.w
+    :~  name+(cord lal.w)
         kelvin+(numb num.w)
     ==
   ::
@@ -290,14 +290,14 @@
   ++  rein
     |=  r=^rein
     %-  pairs
-    :~  add+a+(turn ~(tap in add.r) (lead %s))
-        sub+a+(turn ~(tap in sub.r) (lead %s))
+    :~  add+(set add.r cord)
+        sub+(set sub.r cord)
     ==
   ::
   ++  arak
     |=  a=^arak
     %-  pairs
-    :~  rail+?~(rail.a ~ (rail u.rail.a))
+    :~  rail+(unit rail.a rail)
         rein+(rein rein.a)
     ==
   ::
@@ -305,11 +305,11 @@
     |=  r=^rail
     %-  pairs
     :~  ship+(ship ship.r)
-        publisher+?~(publisher.r ~ s+(scot %p u.publisher.r))
-        desk+s+desk.r
-        paused+b+paused.r
+        publisher+(unit publisher.r ship)
+        desk+(cord desk.r)
+        paused+(bool paused.r)
         aeon+(numb aeon.r)
-        next+a+(turn next.r rung)
+        next+(list next.r rung)
     ==
   --
 --

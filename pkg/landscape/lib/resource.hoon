@@ -29,13 +29,12 @@
   =,  enjs:format
   %-  pairs
   :~  ship+(shil entity.resource)
-      name+s+name.resource
+      name+(cord name.resource)
   ==
 ::
 ++  enjs-path
   |=  =resource
-  %-  spat
-  (en-path resource)
+  (path:enjs:format (en-path resource))
 ::
 ++  dejs-path
   %-  su:dejs:format

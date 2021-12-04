@@ -130,16 +130,18 @@
     %+  frond  -.u
     ^-  json
     ?-  -.u
-      %del-charge  s+desk.u
+      %del-charge  (cord desk.u)
     ::
         %initial
-      %-  pairs
-      %+  turn  ~(tap by initial.u)
-      |=([=desk c=^charge] [desk (charge c)])
+      :-  %o
+      %-  ~(run by initial.u)
+      |=  c=^charge
+      ^-  json
+      (charge c)
     ::
         %add-charge
       %-  pairs
-      :~  desk+s+desk.u
+      :~  desk+(cord desk.u)
           charge+(charge charge.u)
       ==
     ==
@@ -147,29 +149,22 @@
   ++  num
     |=  a=@u
     ^-  ^tape
-    ~(rend co [%$ %ud a])
+    (a-co:co a)
   ::
   ++  version
     |=  v=^version
     ^-  json
-    :-  %s
-    %-  crip
+    %-  tape
     "{(num major.v)}.{(num minor.v)}.{(num patch.v)}"
-  ::
-  ++  merge
-    |=  [a=json b=json]
-    ^-  json
-    ?>  &(?=(%o -.a) ?=(%o -.b))
-    [%o (~(uni by p.a) p.b)]
   ::
   ++  href
     |=  h=^href
     %+  frond  -.h
     ?-    -.h
-        %site  s+(spat path.h)
+        %site  (path path.h)
         %glob
       %-  pairs
-      :~  base+s+base.h
+      :~  base+(cord base.h)
           glob-reference+(glob-reference glob-reference.h)
       ==
     ==
@@ -177,7 +172,7 @@
   ++  glob-reference
     |=  ref=^glob-reference
     %-  pairs
-    :~  hash+s+(scot %uv hash.ref)
+    :~  hash+(numh %uv hash.ref)
         location+(glob-location location.ref)
     ==
   ::
@@ -186,36 +181,31 @@
     ^-  json
     %+  frond  -.loc
     ?-  -.loc
-      %http  s+url.loc
+      %http  (cord url.loc)
       %ames  (ship ship.loc)
     ==
   ::
   ++  charge
     |=  c=^charge
-    %+  merge  (docket docket.c)
-    %-  pairs
-    :~  chad+(chad chad.c)
-    ==
-  ::
-  ++  docket
-    |=  d=^docket
     ^-  json
     %-  pairs
-    :~  title+s+title.d
-        info+s+info.d
-        color+s+(scot %ux color.d)
-        href+(href href.d)
-        image+?~(image.d ~ s+u.image.d)
-        version+(version version.d)
-        license+s+license.d
-        website+s+website.d
+    :~  title+(cord title.docket.c)
+        info+(cord info.docket.c)
+        color+(numh %ux color.docket.c)
+        href+(href href.docket.c)
+        image+(unit image.docket.c cord)
+        version+(version version.docket.c)
+        license+(cord license.docket.c)
+        website+(cord website.docket.c)
+        chad+(chad chad.c)
     ==
   ::
   ++  chad
     |=  c=^chad
+    ^-  json
     %+  frond  -.c
     ?+  -.c  ~
-      %hung  s+err.c
+      %hung   (cord err.c)
     ==
   --
 --

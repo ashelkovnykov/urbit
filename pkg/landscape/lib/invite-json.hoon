@@ -11,20 +11,19 @@
 ++  invites-to-json
   |=  inv=invites
   ^-  json
-  %-  pairs:enjs:format
-  %+  turn  ~(tap by inv)
-  |=  [=term =invitatory]
-  ^-  [cord json]
-  [term (invitatory-to-json invitatory)]
+  :-  %o
+  %-  ~(run by inv)
+  |=  =invitatory
+  ^-  json
+  (invitatory-to-json invitatory)
 ::
 ++  invitatory-to-json
   |=  =invitatory
   ^-  json
-  =,  enjs:format
-  %-  pairs
-  %+  turn  ~(tap by invitatory)
+  :-  %o
+  ^-  (map @t json)
+  %-  ~(run in invitatory)
   |=  [=serial =invite]
-  ^-  [^cord json]
   [(scot %uv serial) (invite-to-json invite)]
 ::
 ++  invite-to-json
@@ -33,10 +32,10 @@
   =,  enjs:format
   %-  pairs
   :~  [%ship (shil ship.invite)]
-      [%app [%s app.invite]]
+      [%app (cord app.invite)]
       [%resource (enjs:resource resource.invite)]
       [%recipient (shil recipient.invite)]
-      [%text [%s text.invite]]
+      [%text (cord text.invite)]
   ==
 ::
 ++  update-to-json
@@ -44,47 +43,26 @@
   =,  enjs:format
   ^-  json
   %+  frond  %invite-update
-  %-  pairs
-  :~
-    ?:  =(%initial -.upd)
-      ?>  ?=(%initial -.upd)
-      [%initial (invites-to-json invites.upd)]
-    ?:  =(%create -.upd)
-      ?>  ?=(%create -.upd)
-      [%create (pairs [%term s+term.upd]~)]
-    ?:  =(%delete -.upd)
-      ?>  ?=(%delete -.upd)
-      [%delete (pairs [%term s+term.upd]~)]
-    ?:  =(%accepted -.upd)
-      ?>  ?=(%accepted -.upd)
-      :-  %accepted
-      %-  pairs
-      :~  [%term s+term.upd]
-          [%uid s+(scot %uv uid.upd)]
-          [%invite (invite-to-json invite.upd)]
-      ==
-    ?:  =(%decline -.upd)
-      ?>  ?=(%decline -.upd)
-      :-  %decline
-      %-  pairs
-      :~  [%term s+term.upd]
-          [%uid s+(scot %uv uid.upd)]
-      ==
-    ?:  =(%invite -.upd)
-      ?>  ?=(%invite -.upd)
-      :-  %invite
-      %-  pairs
-      :~  [%term s+term.upd]
-          [%uid s+(scot %uv uid.upd)]
-          [%invite (invite-to-json invite.upd)]
-      ==
-    ?:  =(%invitatory -.upd)
-      ?>  ?=(%invitatory -.upd)
-      :-  %invitatory
-      (invitatory-to-json invitatory.upd)
+  %-  frond
+  ?+  -.upd  [*@t *json]
+    %initial            [%initial (invites-to-json invites.upd)]
+    %invitatory         [%invitatory (invitatory-to-json invitatory.upd)]
+    ?(%create %delete)  [-.upd (frond [%term (cord term.upd)])]
     ::
-    ::  %noop
-    [*@t *json]
+      %decline
+    :-  %decline
+    %-  pairs
+    :~  [%term (cord term.upd)]
+        [%uid (numh %uv uid.upd)]
+    ==
+    ::
+      ?(%accepted %invite)
+    :-  -.upd
+    %-  pairs
+    :~  [%term (cord term.upd)]
+        [%uid (numh %uv uid.upd)]
+        [%invite (invite-to-json invite.upd)]
+    ==
   ==
 ::
 ++  json-to-action

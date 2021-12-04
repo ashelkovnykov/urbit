@@ -77,18 +77,18 @@
     =,  enjs:format
     %^  sign:jws:jose  key
       ::  the JWT's "header"
-      %:  pairs
-        alg+s+'RS256'
-        typ+s+'JWT'
-        kid+s+kid
-        ~
+      %-  pairs
+      :~
+        alg+(cord 'RS256')
+        typ+(cord 'JWT')
+        kid+(cord kid)
       ==
     ::  the JWT's "payload"
     %:  pairs
-      iss+s+iss
-      sub+s+iss                                 ::  per g.co, use iss for sub
-      scope+s+scope
-      aud+s+aud
+      iss+(cord iss)
+      sub+(cord iss)                                 ::  per g.co, use iss for sub
+      scope+(cord scope)
+      aud+(cord aud)
       iat+(sect iat)
       exp+(sect (add iat ~h1))
       ~
@@ -105,6 +105,7 @@
   |=  [jot=@t url=@t]
   =/  m  (strand ,token:gcp)  ^-  form:m
   ;<  ~  bind:m
+    =,  enjs:format
     %:  send-request:strandio
       method=%'POST'
       url=url
@@ -112,10 +113,9 @@
       ^=  body
       %-  some  %-  as-octt:mimes:html
       %-  en-json:html
-      %:  pairs:enjs:format
-        :-  'grant_type'
-        s+'urn:ietf:params:oauth:grant-type:jwt-bearer'
-        assertion+s+jot
+      %:  pairs
+        'grant_type'^(cord 'urn:ietf:params:oauth:grant-type:jwt-bearer')
+        'assertion'^(cord jot)
         ~
       ==
     ==

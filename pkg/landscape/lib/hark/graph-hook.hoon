@@ -34,7 +34,7 @@
   ++  graph-index
     |=  [graph=resource =index:post]
     %-  pairs
-    :~  graph+s+(enjs-path:resource graph)
+    :~  graph+(enjs-path:resource graph)
         index+(index:enjs:graph-store index)
     ==
   ::
@@ -43,12 +43,10 @@
     ^-  json
     %+  frond  -.act
     ?-  -.act
-      %set-watch-on-self  b+watch-on-self.act
-      %set-mentions  b+mentions.act
-      ?(%listen %ignore)   (graph-index graph.act index.act)
+      %set-watch-on-self  (bool watch-on-self.act)
+      %set-mentions       (bool mentions.act)
+      ?(%listen %ignore)  (graph-index graph.act index.act)
     ==
-  ::
-  ::
   ::
   ++  update
     |=  upd=^update
@@ -57,10 +55,9 @@
       (action upd)
     %+  frond  -.upd
     %-  pairs
-    :~  'watchOnSelf'^b+watch-on-self.upd
-        'mentions'^b+mentions.upd
-        :+  %watching  %a
-        (turn ~(tap in watching.upd) graph-index)
+    :~  'watchOnSelf'^(bool watch-on-self.upd)
+        'mentions'^(bool mentions.upd)
+        'watching'^(set watching.upd graph-index)
     ==
   --
 --

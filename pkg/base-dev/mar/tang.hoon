@@ -3,19 +3,18 @@
   ::
 /?    310
 ::
-=,  format
 |_  tan=(list tank)
 ++  grad  %noun
 ++  grow
   |%
   ++  noun  tan
   ++  json
-    =/  result=(each (list ^json) tang)
-      (mule |.((turn tan tank:enjs:format)))
-    ?-  -.result
-      %&  a+p.result
-      %|  a+[a+[%s '[[output rendering error]]']~]~
-    ==
+    =,  enjs:format
+    =/  result=(each (^list ^json) tang)
+      (mule |.((list tan tank)))
+    ?:  -.result
+      a+p.result
+    a+[a+[%s '[[output rendering error]]']~]~
   ::
   ++  elem
     =-  ;pre:code:"{(of-wall -)}"

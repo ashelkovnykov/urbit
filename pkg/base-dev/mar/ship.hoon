@@ -3,7 +3,7 @@
 ++  grow
   |%
   ++  noun  s
-  ++  json  s+(scot %p s)
+  ++  json  (ship:enjs:format s)
   ++  mime
     ^-  ^mime
     [/text/x-ship (as-octt:mimes:html (scow %p s))]

@@ -1057,15 +1057,16 @@
   ~/  %on-peek
   |=  pax=path
   ^-  (unit (unit cage))
+  =,  enjs:format
   ?+  pax  (on-peek:def pax)
       [%x %configured ~]
     =/  provider=json
       ?~  prov  ~
-      [%s (scot %p host.u.prov)]
+      (ship host.u.prov)
     =/  result=json
-      %-  pairs:enjs:format
+      %-  pairs
       :~  [%provider provider]
-          [%'hasWallet' b+?=(^ walts)]
+          ['hasWallet' (bool ?=(^ walts))]
       ==
     ``json+!>(result)
   ::
@@ -1085,10 +1086,11 @@
     =/  who  (slav %p i.t.path)
     ?>  =(who our.bowl)
     =/  response=json
-      %+  frond:enjs:format  'checkPayee'
-      %-  pairs:enjs:format
-      :~  ['hasWallet' b+?=(^ curr-xpub)]
-          ['payee' (shil:enjs:format our.bowl)]
+      =,  enjs:format
+      %+  frond  'checkPayee'
+      %-  pairs
+      :~  ['hasWallet' (bool ?=(^ curr-xpub))]
+          ['payee' (shil our.bowl)]
       ==
     :_  this
     [%give %fact ~ %json !>(response)]~

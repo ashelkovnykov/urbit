@@ -23,7 +23,7 @@
       :-  %initial
       %-  pairs
       :~  [%rolodex (rolo rolodex.upd)]
-          [%is-public b+is-public.upd]
+          [%is-public (bool is-public.upd)]
       ==
     ::
         %add
@@ -34,8 +34,7 @@
       ==
     ::
         %remove
-      :-  %remove
-      (pairs [%ship (shil ship.upd)]~)
+      [%remove (frond %ship (shil ship.upd))]
     ::
         %edit
       :-  %edit
@@ -46,37 +45,35 @@
       ==
     ::
         %allow
-      :-  %allow
-      (pairs [%beings (beng beings.upd)]~)
+      [%allow (frond %beings (beng beings.upd))]
     ::
         %disallow
-      :-  %disallow
-      (pairs [%beings (beng beings.upd)]~)
+      [%disallow (frond %beings (beng beings.upd))]
     ::
         %set-public
-      [%set-public b+public.upd]
+      [%set-public (bool public.upd)]
     ==
   ::
   ++  rolo
     |=  =rolodex
     ^-  json
-    %-  pairs
-    %+  turn  ~(tap by rolodex)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in rolodex)
     |=  [=^ship =contact]
-    ^-  [^cord json]
     [(scot %p ship) (cont contact)]
   ::
   ++  cont
     |=  =contact
     ^-  json
     %-  pairs
-    :~  [%nickname s+nickname.contact]
-        [%bio s+bio.contact]
-        [%status s+status.contact]
-        [%color s+(scot %ux color.contact)]
-        [%avatar ?~(avatar.contact ~ s+u.avatar.contact)]
-        [%cover ?~(cover.contact ~ s+u.cover.contact)]
-        [%groups a+(turn ~(tap in groups.contact) (cork enjs-path:res (lead %s)))]
+    :~  [%nickname (cord nickname.contact)]
+        [%bio (cord bio.contact)]
+        [%status (cord status.contact)]
+        [%color (numh %ux color.contact)]
+        [%avatar (unit avatar.contact cord)]
+        [%cover (unit cover.contact cord)]
+        [%groups (set groups.contact enjs-path:res)]
         [%last-updated (time last-updated.contact)]
     ==
   ::
@@ -85,21 +82,21 @@
     ^-  json
     %+  frond  -.field
     ?-  -.field
-      %nickname      s+nickname.field
-      %bio           s+bio.field
-      %status        s+status.field
-      %color         s+(scot %ux color.field)
-      %avatar        ?~(avatar.field ~ s+u.avatar.field)
-      %cover         ?~(cover.field ~ s+u.cover.field)
-      %add-group     s+(enjs-path:res resource.field)
-      %remove-group  s+(enjs-path:res resource.field)
+      %nickname      (cord nickname.field)
+      %bio           (cord bio.field)
+      %status        (cord status.field)
+      %color         (numh %ux color.field)
+      %avatar        (unit avatar.field cord)
+      %cover         (unit cover.field cord)
+      %add-group     (enjs-path:res resource.field)
+      %remove-group  (enjs-path:res resource.field)
     ==
   ::
   ++  beng
     |=  =beings
     ^-  json
     ?-  -.beings
-      %ships  [%a (turn ~(tap in ships.beings) ship)]
+      %ships  (set ships.beings ship)
       %group  (enjs:res resource.beings)
     ==
   --

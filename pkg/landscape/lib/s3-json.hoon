@@ -19,31 +19,31 @@
 ++  update-to-json
   |=  upd=update
   ^-  json
-  =,  format
-  %+  frond:enjs  %s3-update
-  %-  pairs:enjs
+  =,  enjs:format
+  %+  frond  %s3-update
+  %-  pairs
   :~  ?-  -.upd
-          %set-current-bucket  [%'setCurrentBucket' s+bucket.upd]
-          %add-bucket          [%'addBucket' s+bucket.upd]
-          %remove-bucket       [%'removeBucket' s+bucket.upd]
-          %set-endpoint        [%'setEndpoint' s+endpoint.upd]
-          %set-access-key-id   [%'setAccessKeyId' s+access-key-id.upd]
+          %set-current-bucket  [%'setCurrentBucket' (cord bucket.upd)]
+          %add-bucket          [%'addBucket' (cord bucket.upd)]
+          %remove-bucket       [%'removeBucket' (cord bucket.upd)]
+          %set-endpoint        [%'setEndpoint' (cord endpoint.upd)]
+          %set-access-key-id   [%'setAccessKeyId' (cord access-key-id.upd)]
           %set-secret-access-key
-        [%'setSecretAccessKey' s+secret-access-key.upd]
+        [%'setSecretAccessKey' (cord secret-access-key.upd)]
       ::
           %credentials
         :-  %credentials
-        %-  pairs:enjs
-        :~  [%endpoint s+endpoint.credentials.upd]
-            [%'accessKeyId' s+access-key-id.credentials.upd]
-            [%'secretAccessKey' s+secret-access-key.credentials.upd]
+        %-  pairs
+        :~  [%endpoint (cord endpoint.credentials.upd)]
+            [%'accessKeyId' (cord access-key-id.credentials.upd)]
+            [%'secretAccessKey' (cord secret-access-key.credentials.upd)]
         ==
       ::
           %configuration
         :-  %configuration
-        %-  pairs:enjs
-        :~  [%buckets a+(turn ~(tap in buckets.configuration.upd) |=(a=@t s+a))]
-            [%'currentBucket' s+current-bucket.configuration.upd]
+        %-  pairs
+        :~  [%buckets (set buckets.configuration.upd cord)]
+            [%'currentBucket' (cord current-bucket.configuration.upd)]
         ==
       ==
   ==

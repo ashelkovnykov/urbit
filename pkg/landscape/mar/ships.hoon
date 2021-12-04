@@ -9,7 +9,7 @@
           ++  json  (ar (su fed:ag)):dejs
           --
 ++  grow  |%
-          ++  json  `^json`[%a (turn all shil:enjs)]
+          ++  json  (list all shil):enjs
           --
 ++  grad  %json
 --

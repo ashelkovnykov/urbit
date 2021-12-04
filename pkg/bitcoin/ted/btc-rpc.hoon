@@ -18,9 +18,9 @@
       %-  as-octt:mimes:html
       %-  en-json:html
       %-  pairs
-      :~  jsonrpc+s+'2.0'
-          id+s+'block-info'
-          method+s+'getblockchaininfo'
+      :~  jsonrpc+[%s '2.0']
+          id+[%s 'block-info']
+          method+[%s 'getblockchaininfo']
       ==
   ==
 ++  electrs-req
@@ -34,10 +34,10 @@
       %-  as-octt:mimes:html
       %-  en-json:html
       %-  pairs
-      :~  jsonrpc+s+'2.0'
-          id+s+'list-unspent'
-          method+s+'blockchain.scripthash.listunspent'
-          params+a+~[[%s '34aae877286aa09828803af27ce2315e72c4888efdf74d7d067c975b7c558789']]
+      :~  jsonrpc+[%s] '2.0']
+          id+[%s] 'list-unspent']
+          method+[%s 'blockchain.scripthash.listunspent']
+          params+[%a ~[[%s '34aae877286aa09828803af27ce2315e72c4888efdf74d7d067c975b7c558789']]]
       ==
   ==
 ::

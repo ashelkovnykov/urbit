@@ -3369,27 +3369,6 @@
   ::                                                    ::  ++enjs:format
   ++  enjs  ^?                                          ::  json encoders
     |%
-    ::                                                  ::  ++frond:enjs:format
-    ++  frond                                           ::  object from k-v pair
-      |=  [p=@t q=json]
-      ^-  json
-      [%o [[p q] ~ ~]]
-    ::                                                  ::  ++pairs:enjs:format
-    ++  pairs                                           ::  object from k-v list
-      |=  a=(^list [p=@t q=json])
-      ^-  json
-      [%o (~(gas by *(map @t json)) a)]
-    ::                                                  ::  ++list:enjs:format
-    ++  list                                            ::  array from list
-      |*  [lst=(^list) jon=$-(* json)]
-      ^-  json
-      :-  %a
-      (turn lst jon)
-    ::                                                  ::  ++set:enjs:format
-    ++  set                                             ::  array from set
-      |*  [sit=(^set) jon=$-(* json)]
-      ^-  json
-      (list ~(tap in sit) jon)
     ::                                                  ::  ++bool:enjs:format
     ++  bool                                            ::  boolean
       |=  a=?
@@ -3405,33 +3384,33 @@
       |=  a=^tape
       ^-  json
       [%s (crip a)]
-    ::                                                  ::  ++wall:enjs:format
-    ++  wall                                            ::  string from wall
-      |=  a=^wall
+    ::                                                  ::  ++path:enjs:format
+    ++  path                                            ::  string from path
+      |=  a=^path
       ^-  json
-      (tape (of-wall a))
-    ::                                                  ::  ++shil:enjs:format
-    ++  shil                                            ::  string from ship
-      |=  a=^ship
-      ^-  json
-      [%s (rsh [3 1] (scot %p a))]
+      [%s (spat a)]
     ::                                                  ::  ++ship:enjs:format
     ++  ship                                            ::  string from ship
       |=  a=^ship
       ^-  json
       [%s (scot %p a)]
+    ::                                                  ::  ++shil:enjs:format
+    ++  shil                                            ::  string from ship
+      |=  a=^ship
+      ^-  json
+      [%s (rsh [3 1] (scot %p a))]
     ::                                                  ::  ++numb:enjs:format
     ++  numb                                            ::  number to int
       |=  a=@u
       ^-  json
       [%n (crip (a-co:co a))]
-    ::                                                  ::  ++numc:enjs:format
-    ++  numc                                            ::  number as string
+    ::                                                  ::  ++nums:enjs:format
+    ++  nums                                            ::  number as string
       |=  a=@u
       ^-  json
       [%s (crip (a-co:co a))]
-    ::                                                  ::  ++numx:enjs:format
-    ++  numx                                            ::  hoon num as string
+    ::                                                  ::  ++numh:enjs:format
+    ++  numh                                            ::  hoon num as string
       |=  [t=@tas a=@]
       ^-  json
       [%s (scot t a)]
@@ -3448,19 +3427,40 @@
       |=  a=@da
       ^-  json
       [%s (scot %da a)]
-    ::                                                  ::  ++path:enjs:format
-    ++  path                                            ::  string from path
-      |=  a=^path
+    ::                                                  ::  ++wall:enjs:format
+    ++  wall                                            ::  string from wall
+      |=  a=^wall
       ^-  json
-      [%s (spat a)]
+      (tape (of-wall a))
     ::                                                  ::  ++tank:enjs:format
     ++  tank                                            ::  tank as string arr
       |=  a=^tank
       ^-  json
       [%a (turn (wash [0 80] a) tape)]
-    ::                                                  ::  ++nuor:enjs:format
-    ++  nuor                                            ::  unit
-      |*  [a=(unit) r=$-(* json)]
+    ::                                                  ::  ++list:enjs:format
+    ++  list                                            ::  array from list
+      |*  [lst=(^list) jon=$-(* json)]
+      ^-  json
+      :-  %a
+      (turn lst jon)
+    ::                                                  ::  ++set:enjs:format
+    ++  set                                             ::  array from set
+      |*  [sit=(^set) jon=$-(* json)]
+      ^-  json
+      (list ~(tap in sit) jon)
+    ::                                                  ::  ++frond:enjs:format
+    ++  frond                                           ::  object from k-v pair
+      |=  [p=@t q=json]
+      ^-  json
+      [%o [[p q] ~ ~]]
+    ::                                                  ::  ++pairs:enjs:format
+    ++  pairs                                           ::  object from k-v list
+      |=  a=(^list [p=@t q=json])
+      ^-  json
+      [%o (~(gas by *(map @t json)) a)]
+    ::                                                  ::  ++unit:enjs:format
+    ++  unit                                            ::  unit
+      |*  [a=(^unit) r=$-(* json)]
       ^-  json
       ?~  a  ~
       (r u.a)

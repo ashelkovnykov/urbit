@@ -72,18 +72,18 @@
     |=  sta=status:btc-provider
     ?>  ?=(%connected -.sta)
     %-  pairs
-    :~  network+s+network.sta
+    :~  network+(cord network.sta)
         block+(numb block.sta)
-        fee+?~(fee.sta ~ (numb u.fee.sta))
+        fee+(unit fee.sta numb)
     ==
   ::
   ++  new-block
     |=  sta=status:btc-provider
     ?>  ?=(%new-block -.sta)
     %-  pairs
-    :~  network+s+network.sta
+    :~  network+(cord network.sta)
         block+(numb block.sta)
-        fee+?~(fee.sta ~ (numb u.fee.sta))
+        fee+(unit fee.sta numb)
         blockhash+(hexb blockhash.sta)
         blockfilter+(hexb blockfilter.sta)
     ==
@@ -92,8 +92,8 @@
     |=  h=hexb:bitcoin
     ^-  json
     %-  pairs
-    :~  wid+(numb:enjs wid.h)
-        dat+s+(scot %ux dat.h)
+    :~  wid+(numb wid.h)
+        dat+(numh %ux dat.h)
     ==
   ::
   ++  update
@@ -111,7 +111,7 @@
       %new-address         (address address.upd)
       %balance             (balance balance.upd)
       %scan-progress       (scan-progress main.upd change.upd)
-      %error               s+error.upd
+      %error               (cord error.upd)
       %broadcast-success   ~
     ==
   ::
@@ -121,11 +121,11 @@
     ^-  json
     %-  pairs
     :~  provider+(provider provider.upd)
-        wallet+?~(wallet.upd ~ [%s u.wallet.upd])
+        wallet+(unit wallet.upd cord)
         balance+(balance balance.upd)
         history+(history history.upd)
         btc-state+(btc-state btc-state.upd)
-        address+?~(address.upd ~ (address u.address.upd))
+        address+(unit address.upd address)
     ==
   ::
   ++  change-provider
@@ -139,7 +139,7 @@
     ?>  ?=(%change-wallet -.upd)
     ^-  json
     %-  pairs
-    :~  wallet+?~(wallet.upd ~ [%s u.wallet.upd])
+    :~  wallet+(unit wallet.upd cord)
         balance+(balance balance.upd)
         history+(history history.upd)
     ==
@@ -149,7 +149,7 @@
     ?>  ?=(%psbt -.upd)
     ^-  json
     %-  pairs
-    :~  pb+s+pb.upd
+    :~  pb+(cord pb.upd)
         fee+(numb fee.upd)
     ==
   ::
@@ -164,7 +164,8 @@
   ::
   ++  scan-progress
     |=  [main=(unit idx:bitcoin) change=(unit idx:bitcoin)]
-    |^  ^-  json
+    ^-  json
+    |^
     %-  pairs
     :~  main+(from-unit main)
         change+(from-unit change)
@@ -180,7 +181,7 @@
     ^-  json
     %-  pairs
     :~  block+(numb block.bs)
-        fee+?~(fee.bs ~ (numb u.fee.bs))
+        fee+(unit fee.bs numb)
         date+(sect t.bs)
     ==
   ::
@@ -190,41 +191,39 @@
     ?~  p  ~
     %-  pairs
     :~  host+(shil host.u.p)
-        connected+b+connected.u.p
+        connected+(bool connected.u.p)
     ==
   ::
   ++  history
     |=  hy=history:btc-wallet
     ^-  json
-    :-   %o
+    :-  %o
     ^-  (map @t json)
-    %-  ~(rep by hy)
-    |=  [[=txid:btc-wallet h=hest:btc-wallet] out=(map @t json)]
-    ^-  (map @t json)
-    (~(put by out) (scot %ux dat.txid) (hest h))
+    %-  ~(run in hy)
+    |=  [=txid:btc-wallet h=hest:btc-wallet]
+    [(scot %ux dat.txid) (hest h)]
   ::
   ++  hest
     |=  h=hest:btc-wallet
     ^-  json
     %-  pairs
-    :~  xpub+s+xpub.h
+    :~  xpub+(cord xpub.h)
         txid+(hexb txid.h)
         confs+(numb confs.h)
-        recvd+?~(recvd.h ~ (sect u.recvd.h))
+        recvd+(unit recvd.h sect)
         inputs+(vals inputs.h)
         outputs+(vals outputs.h)
-        note+?~(note.h ~ [%s u.note.h])
+        note+(unit note.h cord)
     ==
   ::
   ++  vals
     |=  vl=(^list [=val:tx:bitcoin s=(unit @p)])
     ^-  json
-    :-  %a
-    %+  turn  vl
+    %+  list  vl
     |=  [v=val:tx:bitcoin s=(unit @p)]
     %-  pairs
     :~  val+(val v)
-        ship+?~(s ~ (shil u.s))
+        ship+(unit s shil)
     ==
   ::
   ++  val
@@ -241,8 +240,8 @@
     |=  a=address:bitcoin
     ^-  json
     ?-  -.a
-      %base58  [%s (rsh [3 2] (scot %uc +.a))]
-      %bech32  [%s +.a]
+      %base58  (cord (rsh [3 2] (scot %uc +.a)))
+      %bech32  (cord +.a)
     ==
   --
 --

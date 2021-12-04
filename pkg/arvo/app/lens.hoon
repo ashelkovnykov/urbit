@@ -99,12 +99,17 @@
     [%pass /import %agent [our.bowl app.source.com] %poke %import !>(c)]~
   ::
       %export-all
+    =,  enjs:format
     =/  output  (crip "{<our.bowl>}-export/atom")
     =/  jon
       =/  =atom  (jam (export-all our.bowl now.bowl))
       =/  =octs  [(met 3 atom) atom]
       =/  enc    (en:base64:mimes:html octs)
-      (pairs:enjs:format file+s+output data+s+enc ~)
+      %-  pairs
+      :~
+        file+(cord output)
+        data+(cord enc)
+      ==
     :_  this
     %+  give-simple-payload:app  eyre-id
     (json-response:gen jon)
@@ -197,10 +202,15 @@
     =/  output=@t  (crip "/{app-name}/jam")
     ::
     =/  jon=json
+      =,  enjs:format
       =/  =atom  (jam data)
       =/  =octs  [(met 3 atom) atom]
       =/  enc  (en:base64:mimes:html octs)
-      (pairs:enjs:format file+s+output data+s+enc ~)
+      %-  pairs
+      :~
+        file+(cord output)
+        data+(cord enc)
+      ==
     ::
     :_  this
     %+  give-simple-payload:app  eyre-id.u.job.state
@@ -209,8 +219,9 @@
   ++  take-sole-effect
     |=  fec=sole-effect
     ^-  (quip card:agent:gall _this)
+    =,  enjs:format
     =/  out
-      |-  ^-  (unit lens-out)
+      |-  ^-  (^unit lens-out)
       =*  loop  $
       ?+  -.fec
         ~
@@ -218,11 +229,11 @@
           %tan
         %-  some
         :-  %json
-        %-  wall:enjs:format
-        (turn (flop p.fec) |=(=tank ~(ram re tank)))
+        %-  wall
+        (turn (flop p.fec) |=(=^tank ~(ram re tank)))
       ::
           %txt
-        (some %json s+(crip p.fec))
+        (some %json (tape p.fec))
       ::
           %sag
         %-  some
@@ -231,13 +242,13 @@
           %sav
         %-  some
         :-  %json
-        %-  pairs:enjs:format
-        :~  file+s+(crip <`path`p.fec>)
-            data+s+(en:base64:mimes:html (met 3 q.fec) q.fec)
+        %-  pairs
+        :~  file+(tape <`^path`p.fec>)
+            data+(cord (en:base64:mimes:html (met 3 q.fec) q.fec))
         ==
       ::
           %mor
-        =/  all  `(list lens-out)`(murn p.fec |=(a=sole-effect loop(fec a)))
+        =/  all  `(^list lens-out)`(murn p.fec |=(a=sole-effect loop(fec a)))
         ?~  all  ~
         ~|  [%multiple-effects all]
         ?>  ?=(~ t.all)

@@ -9,7 +9,7 @@
   ++  update
     |=  upd=^update
     ^-  json
-    |^  (frond %launch-update (pairs ~[(encode upd)]))
+    |^  (frond %launch-update (frond (encode upd)))
     ::
     ++  encode
       |=  upd=^update
@@ -18,29 +18,29 @@
           %add
         :-  %add
         %-  pairs
-        :~  [%name s+name.upd]
+        :~  [%name (cord name.upd)]
             [%tile (tile tile.upd)]
         ==
       ::
-          %remove             [%remove s+name.upd]
-          %change-order       [%'changeOrder' (terms tile-ordering.upd)]
-          %change-first-time  [%'changeFirstTime' b+first-time.upd]
+          %remove             [%remove (cord name.upd)]
+          %change-order       [%'changeOrder' (list tile-ordering.upd cord)]
+          %change-first-time  [%'changeFirstTime' (bool first-time.upd)]
           %change-is-shown
         :-  %'changeIsShown'
         %-  pairs
-        :~  [%name s+name.upd]
-            [%'isShown' b+is-shown.upd]
+        :~  [%name (cord name.upd)]
+            [%'isShown' (bool is-shown.upd)]
         ==
       ::
           %initial
         :-  %initial
         %-  pairs
         :~  [%tiles (tiles tiles.upd)]
-            [%'tileOrdering' (terms tile-ordering.upd)]
-            [%'firstTime' b+first-time.upd]
+            [%'tileOrdering' (list tile-ordering.upd cord)]
+            [%'firstTime' (bool first-time.upd)]
         ==
       ::
-          %keys  [%keys (terms ~(tap in keys.upd))]
+          %keys  [%keys (set keys.upd cord)]
       ==
     ::
     ++  tile
@@ -48,16 +48,17 @@
       ^-  json
       %-  pairs
       :~  [%type (tile-type type.tile)]
-          [%'isShown' b+is-shown.tile]
+          [%'isShown' (bool is-shown.tile)]
       ==
     ::
     ++  tiles
       |=  =^tiles
       ^-  json
-      %-  pairs
-      %+  turn  ~(tap by tiles)
-      |=  [=term til=^tile]
-      [term (tile til)] 
+      :-  %o
+      %-  ~(run by tiles)
+      |=  til=^tile
+      ^-  json
+      (tile til)
     ::
     ++  tile-type
       |=  type=^tile-type
@@ -66,23 +67,18 @@
           %basic
         %+  frond  %basic
         %-  pairs
-        :~  [%title s+title.type]
-            [%'iconUrl' s+icon-url.type]
-            [%'linkedUrl' s+linked-url.type]
+        :~  [%title (cord title.type)]
+            [%'iconUrl' (cord icon-url.type)]
+            [%'linkedUrl' (cord linked-url.type)]
         ==
       ::
           %custom
         %+  frond  %custom
         %-  pairs
-        :~  [%'linkedUrl' ?~(linked-url.type ~ s+u.linked-url.type)]
-            [%'image' ?~(image.type ~ s+u.image.type)]
+        :~  [%'linkedUrl' (unit linked-url.type cord)]
+            [%'image' (unit image.type cord)]
         ==
       ==
-    ::
-    ++  terms
-      |=  terms=(^list term)
-      ^-  json
-      (list terms cord)
     --
   --
 ::

@@ -32,17 +32,20 @@
   ;codemirror(value "{v.i.a.g.i.c.src}");
 ::
 ++  elem-to-react-json                                  ::  serialize DOM as json
-  |=  src=manx  ^-  json
+  |=  src=manx
+  ^-  json
   ?:  ?=(_;/(**) src)
-    (tape:enjs v.i.a.g.src)
+    (ta:enjs v.i.a.g.src)
   =+  atr=(molt `(list (pair mane tape))`a.g.src)
   ?:  (~(has by atr) [%urb %codemirror])
     $(src (urb-codemirror src))
-  %-  pairs:enjs  :~
-    c+a+(turn c.src ..$)
-    gn+s+(mane-to-cord n.g.src)
+  %-  pairs:enjs
+  :~
+    c+(list elem-to-react-json c.src)
+    gn+(cord (mane-to-cord n.g.src))
     =<  ga+(pairs:enjs (turn a.g.src .))
-    |=  [a=mane b=tape]  ^-  [cord json]
+    |=  [a=mane b=tape]
+    ^-  [^cord json]
     :_  (tape:enjs b)
     ?^  a  (mane-to-cord a)
     (~(gut by react-attrs) a a)

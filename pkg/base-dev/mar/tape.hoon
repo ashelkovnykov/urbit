@@ -3,7 +3,7 @@
 ++  grow
   |%
   ++  noun  tap
-  ++  json  s+(crip tap)
+  ++  json  (tape:enjs:format tap)
   --
 ++  grab
   |%

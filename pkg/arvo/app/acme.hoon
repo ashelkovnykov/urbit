@@ -455,17 +455,19 @@
 ++  signed-request
   |=  [url=purl non=@t bod=json]
   ^-  hiss
+  =,  enjs:format
   :^  url  %post
     (my content-type+['application/jose+json' ~] ~)
   :-  ~
   ^-  octs
   =;  pro=json
     (as-octt:mimes:html (en-json:html (sign:jws key.act pro bod)))
-  :-  %o  %-  my  :~
-    nonce+s+non
-    url+s+(crip (en-purl:html url))
+  %-  pairs
+  :~
+    nonce+(cord non)
+    url+(tape (en-purl:html url))
     ?^  reg.act
-      kid+s+kid.u.reg.act
+      kid+(cord kid.u.reg.act)
     jwk+(pass:en:jwk key.act)
   ==
 ::  +stateful-request: emit signed, nonce'd request
@@ -624,7 +626,7 @@
       ?:  =(~ next-order)
         this
       (validate-domain:effect 0)
-    =/  =json  [%o (my [['termsOfServiceAgreed' b+&] ~])]
+    =/  =json  (frond:enjs:format 'termsOfServiceAgreed' [%b &])
     ::  XX date in wire?
     ::
     =/  wire-params  [try %register /]
@@ -643,15 +645,17 @@
   ++  new-order
     ^+  this
     ~|  %new-order-effect-fail
+    =,  enjs:format
     ?.  ?=(^ reg.act)  ~|(%no-account !!)
     ?.  ?=([~ ^] next-order)  ~|(%no-domains !!)
     =/  =json
-      :-  %o  %-  my  :~
-        :-  %identifiers
-        :-  %a
-        %+  turn
-          ~(tap in ~(key by `(map turf *)`dom.u.next-order))
-        |=(a=turf [%o (my type+s+'dns' value+s+(en-turf:html a) ~)])
+      %+  frond  %identifiers
+      %+  set  ~(key by `(map turf *)`dom.u.next-order)
+      |=  a=turf
+      %-  pairs
+      :~
+        type+[%s 'dns']
+        value+(cord (en-turf:html a))
       ==
     =/  wire-params  [try %new-order /(scot %da now.bow)]
     (stateful-request wire-params new-order.dir json)
@@ -687,7 +691,8 @@
     ::
     ?>  ?=(%wake sas.u.rod)
     =/  =json
-      [%o (my csr+s+(en-base64url (met 3 csr.u.rod) `@`csr.u.rod) ~)]
+      %+  frond:enjs:format  %csr
+      (cord:enjs:format (en-base64url (met 3 csr.u.rod) `@`csr.u.rod))
     =/  wire-params  [try %finalize-order /(scot %da now.bow)]
     (stateful-request wire-params fin.u.rod json)
   ::  +check-order: check completed order for certificate availability

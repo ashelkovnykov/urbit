@@ -78,16 +78,16 @@
     ^-  json
     %+  frond  -.update
     ?-  -.update
-      %add-group       (add-group update)
-      %add-members     (add-members update)
-      %add-tag         (add-tag update)
-      %remove-members  (remove-members update)
-      %remove-tag      (remove-tag update)
-      %initial         (initial update)
-      %initial-group   (initial-group update)
-      %remove-group    (remove-group update)
-      %change-policy   (change-policy update)
-      %expose        (expose update)
+      %add-group        (add-group update)
+      %add-members      (add-members update)
+      %add-tag          (add-tag update)
+      %remove-members   (remove-members update)
+      %remove-tag       (remove-tag update)
+      %initial          (initial update)
+      %initial-group    (initial-group update)
+      %remove-group     (remove-group update)
+      %change-policy    (change-policy update)
+      %expose           (expose update)
     ==
   ::
   ++  initial-group
@@ -101,14 +101,12 @@
   ++  initial
     |=  =^initial
     ?>  ?=(%initial -.initial)
-    %-  pairs
-    ^-  (^list [@t json])
-    %+  turn
-      ~(tap by groups.initial)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in groups.initial)
     |=  [rid=resource grp=^group]
-    ^-  [@t json]
     :_  (group grp)
-    (enjs-path:resource rid)
+    (spat (en-path:resource rid))
   ::
   ++  group
     |=  =^group
@@ -117,33 +115,32 @@
     :~  members+(set members.group shil)
         policy+(policy policy.group)
         tags+(tags tags.group)
-        hidden+b+hidden.group
+        hidden+(bool hidden.group)
     ==
-  ::
   ++  tags
     |=  =^tags
     ^-  json
-    %-  pairs
-    %+  turn  ~(tap by tags)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in tags)
     |=  [=^tag ships=(^set ^ship)]
-    ^-  [@t json]
     :_  (set ships shil)
     ?@  tag  tag
     ;:  (cury cat 3)
       app.tag  '\\'
       tag.tag  '\\'
-      (enjs-path:resource resource.tag)
+      (spat (en-path:resource resource.tag))
     ==
   ::
   ++  tag
     |=  =^tag
     ^-  json
     ?@  tag
-      (frond %tag s+tag)
+      (frond %tag (cord tag))
     %-  pairs
-    :~  app+s+app.tag
-        tag+s+tag.tag
-        resource+s+(enjs-path:resource resource.tag)
+    :~  app+(cord app.tag)
+        tag+(cord tag.tag)
+        resource+(enjs-path:resource resource.tag)
     ==
   ::
   ++  policy
@@ -151,10 +148,11 @@
     %+  frond  -.policy
     %-  pairs
     ?-  -.policy
-         %invite
+        %invite
       :~  pending+(set pending.policy shil)
       ==
-         %open
+    ::
+        %open
       :~  banned+(set banned.policy shil)
           ban-ranks+(set ban-ranks.policy cord)
       ==
@@ -205,7 +203,7 @@
     %-  pairs
     :~  resource+(enjs:resource resource.action)
         policy+(policy policy.action)
-        hidden+b+hidden.action
+        hidden+(bool hidden.action)
     ==
   ::
   ++  add-members

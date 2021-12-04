@@ -671,7 +671,7 @@
   ++  batch-read-request
     |=  req=(list proto-read-request)
     ^-  json
-    a+(turn req read-request)
+    (list:enjs:format req read-request)
   ::
   ++  read-request
     |=  proto-read-request
@@ -684,20 +684,20 @@
   ::
   ++  request-to-json
     =,  enjs:format
-    |=  [riq=(unit @t) req=request]
+    |=  [riq=(^unit @t) req=request]
     ^-  json
     %-  pairs
     =;  r=[met=@t pas=(^list json)]
       ::TODO  should use request-to-json:rpc:jstd,
       ::      and probably (fall riq -.req)
-      :*  jsonrpc+s+'2.0'
-          method+s+met.r
-          params+a+pas.r
+      :*  jsonrpc+[%s '2.0']
+          method+(cord met.r)
+          params+[%a pas.r]
           ::TODO  would just jamming the req noun for id be a bad idea?
           ?~  riq  ~
-          [id+s+u.riq]~
+          [id+(cord u.riq)]~
       ==
-    ?-  -.req
+    ?-    -.req
         %eth-block-number
       ['eth_blockNumber' ~]
     ::
@@ -710,31 +710,31 @@
         %eth-new-filter
       :-  'eth_newFilter'
       :_  ~
-      :-  %o  %-  ~(gas by *(map @t json))
+      %-  pairs
       =-  (murn - same)
-      ^-  (^list (unit (pair @t json)))
-      :~  ?~  fro.req  ~
+      ^-  (^list (^unit (pair @t json)))
+      :~
+          ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
         ::
           ?~  tob.req  ~
           `['toBlock' (block-to-json u.tob.req)]
         ::
           ::NOTE  tmi
-          ?:  =(0 (lent adr.req))  ~
+          ?~  adr.req  ~
           :+  ~  'address'
-          ?:  =(1 (lent adr.req))  (tape (address-to-hex (snag 0 adr.req)))
-          :-  %a
-          (turn adr.req (cork address-to-hex tape))
+          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
+          (list (turn adr.req address-to-hex) tape)
         ::
           ?~  top.req  ~
-          :+  ~  'topics'
-          (topics-to-json top.req)
+          `['topics' (topics-to-json top.req)]
       ==
     ::
         %eth-get-block-by-number
       :-  'eth_getBlockByNumber'
-      :~  (tape (num-to-hex bon.req))
-          b+txs.req
+      :~ 
+        (tape (num-to-hex bon.req))
+        (bool txs.req)
       ==
     ::
         %eth-get-filter-logs
@@ -743,43 +743,41 @@
         %eth-get-logs
       :-  'eth_getLogs'
       :_  ~
-      :-  %o  %-  ~(gas by *(map @t json))
+      %-  pairs
       =-  (murn - same)
-      ^-  (^list (unit (pair @t json)))
-      :~  ?~  fro.req  ~
+      ^-  (^list (^unit (pair @t json)))
+      :~ 
+          ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
         ::
           ?~  tob.req  ~
           `['toBlock' (block-to-json u.tob.req)]
         ::
-          ?:  =(0 (lent adr.req))  ~
+          ?~  adr.req  ~
           :+  ~  'address'
-          ?:  =(1 (lent adr.req))  (tape (address-to-hex (snag 0 adr.req)))
-          :-  %a
-          (turn adr.req (cork address-to-hex tape))
+          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
+          (list (turn adr.req address-to-hex) tape)
         ::
           ?~  top.req  ~
-          :+  ~  'topics'
-          (topics-to-json top.req)
+          `['topics' (topics-to-json top.req)]
       ==
     ::
         %eth-get-logs-by-hash
       :-  'eth_getLogs'
-      :_  ~  :-  %o
-      %-  ~(gas by *(map @t json))
+      :_  ~
+      %-  pairs
       =-  (murn - same)
-      ^-  (^list (unit (pair @t json)))
-      :~  `['blockHash' (tape (transaction-to-hex has.req))]
+      ^-  (^list (^unit (pair @t json)))
+      :~ 
+          `['blockHash' (tape (transaction-to-hex has.req))]
         ::
-          ?:  =(0 (lent adr.req))  ~
+          ?~  adr.req  ~
           :+  ~  'address'
-          ?:  =(1 (lent adr.req))  (tape (address-to-hex (snag 0 adr.req)))
-          :-  %a
-          (turn adr.req (cork address-to-hex tape))
+          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
+          (list (turn adr.req address-to-hex) tape)
         ::
           ?~  top.req  ~
-          :+  ~  'topics'
-          (topics-to-json top.req)
+          `['topics' (topics-to-json top.req)]
       ==
     ::
         %eth-get-filter-changes
@@ -787,14 +785,16 @@
     ::
         %eth-get-transaction-count
       :-  'eth_getTransactionCount'
-      :~  (tape (address-to-hex adr.req))
-          (block-to-json block.req)
+      :~ 
+        (tape (address-to-hex adr.req))
+        (block-to-json block.req)
       ==
     ::
         %eth-get-balance
       :-  'eth_getBalance'
-      :~  (tape (address-to-hex adr.req))
-          (block-to-json block.req)
+      :~
+        (tape (address-to-hex adr.req))
+        (block-to-json block.req)
       ==
     ::
         %eth-get-transaction-by-hash
@@ -811,10 +811,11 @@
     =,  enjs:format
     |=  cal=call
     ^-  json
-    :-  %o  %-  ~(gas by *(map @t json))
+    %-  pairs
     =-  (murn - same)
-    ^-  (^list (unit (pair @t json)))
-    :~  ?~  from.cal  ~
+    ^-  (^list (^unit (pair @t json)))
+    :~
+        ?~  from.cal  ~
         `['from' (tape (address-to-hex u.from.cal))]
       ::
         `['to' (tape (address-to-hex to.cal))]
@@ -833,29 +834,32 @@
     ==
   ::
   ++  block-to-json
+    =,  enjs:format
     |=  dob=block
     ^-  json
     ?-  -.dob
-      %number   s+(crip '0' 'x' ((x-co:co 1) n.dob))
-      %label    s+l.dob
+      %number   (tape (num-to-hex n.dob))
+      %label    (cord l.dob)
     ==
   ::
   ++  topics-to-json
-    |=  tos=(list ?(@ux (list @ux)))
+    =,  enjs:format
+    |=  tos=(^list ?(@ux (^list @ux)))
     ^-  json
-    :-  %a
-    =/  ttj
-      ;:  cork
-        (cury render-hex-bytes 32)
-        prefix-hex
-        tape:enjs:format
-      ==
-    %+  turn  tos
-    |=  t=?(@ (list @))
+    %+  list  tos
+    |=  t=?(@ (^list @))
+    |^
     ?@  t
       ?:  =(0 t)  ~
       (ttj `@`t)
-    a+(turn t ttj)
+    (list t ttj)
+    ++  ttj
+      ;:  cork
+        (cury render-hex-bytes 32)
+        prefix-hex
+        tape
+      ==
+    --
   ::
   ::  parsing responses
   ::

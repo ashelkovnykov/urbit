@@ -144,12 +144,12 @@
 ++  test-enjs
   =,  enjs
   ;:  weld
-    ::  frond
+    ::  simple object
     ::
     %+  expect-eq
       !>  [%o (molt ~[foo:ex])]
       !>  (frond foo:ex)
-    ::  pairs
+    ::  complex object
     ::
     %+  expect-eq
       !>  [%o (molt ~[foo:ex bar:ex])]
@@ -186,64 +186,64 @@
       ::
       !>  wal:ex
       !>  (wall ~["hello" "world"])
-    ::  shil
-    ::
-    %+  expect-eq
-      !>  [%s 'zod']
-      !>  (shil ~zod)
-    ::  ship
+    ::  ship name
     ::
     %+  expect-eq
       !>  [%s '~zod']
       !>  (ship ~zod)
-    ::  numb
+    ::  ship name, no '~'
+    ::
+    %+  expect-eq
+      !>  [%s 'zod']
+      !>  (shil ~zod)
+    ::  number
     ::
     %+  expect-eq
       !>  [%n '0']
       !>  (numb 0)
     %+  expect-eq
       !>  [%n '10']
-      !>  (numb 10)
+      !>  (numb 0xa)
     %+  expect-eq
       !>  num:ex
       !>  (numb 101)
     %+  expect-eq
       !>  [%n '1000']
       !>  (numb 1.000)
-    ::  numc
+    ::  number as string
     ::
     %+  expect-eq
       !>  [%s '0']
-      !>  (numc 0)
+      !>  (nums 0)
     %+  expect-eq
       !>  [%s '10']
-      !>  (numc 10)
+      !>  (nums 10)
     %+  expect-eq
       !>  [%s '100']
-      !>  (numc 100)
+      !>  (nums 100)
     %+  expect-eq
       !>  [%s '1000']
-      !>  (numc 1.000)
-    ::  numx
+      !>  (nums 1.000)
+    ::  hoon num as string
     ::
     %+  expect-eq
       !>  [%s '0']
-      !>  (numx %u 0)
+      !>  (numh %u 0)
     %+  expect-eq
       !>  [%s '1.000']
-      !>  (numx %ud 1.000)
+      !>  (numh %ud 1.000)
     %+  expect-eq
       !>  [%s '0xa.baca']
-      !>  (numx %ux 0xa.baca)
+      !>  (numh %ux 0xa.baca)
     %+  expect-eq
       !>  [%s '384.319.963']
-      !>  (numx %u 0vb.egger)
-    ::  sect
+      !>  (numh %u 0vb.egger)
+    ::  sec time
     ::
     %+  expect-eq
       !>  tsc:ex
       !>  (sect ~1970.1.1..0.0.1)
-    ::  time
+    ::  ms time
     ::
     %+  expect-eq
       !>  tms:ex
@@ -272,14 +272,14 @@
     %+  expect-eq
       !>  [%a ~[[%s '!(a:b:c)']]]
       !>  (tank [%palm [":" "!" "(" ")"] leaf+"a" leaf+"b" leaf+"c" ~])
-    ::  nuor
+    ::  unit
     ::
     %+  expect-eq
       !>  ~
-      !>  (nuor ~ numb)
+      !>  (unit ~ numb)
     %+  expect-eq
       !>  num:ex
-      !>  (nuor (some 101) numb)
+      !>  (unit (some 101) numb)
   ==
 ::  dejs - recursive processing of `json` values
 ::

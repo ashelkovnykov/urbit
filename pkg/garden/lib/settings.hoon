@@ -38,36 +38,36 @@
     |=  [d=desk k=key b=^bucket]
     ^-  json
     %-  pairs
-    :~  bucket-key+s+k
+    :~  bucket-key+(cord k)
         bucket+(bucket b)
-        desk+s+d
+        desk+(cord d)
     ==
   ::
   ++  del-bucket
     |=  [d=desk k=key]
     ^-  json
     %-  pairs
-    :~  bucket-key+s+k
-        desk+s+d
+    :~  bucket-key+(cord k)
+        desk+(cord d)
     ==
   ::
   ++  put-entry
     |=  [d=desk b=key k=key v=val]
     ^-  json
-    %-  pairs
-    :~  bucket-key+s+b
-        entry-key+s+k
+    %-  pr
+    :~  bucket-key+(cord b)
+        entry-key+(cord k)
         value+(value v)
-        desk+s+d
+        desk+(cord d)
     ==
   ::
   ++  del-entry
     |=  [d=desk buc=key =key]
     ^-  json
-    %-  pairs
-    :~  bucket-key+s+buc
-        entry-key+s+key
-        desk+s+d
+    %-  pr
+    :~  bucket-key+(cord buc)
+        entry-key+(cord key)
+        desk+(cord d)
     ==
   ::
   ++  value
@@ -77,7 +77,7 @@
       %s  val
       %b  val
       %n  (numb p.val)
-      %a  [%a (turn p.val value)]
+      %a  (list p.val value)
     ==
   ::
   ++  bucket

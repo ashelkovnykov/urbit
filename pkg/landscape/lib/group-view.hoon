@@ -56,41 +56,42 @@
     %+  frond  %group-view-update
     %+  frond  -.upd
     ?-  -.upd
-      %initial  (initial +.upd)
-      %progress  (progress +.upd)
-      %started   (started +.upd)
-      %hide      s+(enjs-path:resource +.upd)
+      %initial    (initial +.upd)
+      %progress   (progress +.upd)
+      %started    (started +.upd)
+      %hide       (enjs-path:resource +.upd)
     ==
   ::
   ++  started
     |=  [rid=resource req=^request]
     %-  pairs
-    :~  resource+s+(enjs-path:resource rid)
+    :~  resource+(enjs-path:resource rid)
         request+(request req)
     ==
   ::
   ++  progress
     |=  [rid=resource prog=^progress]
     %-  pairs
-    :~  resource+s+(enjs-path:resource rid)
-        progress+s+prog
+    :~  resource+(enjs-path:resource rid)
+        progress+(cord prog)
     ==
   ++  request
     |=  req=^request
     %-  pairs
     :~  started+(time started.req)
         ship+(shil ship.req)
-        progress+s+progress.req
-        'shareContact'^b+share-co.req
-        autojoin+b+autojoin.req
-        app+s+`@t`app.req
-        invite+a+(turn ~(tap in invite.req) (cork (cury scot %ux) (lead %s)))
+        progress+(cord progress.req)
+        'shareContact'^(bool share-co.req)
+        autojoin+(bool autojoin.req)
+        app+(cord app.req)
+        invite+(set invite.req (cury numh %ux))
     ==
   ::
   ++  initial
     |=  init=(map resource ^request)
-    %-  pairs
-    %+  turn  ~(tap by init)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in init)
     |=  [rid=resource req=^request]
     :_  (request req)
     (enjs-path:resource rid)

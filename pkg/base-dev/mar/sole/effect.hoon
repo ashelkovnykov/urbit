@@ -13,18 +13,31 @@
 ++  mar-sole-change                       ::  XX  dependency
   |_  cha=sole-change
   ++  grow
-    |%  ++  json
+    |%
+    ++  json
       ^-  ^json
       =,  enjs
       =;  edi
-        =,(cha (pairs ted+(edi ted) ler+a+~[(numb own.ler) (numb his.ler)] ~))
+        =,  cha
+        %-  pairs
+        :~
+          ted+(edi ted)
+          ler+(list ~[own.ler his.ler] numb)
+        ==
       |=  det=sole-edit
       ?-  -.det
-        %nop  [%s 'nop']
-        %mor  [%a (turn p.det ..$)]
-        %del  (frond %del (numb p.det))
-        %set  (frond %set (tape (tufa p.det)))
-        %ins  (frond %ins (pairs at+(numb p.det) cha+s+(tuft q.det) ~))
+          %nop  (cord 'nop')
+          %mor  (list p.det json)
+          %del  (frond %del (numb p.det))
+          %set  (frond %set (tape (tufa p.det)))
+        ::
+          %ins
+        %+  frond  %ins
+        %-  pairs
+        :~
+          at+(numb p.det)
+          cha+(cord (tuft q.det))
+        ==
       ==
     --
   --
@@ -55,7 +68,7 @@
     ^-  ^json
     ?+    -.sef
               ~|(unsupported-effect+-.sef !!)
-        %mor  [%a (turn p.sef |=(a=sole-effect json(sef a)))]
+        %mor  (list p.sef json)
         %err  (frond %hop (numb p.sef))
         %txt  (frond %txt (tape p.sef))
         %tan  (frond %tan (tape (wush 160 p.sef)))
@@ -63,20 +76,25 @@
     ::
         %pro
       %+  frond  %pro
-      (pairs vis+b+vis.sef tag+s+tag.sef cad+(tape (purge cad.sef)) ~)
+      %-  pairs
+      :~
+        vis+(bool vis.sef)
+        tag+(cord tag.sef)
+        cad+(tape (purge cad.sef))
+      ==
     ::
         %tab
-      :-  %a
-      %+  turn  p.sef
+      %+  list  p.sef
       |=  [c=^cord =^tank]
       %+  frond  %tab
       %-  pairs
-      :~  match+s+c
-          info+(tape ~(ram re tank))
+      :~
+        match+(cord c)
+        info+(tape ~(ram re tank))
       ==
     ::
         ?(%bel %clr %nex %bye)
-      (frond %act %s -.sef)
+      (frond %act (cord -.sef))
     ==
   --
 --

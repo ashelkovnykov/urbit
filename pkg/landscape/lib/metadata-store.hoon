@@ -11,17 +11,17 @@
   ++  initial-group
     |=  [group=resource assocs=^associations]
     %-  pairs
-    :~  group+s+(enjs-path:resource group)
+    :~  group+(enjs-path:resource group)
         associations+(associations assocs)
     ==
   ::
   ++  associations
     |=  =^associations
     ^-  json
-    %-  pairs
-    %+  turn  ~(tap by associations)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in associations)
     |=  [=md-resource [group=resource =^metadatum]]
-    ^-  [^cord json]
     :-  %:  rap  3
             (spat (en-path:resource group))
             '/'
@@ -30,9 +30,9 @@
             ~
         ==
     %-  pairs
-    :~  [%group s+(enjs-path:resource group)]
-        [%app-name s+app-name.md-resource]
-        [%resource s+(enjs-path:resource resource.md-resource)]
+    :~  [%group (enjs-path:resource group)]
+        [%app-name (cord app-name.md-resource)]
+        [%resource (enjs-path:resource resource.md-resource)]
         [%metadata (^metadatum metadatum)]
     ==
   ::
@@ -40,95 +40,91 @@
     |=  edt=^edit-field
     ^-  json
     %+  frond  -.edt
-    ^-  json
     ?-  -.edt
-      %color                                [%s `@t`(scot %ux color.edt)]
-      ?(%title %description %picture %vip)  [%s `@t`+.edt]
-      ?(%preview %hidden)                   [%b `?`+.edt]
+      %color                                (numh %ux color.edt)
+      ?(%title %description %picture %vip)  (cord +.edt)
+      ?(%preview %hidden)                   (bool +.edt)
     ==
   ::
   ++  metadatum
     |=  met=^metadatum
     ^-  json
     %-  pairs
-    :~  [%title s+title.met]
-        [%description s+description.met]
-        [%color s+(scot %ux color.met)]
-        [%date-created s+(scot %da date-created.met)]
+    :~  [%title (cord title.met)]
+        [%description (cord description.met)]
+        [%color (numh %ux color.met)]
+        [%date-created (numh %da date-created.met)]
         [%creator (ship creator.met)]
       ::
         :-  %config
         ?+    -.config.met  o+~
             %graph
-          %+  frond  %graph
-          s+module.config.met
+          (frond %graph (cord module.config.met))
         ::
             %group
           %+  frond  %group
-          ?~  feed.config.met
-            ~
-          ?~  u.feed.config.met
-            o+~
+          ?~  feed.config.met  ~
+          ?~  u.feed.config.met  o+~
           %-  pairs
-          :~  [%app-name s+app-name.u.u.feed.config.met]
-              [%resource s+(enjs-path:resource resource.u.u.feed.config.met)]
+          :~  [%app-name (cord app-name.u.u.feed.config.met)]
+              [%resource (enjs-path:resource resource.u.u.feed.config.met)]
           ==
         ==
       ::
-        [%picture s+picture.met]
-        [%preview b+preview.met]
-        [%hidden b+hidden.met]
-        [%vip s+`@t`vip.met]
+        [%picture (cord picture.met)]
+        [%preview (bool preview.met)]
+        [%hidden (bool hidden.met)]
+        [%vip (cord vip.met)]
     ==
   ::
   ++  update
     |=  upd=^update
     ^-  json
     %+  frond  %metadata-update
-    %-  pairs
-    :~  ?-  -.upd
+    %-  frond
+    ?-  -.upd
+    ::
         %add
       :-  %add
       %-  pairs
-      :~  [%group s+(enjs-path:resource group.upd)]
-          [%app-name s+app-name.resource.upd]
-          [%resource s+(enjs-path:resource resource.resource.upd)]
+      :~  [%group (enjs-path:resource group.upd)]
+          [%app-name (cord app-name.resource.upd)]
+          [%resource (enjs-path:resource resource.resource.upd)]
           [%metadata (metadatum metadatum.upd)]
       ==
     ::
         %edit
       :-  %edit
       %-  pairs
-      :~  [%group s+(enjs-path:resource group.upd)]
-          [%app-name s+app-name.resource.upd]
-          [%resource s+(enjs-path:resource resource.resource.upd)]
+      :~  [%group (enjs-path:resource group.upd)]
+          [%app-name (cord app-name.resource.upd)]
+          [%resource (enjs-path:resource resource.resource.upd)]
           [%edit (edit-field edit-field.upd)]
       ==
     ::
         %updated-metadata
       :-  %add
       %-  pairs
-      :~  [%group s+(enjs-path:resource group.upd)]
-          [%app-name s+app-name.resource.upd]
-          [%resource s+(enjs-path:resource resource.resource.upd)]
+      :~  [%group (enjs-path:resource group.upd)]
+          [%app-name (cord app-name.resource.upd)]
+          [%resource (enjs-path:resource resource.resource.upd)]
           [%metadata (metadatum metadatum.upd)]
       ==
     ::
         %remove
-        :-  %remove
-        %-  pairs
-        :~  [%group s+(enjs-path:resource group.upd)]
-            [%app-name s+app-name.resource.upd]
-            [%resource s+(enjs-path:resource resource.resource.upd)]
-        ==
+      :-  %remove
+      %-  pairs
+      :~  [%group (enjs-path:resource group.upd)]
+          [%app-name (cord app-name.resource.upd)]
+          [%resource (enjs-path:resource resource.resource.upd)]
+      ==
     ::
         %associations
       [%associations (associations associations.upd)]
     ::
         %initial-group
       [%initial-group (initial-group +.upd)]
-    ::
-    ==  ==
+    ==
   ::
   ++  hook-update
     |=  upd=^hook-update
@@ -136,15 +132,17 @@
     %+  frond  -.upd
     %-  pairs
     ?-  -.upd
+    ::
         %preview
-      :~  [%group s+(enjs-path:resource group.upd)]
+      :~  [%group (enjs-path:resource group.upd)]
           [%channels (associations channels.upd)]
           [%members (numb members.upd)]
           [%channel-count (numb channel-count.upd)]
           [%metadata (metadatum metadatum.upd)]
       ==
+    ::
         %req-preview
-      ~[group+s+(enjs-path:resource group.upd)]
+      ~[group+(enjs-path:resource group.upd)]
     ==
   --
 ::

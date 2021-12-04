@@ -3,7 +3,7 @@
 ++  grow
   |%
   ++  noun  desk
-  ++  json  s+desk
+  ++  json  (cord:enjs:format desk)
   --
 ++  grab
   |%

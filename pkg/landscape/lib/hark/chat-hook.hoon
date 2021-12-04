@@ -22,8 +22,8 @@
     %+  frond  -.upd
     ?-  -.upd
       ?(%listen %ignore)  (path chat.upd)
-      %set-mentions  b+mentions.upd
-      %initial   a+(turn ~(tap in watching.upd) path)
+      %set-mentions       (bool mentions.upd)
+      %initial            (set watching.upd path)
     ==
   --
 --

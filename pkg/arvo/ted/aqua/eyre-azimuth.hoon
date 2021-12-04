@@ -82,19 +82,19 @@
   ?:  =(method 'eth_blockNumber')
     :-  ~
     %+  answer-request  req
-    s+(crip (num-to-hex:ethereum latest-block))
+    (tape (num-to-hex:ethereum latest-block))
   ?:  =(method 'eth_getBlockByNumber')
     :-  ~
     %+  answer-request  req
-    :-  %o
-    =/  number  (hex-to-num:ethereum (get-first-param req))
+    %-  pairs
+    =/  hex  (get-first-param req)
+    =/  number  (hex-to-num:ethereum hex)
     =/  hash  (number-to-hash number)
     =/  parent-hash  (number-to-hash ?~(number number (dec number)))
-    %-  malt
-    ^-  (^list (pair term json))
-    :~  hash+s+(crip (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
-        number+s+(crip (num-to-hex:ethereum number))
-        'parentHash'^s+(crip (num-to-hex:ethereum parent-hash))
+    :~
+      'number'^(tape hex)
+      'hash'^(tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
+      'parentHash'^(tape (num-to-hex:ethereum parent-hash))   ::  not like hash?
     ==
   ?:  =(method 'eth_getLogs')
     :-  ~
@@ -169,10 +169,11 @@
     =/  resp
       %-  crip
       %-  en-json:html
-      :-  %a  :_  ~
+      :-  %a
+      :_  ~
       %-  pairs
-      :~  id+s+(get-id req)
-          jsonrpc+s+'2.0'
+      :~  id+(cord (get-id req))
+          jsonrpc+(cord '2.0')
           result+result
       ==
     =/  events=(^list aqua-event)
@@ -222,37 +223,28 @@
     |=  [count=@ud selected-logs=(^list az-log)]
     ^-  json
     :-  %a
-    |-  ^-  (^list json)
-    ?~  selected-logs
-      ~
-    :_  $(selected-logs t.selected-logs, count +(count))
+    |-
+    ^-  (^list json)
+    ?~  selected-logs  ~
+    :_  $(count +(count), selected-logs t.selected-logs)
     %-  pairs
-    :~  'logIndex'^s+'0x0'
-        'transactionIndex'^s+'0x0'
-        :+  'transactionHash'  %s
-        (crip (prefix-hex:ethereum (render-hex-bytes:ethereum 32 `@`0x5362)))
-      ::
-        :+  'blockHash'  %s
+    :~
+      'logIndex'^[%s '0x0']
+      'transactionIndex'^[%s '0x0']
+        :- 'transactionHash'
+      (tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 `@`0x5362)))
+    ::
         =/  hash  (number-to-hash count)
-        (crip (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
-      ::
-        :+  'blockNumber'  %s
-        (crip (num-to-hex:ethereum count))
-      ::
-        :+  'address'  %s
-        (crip (address-to-hex:ethereum azimuth:contracts:azimuth))
-      ::
-        'type'^s+'mined'
-      ::
-        'data'^s+data.i.selected-logs
-        :+  'topics'  %a
-        %+  turn  topics.i.selected-logs
-        |=  topic=@ux
-        ^-  json
-        :-  %s
-        %-  crip
-        %-  prefix-hex:ethereum
-        (render-hex-bytes:ethereum 32 `@`topic)
+      'blockHash'^(tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
+    ::
+      'blockNumber'^(tape (num-to-hex:ethereum count))
+      'address'^(tape (address-to-hex:ethereum azimuth:contracts:azimuth))
+      'type'^(cord` 'mined')
+      'data'^(cord data.i.selected-logs)
+    ::
+        :-  'topics'
+        %+  list  topics.i.selected-logs
+      :(cork (cury render-hex-bytes:ethereum 32) prefix-hex:ethereum tape)
     ==
   --
 ::

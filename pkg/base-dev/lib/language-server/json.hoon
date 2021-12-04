@@ -186,8 +186,8 @@
     |=  pub=text-document--publish-diagnostics:notification:lsp
     ^-  json
     %:  pairs
-      uri+s+uri.pub
-      diagnostics+a+(turn diagnostics.pub diagnostic)
+      uri+(cord uri.pub)
+      diagnostics+(list diagnostics.pub diagnostic)
       ~
     ==
   ++  notification
@@ -200,10 +200,10 @@
         ==
     ~!  -.notification
     =/  method=^cord  (crip (unparse-method -.notification))
-    %:  pairs
-      method+s+method
+    %-  pairs
+    :~
+      method+(cord method)
       params+params
-      ~
     ==
   ::
   ++  response
@@ -218,7 +218,7 @@
       ++  wrap-in-id
         |=  [id=^cord res=json]
         %:  pairs
-          id+s+id
+          id+(cord id)
           result+res
           ~
         ==
@@ -228,12 +228,12 @@
         %+  frond  'contents'
         ?~  contents.hov
           ~
-        s+u.contents.hov
+        (cord u.contents.hov)
       ::
       ++  text-document--completion
         |=  com=text-document--completion:response:lsp
         %+  wrap-in-id   id.com
-        [%a (turn completion.com completion-item)]
+        (list completion.com completion-item)
       --
   ++  unparse-method
     |=  c=^cord
@@ -260,11 +260,11 @@
     |=  com=completion-item:lsp
     ^-  json
     %:  pairs
-      label+s+label.com
-      detail+s+detail.com
+      label+(cord label.com)
+      detail+(cord detail.com)
       kind+(numb kind.com)
-      'documentation'^s+doc.com
-      'insertText'^s+insert-text.com
+      'documentation'^(cord doc.com)
+      'insertText'^(cord insert-text.com)
       'insertTextFormat'^(numb insert-text-format.com)
       ~
     ==
@@ -293,7 +293,7 @@
     %:  pairs
       range+(range range.diag)
       severity+(numb severity.diag)
-      message+s+message.diag
+      message+(cord message.diag)
       ~
     ==
   ::

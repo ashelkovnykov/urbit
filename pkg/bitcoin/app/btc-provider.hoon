@@ -198,12 +198,12 @@
   ::
   ?:  ?=([%permitted @ ~] pax)
     :_  this
+    =,  enjs:format
     =/  jon=json
-      %+  frond:enjs:format
-        %'providerStatus'
-      %-  pairs:enjs:format
-      :~  provider+s+(scot %p our.bowl)
-          permitted+b+(is-whitelisted:hc src.bowl)
+      %+  frond  %'providerStatus'
+      %-  pairs
+      :~  provider+(ship our.bowl)
+          permitted+(bool (is-whitelisted:hc src.bowl))
       ==
     [%give %fact ~ %json !>(jon)]~
   ::

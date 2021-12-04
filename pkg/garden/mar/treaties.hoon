@@ -10,7 +10,6 @@
     |=  t=treaty:treaty
     :-  (crip "{(scow %p ship.t)}/{(trip desk.t)}")
     (treaty:enjs:treaty t)
-
   --
 ++  grab
   |%

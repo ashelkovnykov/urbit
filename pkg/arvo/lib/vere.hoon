@@ -44,6 +44,7 @@
   ::  |give:dawn: produce requests for pre-boot validation
   ::
   ++  give
+    =,  enjs:format
     |%
     ::  +czar:give:dawn: Eth RPC for galaxy table
     ::
@@ -51,24 +52,23 @@
       ^-  octs
       %-  as-octt:mimes:html
       %-  en-json:html
-      :-  %a
-      %+  turn  (gulf 0 255)
+      %+  list  (gulf 0 255)
       |=  gal=@
       %+  request-to-json
         (cat 3 'gal-' (scot %ud gal))
       :-  'getPoint'
-      (~(put by *(map @t json)) 'ship' s+(scot %p gal))
+      (~(put by *(map @t json)) 'ship' (ship gal))
     ::  +point:give:dawn: Eth RPC for ship's contract state
     ::
     ++  point
-      |=  who=ship
+      |=  who=^ship
       ^-  octs
       %-  as-octt:mimes:html
       %-  en-json:html
       %+  request-to-json
         ~.
       :-  'getPoint'
-      (~(put by *(map @t json)) 'ship' s+(scot %p who))
+      (~(put by *(map @t json)) 'ship' (ship who))
     ::  +turf:give:dawn: Eth RPC for network domains
     ::
     ++  turf
@@ -86,11 +86,11 @@
     ++  request-to-json
       |=  [id=@t method=@t params=(map @t json)]
       ^-  json
-      %-  pairs:enjs:format
-      :~  jsonrpc+s+'2.0'
-          id+s+id
-          method+s+method
-          params+o+params
+      %-  pairs
+      :~  jsonrpc+[%s '2.0']
+          id+(cord id)
+          method+(cord method)
+          params+[%o params]
       ==
     --
   ::  |take:dawn: parse responses for pre-boot validation

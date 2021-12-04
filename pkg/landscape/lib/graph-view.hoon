@@ -86,26 +86,21 @@
     ^-  json
     ?>  ?=(%pending-indices -.act)
     %+  frond  %pending-indices
-    %-  pairs
-    %+  turn  ~(tap by pending.act)
+    :-  %o
+    ^-  (map @t json)
+    %-  ~(run in pending.act)
     |=  [h=hash:store i=index:store]
-    ^-  [@t json]
     =/  idx  (index i)
     ?>  ?=(%s -.idx)
-    [p.idx s+(scot %ux h)]
+    [p.idx (numh %ux h)]
   ::
   ++  index
     |=  i=index:store
     ^-  json
-    ?:  =(~ i)  s+'/'
-    =/  j=^tape  ""
-    |-
-    ?~  i  [%s (crip j)]
-    =/  k=json  (numb i.i)
-    ?>  ?=(%n -.k)
-    %_  $
-        i  t.i
-        j  (weld j (weld "/" (trip +.k)))
-    ==
+    %-  %s
+    ?~  i  '/'
+    %+  roll  i
+    |=  [cur=@ acc=@t]
+    (rap 3 acc '/' (crip (a-co:co cur)) ~)
   --
 --

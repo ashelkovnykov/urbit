@@ -14,7 +14,8 @@
   ++  json
     :-  %o
     %-  ~(run by all)
-    |=(a=cord s+a)
+    |=  a=cord
+    (cord:enjs:format a)
   --
 ++  grab  |%                                            ::  convert from
           ++  noun  (map knot cord)                     ::  clam from %noun

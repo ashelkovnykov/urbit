@@ -19,13 +19,13 @@
       %+  merge  (desk-arak desk arak)
       %-  pairs
       :~  weft+(weft:enjs:hood weft)
-          blockers+a+(turn ~(tap in blockers) (lead %s))
+          blockers+(set blockers cord)
       ==
     ::
     ++  desk-arak
       |=  [=desk =arak:hood]
       %-  pairs
-      :~  desk+s+desk
+      :~  desk+(cord desk)
           arak+(arak:enjs:hood arak)
       ==
     ::
@@ -33,7 +33,7 @@
       |=  [=desk =arak:hood =tang]
       %+  merge  (desk-arak desk arak)
       %+  frond   %tang
-      a+(turn tang tank)
+      (list tang tank)
     ::
     ++  merge
       |=  [a=^json b=^json]

@@ -43,10 +43,11 @@
   ++  on-watch
     |=  =wire
     ^-  (quip card _this)
+    =,  enjs:format
     ?.  ?=([%all ~] wire)  (on-watch:def wire)
     =/  jon
-      %-  pairs:enjs:format
-      :*  ['location' s+location]
+      %-  pairs
+      :*  ['location' (cord location)]
         ::
           ?.  ?=([%o *] data)  ~
           ~(tap by p.data)

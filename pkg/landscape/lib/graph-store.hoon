@@ -52,13 +52,13 @@
   ++  signatures
     |=  s=^signatures
     ^-  json
-    [%a (turn ~(tap in s) signature)]
+    (set s signature)
   ::
   ++  signature
     |=  s=^signature
     ^-  json
     %-  pairs
-    :~  [%signature s+(scot %ux p.s)]
+    :~  [%signature (numh %ux p.s)]
         [%ship (shil q.s)]
         [%life (numb r.s)]
     ==
@@ -67,14 +67,10 @@
     |=  ind=^index
     ^-  json
     :-  %s
-    ?:  =(~ ind)
-      '/'
+    ?:  =(~ ind)  '/'
     %+  roll  ind
     |=  [cur=@ acc=@t]
-    ^-  @t
-    =/  num  (numb cur)
-    ?>  ?=(%n -.num)
-    (rap 3 acc '/' p.num ~) 
+    (rap 3 acc '/' (crip (a-co:co cur)) ~)
   ::
   ++  uid
     |=  u=^uid
@@ -89,22 +85,24 @@
     ^-  json
     ?-  -.c
         %mention    (frond %mention (shil ship.c))
-        %text       (frond %text s+text.c)
-        %url        (frond %url s+url.c)
+        %text       (frond %text (cord text.c))
+        %url        (frond %url (cord url.c))
         %reference  (frond %reference (reference +.c))
         %code
       %+  frond  %code
       %-  pairs
-      :-  [%expression s+expression.c]
-      :_  ~
-      :-  %output
-      ::  virtualize output rendering, +tank:enjs:format might crash
-      ::
-      =/  result=(each (^list json) tang)
-        (mule |.((turn output.c tank)))
-      ?-  -.result
-        %&  a+p.result
-        %|  a+[a+[%s '[[output rendering error]]']~]~
+      :~  [%expression (cord expression.c)]
+        ::
+          :-  %output
+          ::  virtualize output rendering, +tank:enjs:format might crash
+          ::
+          =/  result=(each json tang)
+            (mule |.((list output.c tank)))
+          ?-  -.result
+            %&  p.result
+            %|  a+[a+[%s '[[output rendering error]]']~]~
+          ==
+        ::
       ==
     ==
   ::
@@ -114,27 +112,23 @@
     %+  frond  -.ref
     ?-  -.ref
       %graph  (graph +.ref)
-      %group  (group +.ref)
+      %group  (enjs-path:res +.ref)
       %app    (app +.ref)
     ==
     ::
     ++  graph
       |=  [grp=res gra=res idx=^index]
       %-  pairs
-      :~  graph+s+(enjs-path:res gra)
-          group+s+(enjs-path:res grp)
+      :~  graph+(enjs-path:res gra)
+          group+(enjs-path:res grp)
           index+(index idx)
       ==
-    ::
-    ++  group
-      |=  grp=res
-      s+(enjs-path:res grp)
     ::
     ++  app
       |=  [s=^ship =desk p=^path]
       %-  pairs
       :~  ship+(ship s)
-          desk+s+desk
+          desk+(cord desk)
           path+(path p)
       ==
     --
@@ -143,8 +137,8 @@
     |=  mp=^maybe-post
     ^-  json
     ?-  -.mp
-      %|  s+(scot %ux p.mp)
       %&  (post p.mp)
+      %|  (numh %ux p.mp)
     ==
   ::
   ++  post
@@ -154,15 +148,15 @@
     :~  [%author (shil author.p)]
         [%index (index index.p)]
         [%time-sent (time time-sent.p)]
-        [%contents [%a (turn contents.p content)]]
-        [%hash ?~(hash.p ~ s+(scot %ux u.hash.p))]
+        [%contents (list contents.p content)]
+        [%hash (unit hash.p (cury numh %ux))]
         [%signatures (signatures signatures.p)]
     ==
   ::
   ++  update
     |=  upd=^update
     ^-  json
-    |^  (frond %graph-update (pairs ~[(encode q.upd)]))
+    |^  (frond %graph-update (frond (encode q.upd)))
     ::
     ++  encode
       |=  upd=action
@@ -173,8 +167,8 @@
         %-  pairs
         :~  [%resource (enjs:res resource.upd)]
             [%graph (graph graph.upd)]
-            [%mark ?~(mark.upd ~ s+u.mark.upd)]
-            [%overwrite b+overwrite.upd]
+            [%mark (unit mark.upd cord)]
+            [%overwrite (bool overwrite.upd)]
         ==
       ::
           %remove-graph
@@ -191,7 +185,7 @@
         :-  %remove-posts
         %-  pairs
         :~  [%resource (enjs:res resource.upd)]
-            [%indices (indices indices.upd)]
+            [%indices (set indices.upd index)]
         ==
       ::
           %add-signatures
@@ -211,14 +205,14 @@
           %add-tag
         :-  %add-tag
         %-  pairs
-        :~  [%term s+term.upd]
+        :~  [%term (cord term.upd)]
             [%uid (uid uid.upd)]
         ==
       ::
           %remove-tag
         :-  %remove-tag
         %-  pairs
-        :~  [%term s+term.upd]
+        :~  [%term (cord term.upd)]
             [%uid (uid uid.upd)]
         ==
       ::
@@ -229,35 +223,31 @@
         [%unarchive-graph (enjs:res resource.upd)]
       ::
           %keys
-        [%keys [%a (turn ~(tap in resources.upd) enjs:res)]]
+        [%keys (set resources.upd enjs:res)]
       ::
           %tags
-        [%tags [%a (turn ~(tap in tags.upd) |=(=term s+term))]]
+        [%tags (set tags.upd cord)]
       ::
           %run-updates
         [%run-updates ~]
       ::
           %tag-queries
         :-  %tag-queries
-        %-  pairs
-        %+  turn  ~(tap by tag-queries.upd)
-        |=  [=term uids=(^set ^uid)]
-        ^-  [^cord json]
-        [term [%a (turn ~(tap in uids) uid)]]
+        :-  %o
+        %-  ~(run by tag-queries.upd)
+        |=  uids=(^set ^uid)
+        ^-  json
+        (set uids uid)
       ==
     ::
     ++  graph
       |=  g=^graph
       ^-  json
       %-  pairs
-      %+  turn
-        (tap:orm g)
+      %+  turn  (tap:orm g)
       |=  [a=atom n=^node]
       ^-  [@t json]
-      :_  (node n)
-      =/  idx  (numb a)
-      ?>  ?=(%n -.idx)
-      p.idx
+      [(crip (a-co:co a)) (node n)]
     ::
     ++  node
       |=  n=^node
@@ -274,19 +264,15 @@
     ++  nodes
       |=  m=(map ^index ^node)
       ^-  json
-      %-  pairs
-      %+  turn  ~(tap by m)
+      :-  %o
+      ^-  (map @t json)
+      %-  ~(run in m)
       |=  [n=^index o=^node]
       ^-  [@t json]
       :_  (node o)
       =/  idx  (index n)
       ?>  ?=(%s -.idx)
       p.idx
-    ::
-    ++  indices
-      |=  i=(^set ^index)
-      ^-  json
-      [%a (turn ~(tap in i) index)]
     ::
     --
   --

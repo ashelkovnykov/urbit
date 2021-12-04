@@ -6,11 +6,11 @@
   |%
   ++  noun  ark
   ++  json
-    =,  enjs:format
-    %-  pairs
-    %+  turn  ~(tap by ark)
-    |=  [=desk =arak:hood]
-    [desk (arak:enjs:hood arak)]
+    :-  %o
+    %-  ~(run by ark)
+    |=  =arak:hood
+    ^-  json
+    (arak:enjs:hood arak)
   --
 ::
 ++  grab

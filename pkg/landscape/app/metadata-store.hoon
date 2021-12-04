@@ -372,7 +372,7 @@
       ?~  assoc  ~
       =/  =json
         %-  pairs:enjs:format
-        :~  group+s+(enjs-path:resource group.u.assoc)
+        :~  group+(enjs-path:resource group.u.assoc)
             metadatum+(metadatum:enjs:lib metadatum.u.assoc)
         ==
       ``json+!>(json)

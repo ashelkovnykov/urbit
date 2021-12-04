@@ -8,11 +8,10 @@
   [5 3]
 ++  position-jon
   ^-  json
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['character' %n '3']
     ['line' %n '5']
-    ~
   ==
 ::
 ++  range
@@ -20,21 +19,19 @@
 ::
 ++  range-jon
   ^-  json
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['start' position-jon]
     ['end' position-jon]
-    ~
   ==
 ::
 ++  change-jon
   ^-  json
-  :-  %o
-  %:  malt
-    ['text' `json`[%s `@t`'text']]
+  %-  pairs
+  :~
+    ['text' [%s 'text']]
     ['rangeLength' [%n '3']]
     ['range' range-jon]
-    ~
   ==
 ::
 ++  changes-jon
@@ -49,12 +46,11 @@
 ::
 ++  text-document-item-jon
   ^-  json
-  :-  %o
-  %:  malt
-    ['uri' `json`[%s 'file://']]
-    ['version' `json`[%n '1']]
-    ['text' `json`[%s 'text']]
-    ~
+  %-  pairs
+  :~
+    ['uri' [%s 'file://']]
+    ['version' [%n '1']]
+    ['text' [%s 'text']]
   ==
 ::
 ++  text-document-id
@@ -63,11 +59,11 @@
 ::
 ++  text-document-id-jon
   ^-  json
-  :-  %o
-  %:  malt
-    ['uri' `json`[%s 'file://']]
-    ['version' `json`[%n '1']]
-    ~
+  %-  pairs
+  :~
+    ['uri' [%s 'file://']]
+    ['version' [%n '1']]
+    ['text' [%s 'text']]
   ==
 ++  diagnostic
   ^-  diagnostic:lsp-sur
@@ -75,12 +71,11 @@
 ::
 ++  diagnostic-jon
   ^-  json
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['range' range-jon]
-    ['severity' `json`[%n '1']]
-    ['message' `json`[%s 'Syntax Error']]
-    ~
+    ['severity' [%n '1']]
+    ['message' [%s 'Syntax Error']]
   ==
 ::
 ++  completion-item
@@ -89,39 +84,39 @@
 ::
 ++  completion-item-jon
   ^-  json
-  %:  pairs
-    label+s+'label'
-    detail+s+'detail'
-    kind+n+'1'
-    documentation+s+'doc'
-    'insertText'^s+'snippet'
-    'insertTextFormat'^n+'1'
-    ~
+  %-  pairs
+  :~
+    ['label' [%s 'label']]
+    ['detail' [%s 'detail']]
+    ['kind' [%n '1']]
+    ['documentation' [%s 'doc']]
+    ['insertText' [%s 'snippet']]
+    ['insertTextFormat' [%n '1']]
   ==
 ::
 ++  make-notification-jon
   |=  [method=@t params=json]
   ^-  json
-  %:  pairs
-    ['method' `json`[%s method]]
+  %-  pairs
+  :~
+    ['method' [%s method]]
     params+params
-    ~
   ==
 ++  make-request-jon
   |=  [id=@t method=@t params=json]
   ^-  json
-  %:  pairs
-    ['id' `json`[%s id]]
-    ['method' `json`[%s method]]
+  %-  pairs
+  :~
+    ['id' [%s id]]
+    ['method' [%s method]]
     params+params
-    ~
   ==
 ++  make-response-jon
   |=  [id=@t result=json]
-  %:  pairs
-    id+s+id
-    result+result
-    ~
+  %-  pairs
+  :~
+    ['id' [%s id]]
+    ['result' result]
   ==
 ::
 :: Notifications
@@ -132,11 +127,10 @@
     [%text-document--did-change text-document-id [[~ [[5 3] [5 3]]] `3 'text']~]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didChange'
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['contentChanges' changes-jon]
     ['textDocument' text-document-id-jon]
-    ~
   ==
 ::
 ++  test-parse-did-save
@@ -145,11 +139,7 @@
     [%text-document--did-save text-document-id]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didSave'
-  :-  %o
-  %:  malt
-    ['textDocument' text-document-id-jon]
-    ~
-  ==
+  (frond ['textDocument' text-document-id-jon])
 ::
 ++  test-parse-did-close
   %+  expect-eq
@@ -157,11 +147,7 @@
     [%text-document--did-close text-document-id]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didClose'
-  :-  %o
-  %:  malt
-    ['textDocument' text-document-id-jon]
-    ~
-  ==
+  (frond ['textDocument' text-document-id-jon])
 ::
 ++  test-parse-did-open
   %+  expect-eq
@@ -169,11 +155,7 @@
     [%text-document--did-open text-document-item]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didOpen'
-  :-  %o
-  %:  malt
-    ['textDocument' text-document-item-jon]
-    ~
-  ==
+  (frond ['textDocument' text-document-id-jon])
 ::
 :: Requests
 ::
@@ -184,11 +166,10 @@
   !>  %-  request:dejs
   ^-  json
   %^  make-request-jon  '3'  'textDocument/hover'
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['position' position-jon]
     ['textDocument' text-document-id-jon]
-    ~
   ==
 ++  test-parse-completion
   %+  expect-eq
@@ -197,11 +178,10 @@
   !>  %-  request:dejs
   ^-  json
   %^  make-request-jon  '3'  'textDocument/completion'
-  :-  %o
-  %:  malt
+  %-  pairs
+  :~
     ['position' position-jon]
     ['textDocument' text-document-id-jon]
-    ~
   ==
 ::  to JSON
 ::
@@ -213,11 +193,10 @@
     [%text-document--publish-diagnostics 'file://' [diagnostic ~]]
   !>  ^-  json
   %+  make-notification-jon  'textDocument/publishDiagnostics'
-  :-  %o
-  %:  malt
-    ['uri' `json`[%s 'file://']]
-    ['diagnostics' `json`[%a [diagnostic-jon ~]]]
-    ~
+  %-  pairs
+  :~
+    ['uri' [%s 'file://']]
+    ['diagnostics' [%a [diagnostic-jon ~]]]
   ==
 ::  responses
 ++  test-enjs-hover
@@ -226,8 +205,7 @@
     [%text-document--hover '1' `'text']
   !>  ^-  json
   %+  make-response-jon  '1'
-  %+  frond  'contents'
-  s+'text'
+  (frond ['contents' [%s 'text']])
 ::
 ++  test-enjs-completion
   %+  expect-eq

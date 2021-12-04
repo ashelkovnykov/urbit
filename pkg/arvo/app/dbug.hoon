@@ -164,7 +164,7 @@
     %-  pairs
     %+  turn  all:apps
     |=  app=term
-    [app b+(running:apps app)]
+    [app (bool (running:apps app))]
   ::
     ::  /app/[appname]...
     ::
@@ -180,11 +180,11 @@
       %-  pairs
       :~  :-  'simpleState'
           %-  tank
-          =;  head=(unit ^tank)
+          =;  head=(^unit ^tank)
             (fall head leaf+"unversioned")
           ::  try to print the state version
           ::
-          =/  version=(unit vase)
+          =/  version=(^unit vase)
             (slew 2 (state:apps app))
           ?~  version  ~
           ?.  ?=(%atom -.p.u.version)  ~
@@ -198,11 +198,10 @@
           ++  incoming
             |=  =bitt:gall
             ^-  json
-            :-  %a
-            %+  turn  ~(tap by bitt)
+            %+  list  ~(tap by bitt)
             |=  [d=duct [s=^ship p=^path]]
             %-  pairs
-            :~  'duct'^a+(turn d path)
+            :~  'duct'^(list d path)
                 'ship'^(shil s)
                 'path'^(path p)
             ==
@@ -210,14 +209,13 @@
           ++  outgoing
             |=  =boat:gall
             ^-  json
-            :-  %a
-            %+  turn  ~(tap by boat)
+            %+  list  ~(tap by boat)
             |=  [[w=wire s=^ship t=term] [a=? p=^path]]
             %-  pairs
             :~  'wire'^(path w)
                 'ship'^(shil s)
-                'app'^s+t
-                'acked'^b+a
+                'app'^(cord t)
+                'acked'^(bool a)
                 'path'^(path p)
             ==
           --
@@ -228,7 +226,8 @@
       ::
         [%state ?(~ [@ ~])]
       %-  some
-      =-  (pairs 'state'^(tank -) ~)
+      %+  frond  %state
+      %-  tank
       %+  state-at:apps  app
       ?~  t.rest  ~
       (slaw %t i.t.rest)
@@ -272,9 +271,8 @@
       ?=(%known kind)
     %-  some
     %-  pairs
-    ::NOTE  would do (cork head ship) but can't get that to compile...
-    :~  'known'^a+(turn (turn known head) shil)
-        'alien'^a+(turn (turn alien head) shil)
+    :~  'known'^(list known :(cork head ^ship shil))
+        'alien'^(list alien :(cork head ^ship shil))
     ==
   ::
     ::  /ames/peer/[shipname].json
@@ -290,12 +288,11 @@
     ::
       [%behn %timers ~]
     %-  some
-    :-  %a
-    %+  turn  timers:v-behn
+    %+  list  timers:v-behn
     |=  [date=@da =duct]
     %-  pairs
     :~  'date'^(time date)
-        'duct'^a+(turn duct path)
+        'duct'^(list duct path)
     ==
   ::
     ::  /clay/commits.json
@@ -307,12 +304,11 @@
     ::
       [%eyre %bindings ~]
     %-  some
-    :-  %a
-    %+  turn  bindings:v-eyre
+    %+  list  bindings:v-eyre
     =,  eyre
     |=  [binding =duct =action]
     %-  pairs
-    :~  'location'^s+(cat 3 (fall site '*') (spat path))
+    :~  'location'^(cord (cat 3 (fall site '*') (spat path)))
         'action'^(render-action:v-eyre action)
     ==
   ::
@@ -320,19 +316,18 @@
     ::
       [%eyre %connections ~]
     %-  some
-    :-  %a
-    %+  turn  ~(tap by connections:v-eyre)
+    %+  list  ~(tap by connections:v-eyre)
     |=  [=duct outstanding-connection:eyre]
     %-  pairs
-    :~  'duct'^a+(turn duct path)
+    :~  'duct'^(list duct path)
         'action'^(render-action:v-eyre action)
       ::
         :-  'request'
         %-  pairs
         =,  inbound-request
-        :~  'authenticated'^b+authenticated
-            'secure'^b+secure
-            'source'^s+(scot %if +.address)
+        :~  'authenticated'^(bool authenticated)
+            'secure'^(bool secure)
+            'source'^(cord (scot %if +.address))
             :: ?-  -.address
             ::   %ipv4  %if
             ::   %ipv6  %is
@@ -350,9 +345,8 @@
             :~  'status-code'^(numb status-code)
               ::
                 :-  'headers'
-                :-  %a
-                %+  turn  headers
-                |=([k=@t v=@t] s+:((cury cat 3) k ': ' v))
+                %+  list  headers
+                |=([k=@t v=@t] (cord :((cury cat 3) k ': ' v)))
             ==
         ==
     ==
@@ -361,14 +355,13 @@
     ::
       [%eyre %authentication ~]
     %-  some
-    :-  %a
-    %+  turn
+    %+  list
       %+  sort  ~(tap by sessions:auth-state:v-eyre)
       |=  [[@uv a=session:eyre] [@uv b=session:eyre]]
       (gth expiry-time.a expiry-time.b)
     |=  [cookie=@uv session:eyre]
     %-  pairs
-    :~  'cookie'^s+(end [3 4] (rsh [3 2] (scot %x (shax cookie))))
+    :~  'cookie'^(cord (end [3 4] (rsh [3 2] (scot %x (shax cookie)))))
         'expiry'^(time expiry-time)
         'channels'^(numb ~(wyt in channels))
     ==
@@ -377,27 +370,25 @@
     ::
       [%eyre %channels ~]
     %-  some
-    :-  %a
     =+  channel-state:v-eyre
-    %+  turn  ~(tap by session)
+    %+  list  ~(tap by session)
     |=  [key=@t channel:eyre]
     %-  pairs
-    :~  'session'^s+key
-        'connected'^b+!-.state
+    :~  'session'^(cord key)
+        'connected'^(bool !-.state)
         'expiry'^?-(-.state %& (time date.p.state), %| ~)
         'next-id'^(numb next-id)
         'last-ack'^(time last-ack)
-        'unacked'^a+(turn (sort (turn ~(tap in events) head) dor) numb)
+        'unacked'^(list (sort (turn ~(tap in events) head) dor) numb)
       ::
         :-  'subscriptions'
-        :-  %a
-        %+  turn  ~(tap by subscriptions)
-        |=  [id=@ud [=^ship app=term =^path *]]
+        %+  list  ~(tap by subscriptions)
+        |=  [id=@ud [s=^ship app=term p=^path *]]
         %-  pairs
         :~  'id'^(numb id)
-            'ship'^(shil ship)
-            'app'^s+app
-            'path'^(^path path)
+            'ship'^(shil s)
+            'app'^(cord app)
+            'path'^(path p)
             'unacked'^(numb (~(gut by unacked) id 0))
         ==
     ==
@@ -523,7 +514,7 @@
       %-  pairs
       :~  'messages'^(numb (lent messages))
           'packets'^(numb ~(wyt in packets))
-          'heeds'^(set-array heeds from-duct)
+          'heeds'^(set heeds from-duct)
       ==
     ::
     ::  json for known peer is structured to closely match the peer-state type.
@@ -592,10 +583,11 @@
       :~  'life'^(numb life)
         ::
           :-  'route'
-          %+  maybe  route
+          %+  unit  route
           |=  [direct=? =lane]
+          ^-  json
           %-  pairs
-          :~  'direct'^b+direct
+          :~  'direct'^(bool direct)
             ::
               :-  'lane'
               ?-  -.lane
@@ -611,7 +603,7 @@
         ::
           :-  'qos'
           %-  pairs
-          :~  'kind'^s+-.qos
+          :~  'kind'^(cord -.qos)
               'last-contact'^(time last-contact.qos)
           ==
         ::
@@ -626,8 +618,8 @@
                 |=  [=bone *]
                 =(0 (mod bone 2))
               %-  pairs
-              :~  ['forward' a+(turn forward build)]
-                  ['backward' a+(turn backward build)]
+              :~  'forward'^(list forward build)
+                  'backward'^(list backward build)
               ==
           ::
           +$  flow
@@ -655,15 +647,14 @@
           --
         ::
           :-  'nax'
-          :-  %a
-          %+  turn  (sort ~(tap in nax) dor)  ::  sort by bone
+          %+  list  (sort ~(tap in nax) dor)  ::  sort by bone
           |=  [=bone =message-num]
           %-  pairs
           :*  'message-num'^(numb message-num)
               (bone-to-pairs bone ossuary)
           ==
         ::
-          'heeds'^(set-array heeds from-duct)
+          'heeds'^(set heeds from-duct)
       ==
     ::
     ++  snd-with-bone
@@ -674,27 +665,25 @@
           'next'^(numb next)
         ::
           :-  'unsent-messages'  ::  as byte sizes
-          (set-array unsent-messages (cork (cury met 3) numb))
+          (set unsent-messages (cork (cury met 3) numb))
         ::
           'unsent-fragments'^(numb (lent unsent-fragments))  ::  as lent
         ::
           :-  'queued-message-acks'
-          :-  %a
-          %+  turn  (sort ~(tap by queued-message-acks) dor)  ::  sort by msg nr
+          %+  list  (sort ~(tap by queued-message-acks) dor)  ::  sort by msg nr
           |=  [=message-num =ack]
           %-  pairs
           :~  'message-num'^(numb message-num)
-              'ack'^s+-.ack
+              'ack'^(cord -.ack)
           ==
         ::
           :-  'packet-pump-state'
           %-  pairs
           =,  packet-pump-state
-          :~  'next-wake'^(maybe next-wake time)
+          :~  'next-wake'^(unit next-wake time)
             ::
               :-  'live'
-              :-  %a
-              %+  turn  (sort ~(tap in live) dor)  ::  sort by msg nr & frg nr
+              %+  list  (sort ~(tap in live) dor)  ::  sort by msg nr & frg nr
               |=  [live-packet-key live-packet-val]
               %-  pairs
               :~  'message-num'^(numb message-num)
@@ -729,21 +718,20 @@
           'last-heard'^(numb last-heard)
         ::
           :-  'pending-vane-ack'
-          =-  a+(turn - numb)
+          =-  (list - numb)
           (sort (turn ~(tap in pending-vane-ack) head) dor)  ::  sort by msg #
         ::
           :-  'live-messages'
-          :-  %a
-          %+  turn  (sort ~(tap by live-messages) dor)  ::  sort by msg #
+          %+  list  (sort ~(tap by live-messages) dor)  ::  sort by msg #
           |=  [=message-num partial-rcv-message]
           %-  pairs
           :~  'message-num'^(numb message-num)
               'num-received'^(numb num-received)
               'num-fragments'^(numb num-fragments)
-              'fragments'^(set-array ~(key by fragments) numb)
+              'fragments'^(set ~(key by fragments) numb)
           ==
         ::
-          'nax'^a+(turn (sort ~(tap in nax) dor) numb)
+          'nax'^(list (sort ~(tap in nax) dor) numb)
         ::
           (bone-to-pairs bone ossuary)
       ==
@@ -755,20 +743,9 @@
           'duct'^(from-duct (~(gut by by-bone) bone ~))
       ==
     ::
-    ++  maybe
-      |*  [unit=(unit) enjs=$-(* json)]
-      ^-  json
-      ?~  unit  ~
-      (enjs u.unit)
-    ::
-    ++  set-array
-      |*  [sit=(^set) enjs=$-(* json)]
-      ^-  json
-      a+(turn ~(tap in sit) enjs)
-    ::
     ++  from-duct
       |=  =duct
-      a+(turn duct path)
+      (list duct path)
     --
   --
 ::
@@ -809,10 +786,10 @@
       (trace-tako tako)
     =/  commits=(list commit)  (yakis-to-commits ~(tap in yakis))
     =,  enjs:format
-    %:  pairs
-      head+(pairs (turn heads |=([=tako =desk] (scot %uv tako)^s+desk)))
+    %-  pairs
+    :~
+      head+(pairs (turn heads |=([=tako =desk] (scot %uv tako)^(cord desk))))
       commits+(commits-to-json commits)
-      ~
     ==
   ::
   ++  yakis-to-commits
@@ -842,8 +819,7 @@
   ++  commits-to-json
     |=  commits=(list commit)
     ^-  json
-    :-  %a
-    %+  turn
+    %+  list:enjs:format
       %+  sort  commits
       |=  [a=commit b=commit]
       (gte wen.a wen.b)
@@ -854,27 +830,28 @@
     |=  =commit
     ^-  json
     =,  enjs:format
-    %:  pairs
+    %-  pairs
+    :~
       'commitHash'^(tako-to-json tako.commit)
-      parents+a+(turn parents.commit tako-to-json)
-      children+a+(turn children.commit tako-to-json)
+      parents+(list parents.commit tako-to-json)
+      children+(list children.commit tako-to-json)
       'contentHash'^(tako-to-json content-hash.commit)
-      ~
     ==
   ::
   ++  tako-to-json
     |=  =tako
     ^-  json
-    s+(scot %uv tako)
+    (numh:enjs:format %uv tako)
   --
 ::
 ::  eyre
 ::
 ++  v-eyre
   =,  eyre
+  =,  enjs:format
   |%
   ++  bindings
-    (scry ,(list [=binding =duct =action]) %e %bindings ~)
+    (scry ,(^list [=binding =duct =action]) %e %bindings ~)
   ::
   ++  connections
     (scry ,(map duct outstanding-connection) %e %connections ~)
@@ -888,7 +865,7 @@
   ++  render-action
     |=  =action
     ^-  json
-    :-  %s
+    %-  cord
     ?+  -.action  -.action
       %gen  :((cury cat 3) '+' (spat [desk path]:generator.action))
       %app  (cat 3 ':' app.action)

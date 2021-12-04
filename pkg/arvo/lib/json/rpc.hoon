@@ -16,10 +16,11 @@
 ++  request-to-json
   |=  request
   ^-  json
-  %-  pairs:enjs:format
-  :~  jsonrpc+s+'2.0'
-      id+s+id
-      method+s+method
+  =,  enjs:format
+  %-  pairs
+  :~  jsonrpc+(cord '2.0')
+      id+(cord id)
+      method+(cord method)
     ::
       :-  %params
       ^-  json
@@ -34,30 +35,30 @@
 ++  response-to-json
   |=  =response
   ^-  json
+  =,  enjs:format
   ::  TODO: consider all cases
   ::
   ?+  -.response  ~|([%unsupported-rpc-response response] !!)
-    %batch  a+(turn bas.response response-to-json)
+    %batch  (list bas.response response-to-json)
     ::
       %result
-    %-  pairs:enjs:format
+    %-  pairs
     ::  FIXME: return 'id' as string, number or NULL
     ::
-    :~  ['jsonrpc' s+'2.0']
-        ['id' s+id.response]
+    :~  ['jsonrpc' [%s '2.0']]
+        ['id' (cord id.response)]
         ['result' res.response]
     ==
   ::
       %error
-    =,  enjs:format
-    %-  pairs
-    :~  ['jsonrpc' s+'2.0']
-        ['id' ?~(id.response ~ s+id.response)]
+    %-  pr
+    :~  ['jsonrpc' [%s '2.0']]
+        ['id' (unit id.response cord)]
       ::
         :-  'error'
         %-  pairs
-        :~  ['code' n+code.response]
-            ['message' s+message.response]
+        :~  ['code' (numb code.response)]
+            ['message' (cord message.response)]
     ==  ==
   ==
 ::

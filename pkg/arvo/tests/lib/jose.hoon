@@ -1,6 +1,7 @@
 /-  asn1
 /+  primitive-rsa, *pkcs, *jose, *test
 =,  eyre
+=,  enjs:format
 =*  rsa  primitive-rsa
 |%
 ++  test-jwk
@@ -14,10 +15,11 @@
         'BniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw'
     ==
   =/  jk=json
-    :-  %o  %-  my  :~
-      kty+s+'RSA'
-      n+s+(rap 3 n)
-      e+s+'AQAB'
+    %-  pairs
+    :~
+      kty+[%s 'RSA']
+      n+[%s (rap 3 n)]
+      e+[%s 'AQAB']
     ==
   =/  k  (need (pass:de:jwk jk))
   ;:  weld
@@ -63,21 +65,22 @@
         'BOneufuBiB4cS98l2SR_RQyGWSeWjnczT0QU91p1DhOVRuOopznQ'
     ==
   =/  jk=json
-    :-  %o  %-  my  :~
-      kty+s+'RSA'
-      n+s+nt
-      e+s+'AQAB'
-      d+s+dt
-      p+s+pt
-      q+s+qt
+    %-  pairs
+    :~
+      kty+[%s 'RSA']
+      n+[%s nt]
+      e+[%s 'AQAB']
+      d+[%s dt]
+      p+[%s pt]
+      q+[%s qt]
     ==
   =/  k=key:rsa  (need (ring:de:jwk jk))
-  =/  hed=json  o+(my alg+s+'RS256' ~)
+  =/  hed=json  (frond [%alg [%s 'RS256']])
   =/  hedt=@t  'eyJhbGciOiJSUzI1NiJ9'
   =/  lod=json
     :-  %o  %-  my  :~
-      iss+s+'joe'
-      exp+n+'1300819380'
+      iss+[%s 'joe']
+      exp+[%n '1300819380']
       ['http://example.com/is_root' %b &]
     ==
   =/  lodt=@t
@@ -102,7 +105,7 @@
         'hJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrB'
         'p0igcN_IoypGlUPQGe77Rw'
     ==
-  =/  lod-order=(list @t)  ['iss' 'exp' 'http://example.com/is_root' ~]
+  =/  lod-order=(^list @t)  ['iss' 'exp' 'http://example.com/is_root' ~]
   ?>  ?=(^ sek.k)
   ;:  weld
     %+  expect-eq
@@ -178,10 +181,11 @@
       /acme/challenge
     /'efJn0ywfjIi3M7yT-6H8Mdq85R2LnI8XsTG3DaaY8Gc'/'138087558'
   =/  protected-header=json
-    :-  %o  %-  my  :~
-      nonce+s+non
-      url+s+(crip (en-purl:html url))
-      kid+s+kid
+    %-  pairs
+    :~
+      nonce+[%s non]
+      url+[%s (crip (en-purl:html url))]
+      kid+[%s kid]
     ==
   =/  bod=json
     [%o ~]
@@ -206,7 +210,12 @@
           'Npyn74FCcqbz111AK-Aul1dNhz3ojE1VOk3eVjH69lSGsaMleYR5fi60Jdc5ZbpPPy'
           't-CZRp1F0k6w'
       ==
-    [%o (my payload+s+payload protected+s+protected signature+s+signature ~)]
+    %-  pairs
+    :~
+      payload+[%s payload]
+      protected+[%s protected]
+      signature+[%s signature]
+    ==
   %+  expect-eq
     !>  exp
     !>  (sign:jws k protected-header bod)
