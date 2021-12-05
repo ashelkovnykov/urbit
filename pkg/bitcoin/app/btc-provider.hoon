@@ -200,10 +200,10 @@
     :_  this
     =,  enjs:format
     =/  jon=json
-      %+  frond  %'providerStatus'
-      %-  pairs
-      :~  provider+(ship our.bowl)
-          permitted+(bool (is-whitelisted:hc src.bowl))
+      %+  ob  %'providerStatus'
+      %-  pr
+      :~  provider+(hp our.bowl)
+          permitted+(bo (is-whitelisted:hc src.bowl))
       ==
     [%give %fact ~ %json !>(jon)]~
   ::

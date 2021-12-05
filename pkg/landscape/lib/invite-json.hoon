@@ -30,37 +30,37 @@
   |=  =invite
   ^-  json
   =,  enjs:format
-  %-  pairs
-  :~  [%ship (shil ship.invite)]
-      [%app (cord app.invite)]
+  %-  pr
+  :~  [%ship (hl ship.invite)]
+      [%app (co app.invite)]
       [%resource (enjs:resource resource.invite)]
-      [%recipient (shil recipient.invite)]
-      [%text (cord text.invite)]
+      [%recipient (hl recipient.invite)]
+      [%text (co text.invite)]
   ==
 ::
 ++  update-to-json
   |=  upd=update
   =,  enjs:format
   ^-  json
-  %+  frond  %invite-update
-  %-  frond
+  %+  ob  %invite-update
+  %-  ob
   ?+  -.upd  [*@t *json]
     %initial            [%initial (invites-to-json invites.upd)]
     %invitatory         [%invitatory (invitatory-to-json invitatory.upd)]
-    ?(%create %delete)  [-.upd (frond [%term (cord term.upd)])]
+    ?(%create %delete)  [-.upd (ob [%term (co term.upd)])]
     ::
       %decline
     :-  %decline
-    %-  pairs
-    :~  [%term (cord term.upd)]
-        [%uid (numh %uv uid.upd)]
+    %-  pr
+    :~  [%term (co term.upd)]
+        [%uid (nh %uv uid.upd)]
     ==
     ::
       ?(%accepted %invite)
     :-  -.upd
-    %-  pairs
-    :~  [%term (cord term.upd)]
-        [%uid (numh %uv uid.upd)]
+    %-  pr
+    :~  [%term (co term.upd)]
+        [%uid (nh %uv uid.upd)]
         [%invite (invite-to-json invite.upd)]
     ==
   ==

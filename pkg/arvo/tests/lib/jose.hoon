@@ -15,7 +15,7 @@
         'BniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw'
     ==
   =/  jk=json
-    %-  pairs
+    %-  pr
     :~
       kty+[%s 'RSA']
       n+[%s (rap 3 n)]
@@ -65,7 +65,7 @@
         'BOneufuBiB4cS98l2SR_RQyGWSeWjnczT0QU91p1DhOVRuOopznQ'
     ==
   =/  jk=json
-    %-  pairs
+    %-  pr
     :~
       kty+[%s 'RSA']
       n+[%s nt]
@@ -75,7 +75,7 @@
       q+[%s qt]
     ==
   =/  k=key:rsa  (need (ring:de:jwk jk))
-  =/  hed=json  (frond [%alg [%s 'RS256']])
+  =/  hed=json  (ob [%alg [%s 'RS256']])
   =/  hedt=@t  'eyJhbGciOiJSUzI1NiJ9'
   =/  lod=json
     :-  %o  %-  my  :~
@@ -181,7 +181,7 @@
       /acme/challenge
     /'efJn0ywfjIi3M7yT-6H8Mdq85R2LnI8XsTG3DaaY8Gc'/'138087558'
   =/  protected-header=json
-    %-  pairs
+    %-  pr
     :~
       nonce+[%s non]
       url+[%s (crip (en-purl:html url))]
@@ -210,7 +210,7 @@
           'Npyn74FCcqbz111AK-Aul1dNhz3ojE1VOk3eVjH69lSGsaMleYR5fi60Jdc5ZbpPPy'
           't-CZRp1F0k6w'
       ==
-    %-  pairs
+    %-  pr
     :~
       payload+[%s payload]
       protected+[%s protected]

@@ -1692,16 +1692,16 @@
           [%c %warp our desk.u.from `[%sing %f da+now /[mark.u.from]/json]]
       =*  sign  u.jsyn
       =,  enjs:format
-      %-  pairs
-      ^-  (^list [@t json])
-      :-  ['id' (numb request-id)]
+      %-  pr
+      ^-  (list [@t json])
+      :-  ['id' (nu request-id)]
       ?-    -.sign
           %poke-ack
         :~  ['response' [%s 'poke']]
           ::
             ?~  p.sign
               ['ok' [%s 'ok']]
-            ['err' (wall (render-tang-to-wall 100 u.p.sign))]
+            ['err' (wl (render-tang-to-wall 100 u.p.sign))]
         ==
       ::
           %fact
@@ -1721,7 +1721,7 @@
           ::
             ?~  p.sign
               ['ok' [%s 'ok']]
-            ['err' (wall (render-tang-to-wall 100 u.p.sign))]
+            ['err' (wl (render-tang-to-wall 100 u.p.sign))]
         ==
       ==
     ::

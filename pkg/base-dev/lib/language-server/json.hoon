@@ -185,9 +185,9 @@
   ++  text-document--publish-diagnostics
     |=  pub=text-document--publish-diagnostics:notification:lsp
     ^-  json
-    %:  pairs
-      uri+(cord uri.pub)
-      diagnostics+(list diagnostics.pub diagnostic)
+    %:  pr
+      uri+(co uri.pub)
+      diagnostics+(ls diagnostics.pub diagnostic)
       ~
     ==
   ++  notification
@@ -199,10 +199,10 @@
           (text-document--publish-diagnostics notification)
         ==
     ~!  -.notification
-    =/  method=^cord  (crip (unparse-method -.notification))
-    %-  pairs
+    =/  method=cord  (crip (unparse-method -.notification))
+    %-  pr
     :~
-      method+(cord method)
+      method+(co method)
       params+params
     ==
   ::
@@ -216,40 +216,40 @@
       ==
       ::
       ++  wrap-in-id
-        |=  [id=^cord res=json]
-        %:  pairs
-          id+(cord id)
+        |=  [id=cord res=json]
+        %:  pr
+          id+(co id)
           result+res
           ~
         ==
       ++  text-document--hover
         |=  hov=text-document--hover:response:lsp
         %+  wrap-in-id  id.hov
-        %+  frond  'contents'
+        %+  ob  'contents'
         ?~  contents.hov
           ~
-        (cord u.contents.hov)
+        (co u.contents.hov)
       ::
       ++  text-document--completion
         |=  com=text-document--completion:response:lsp
         %+  wrap-in-id   id.com
-        (list completion.com completion-item)
+        (ls completion.com completion-item)
       --
   ++  unparse-method
-    |=  c=^cord
-    ^-  ^tape
+    |=  c=cord
+    ^-  tape
     %+  rash  c
-    %+  cook  |=(l=(^list ^tape) (zing (join "/" l)))
+    %+  cook  |=(l=(list tape) (zing (join "/" l)))
     %+  more  (jest '--')
     %+  cook
-      |=  tapes=(^list ^tape)
-      ^-  ^tape
+      |=  tapes=(list tape)
+      ^-  tape
       ?~  tapes  ~
       %-  zing
       :-  i.tapes
       %+  turn  t.tapes
-      |=  t=^tape
-      ^-  ^tape
+      |=  t=tape
+      ^-  tape
       ?~  t  ~
       [`@tD`(sub i.t 32) t.t]
     %+  more
@@ -259,29 +259,29 @@
   ++  completion-item
     |=  com=completion-item:lsp
     ^-  json
-    %:  pairs
-      label+(cord label.com)
-      detail+(cord detail.com)
-      kind+(numb kind.com)
-      'documentation'^(cord doc.com)
-      'insertText'^(cord insert-text.com)
-      'insertTextFormat'^(numb insert-text-format.com)
+    %:  pr
+      label+(co label.com)
+      detail+(co detail.com)
+      kind+(nu kind.com)
+      'documentation'^(co doc.com)
+      'insertText'^(co insert-text.com)
+      'insertTextFormat'^(nu insert-text-format.com)
       ~
     ==
   ::
   ++  position
     |=  =position:lsp
     ^-  json
-    %:  pairs
-      line+(numb row.position)
-      character+(numb col.position)
+    %:  pr
+      line+(nu row.position)
+      character+(nu col.position)
       ~
     ==
   ::
   ++  range
     |=  =range:lsp
     ^-  json
-    %:  pairs
+    %:  pr
       start+(position start.range)
       end+(position end.range)
       ~
@@ -290,10 +290,10 @@
   ++  diagnostic
     |=  diag=diagnostic:lsp
     ^-  json
-    %:  pairs
+    %:  pr
       range+(range range.diag)
-      severity+(numb severity.diag)
-      message+(cord message.diag)
+      severity+(nu severity.diag)
+      message+(co message.diag)
       ~
     ==
   ::

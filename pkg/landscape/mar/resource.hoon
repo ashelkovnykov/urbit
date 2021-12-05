@@ -5,7 +5,7 @@
   |%
   ++  noun  rid
   ++  json  
-    %+  frond:enjs:format  %resource
+    %+  ob:enjs:format  %resource
     (enjs:resource rid)
   --
 ++  grab

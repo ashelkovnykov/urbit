@@ -19,8 +19,8 @@
   |%                                                    ::  convert from
   ++  mime  |=([p=mite q=octs] (fall (rush (@t q.q) apex:de-json) *json))
   ++  noun  json                                        ::  clam from %noun
-  ++  numb  numb:enjs
-  ++  time  time:enjs
+  ++  numb  nu:enjs
+  ++  time  ms:enjs
   --
 ++  grad  %mime
 --

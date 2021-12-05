@@ -5,7 +5,7 @@
   |%
   ++  noun  hash
   ++  json
-    (cord:enjs:format (rsh [3 2] (scot %uv hash)))
+    (co:enjs:format (rsh [3 2] (scot %uv hash)))
   --
 ++  grab
   |%

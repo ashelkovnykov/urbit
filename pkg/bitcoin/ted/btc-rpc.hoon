@@ -17,7 +17,7 @@
       %-  some
       %-  as-octt:mimes:html
       %-  en-json:html
-      %-  pairs
+      %-  pr
       :~  jsonrpc+[%s '2.0']
           id+[%s 'block-info']
           method+[%s 'getblockchaininfo']
@@ -33,7 +33,7 @@
       %-  some
       %-  as-octt:mimes:html
       %-  en-json:html
-      %-  pairs
+      %-  pr
       :~  jsonrpc+[%s] '2.0']
           id+[%s] 'list-unspent']
           method+[%s 'blockchain.scripthash.listunspent']

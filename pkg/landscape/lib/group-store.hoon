@@ -60,14 +60,14 @@
 ++  enjs
   =,  enjs:format
   |%
-  ++  frond
+  ++  ob
     |=  [p=@t q=json]
     ^-  json
-    (frond:enjs:format (dekebab p) q)
-  ++  pairs
-    |=  a=(^list [p=@t q=json])
+    (ob:enjs:format (dekebab p) q)
+  ++  pr
+    |=  a=(list [p=@t q=json])
     ^-  json
-    %-  pairs:enjs:format
+    %-  pr:enjs:format
     %+  turn  a
     |=  [p=@t q=json]
     ^-  [@t json]
@@ -76,7 +76,7 @@
   ++  update
     |=  =^update
     ^-  json
-    %+  frond  -.update
+    %+  ob  -.update
     ?-  -.update
       %add-group        (add-group update)
       %add-members      (add-members update)
@@ -93,7 +93,7 @@
   ++  initial-group
     |=  =^update
     ?>  ?=(%initial-group -.update)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.update)
         group+(group group.update)
     ==
@@ -111,11 +111,11 @@
   ++  group
     |=  =^group
     ^-  json
-    %-  pairs
-    :~  members+(set members.group shil)
+    %-  pr
+    :~  members+(st members.group hl)
         policy+(policy policy.group)
         tags+(tags tags.group)
-        hidden+(bool hidden.group)
+        hidden+(bo hidden.group)
     ==
   ++  tags
     |=  =^tags
@@ -123,8 +123,8 @@
     :-  %o
     ^-  (map @t json)
     %-  ~(run in tags)
-    |=  [=^tag ships=(^set ^ship)]
-    :_  (set ships shil)
+    |=  [=^tag ships=(set ship)]
+    :_  (st ships hl)
     ?@  tag  tag
     ;:  (cury cat 3)
       app.tag  '\\'
@@ -136,30 +136,30 @@
     |=  =^tag
     ^-  json
     ?@  tag
-      (frond %tag (cord tag))
-    %-  pairs
-    :~  app+(cord app.tag)
-        tag+(cord tag.tag)
+      (ob %tag (co tag))
+    %-  pr
+    :~  app+(co app.tag)
+        tag+(co tag.tag)
         resource+(enjs-path:resource resource.tag)
     ==
   ::
   ++  policy
     |=  =^policy
-    %+  frond  -.policy
-    %-  pairs
+    %+  ob  -.policy
+    %-  pr
     ?-  -.policy
         %invite
-      :~  pending+(set pending.policy shil)
+      :~  pending+(st pending.policy hl)
       ==
     ::
         %open
-      :~  banned+(set banned.policy shil)
-          ban-ranks+(set ban-ranks.policy cord)
+      :~  banned+(st banned.policy hl)
+          ban-ranks+(st ban-ranks.policy co)
       ==
     ==
   ++  policy-diff
     |=  =diff:^policy
-    %+  frond  -.diff
+    %+  ob  -.diff
     |^
     ?-  -.diff
       %invite   (invite +.diff)
@@ -168,19 +168,19 @@
     ==
     ++  open
       |=  =diff:open:^policy
-      %+  frond  -.diff
+      %+  ob  -.diff
       ?-  -.diff
-        %allow-ranks  (set ranks.diff cord)
-        %ban-ranks    (set ranks.diff cord)
-        %allow-ships  (set ships.diff shil)
-        %ban-ships    (set ships.diff shil)
+        %allow-ranks  (st ranks.diff co)
+        %ban-ranks    (st ranks.diff co)
+        %allow-ships  (st ships.diff hl)
+        %ban-ships    (st ships.diff hl)
       ==
     ++  invite
       |=  =diff:invite:^policy
-      %+  frond  -.diff
+      %+  ob  -.diff
       ?-  -.diff
-        %add-invites      (set invitees.diff shil)
-        %remove-invites   (set invitees.diff shil)
+        %add-invites      (st invitees.diff hl)
+        %remove-invites   (st invitees.diff hl)
       ==
     --
   ::
@@ -188,68 +188,68 @@
     |=  =^update
     ^-  json
     ?>  ?=(%expose -.update)
-    (frond %resource (enjs:resource resource.update))
+    (ob %resource (enjs:resource resource.update))
   ::
   ++  remove-group
     |=  =^update
     ^-  json
     ?>  ?=(%remove-group -.update)
-    (frond %resource (enjs:resource resource.update))
+    (ob %resource (enjs:resource resource.update))
   ::
   ++  add-group
     |=  =action
     ^-  json
     ?>  ?=(%add-group -.action)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.action)
         policy+(policy policy.action)
-        hidden+(bool hidden.action)
+        hidden+(bo hidden.action)
     ==
   ::
   ++  add-members
     |=  =action
     ^-  json
     ?>  ?=(%add-members -.action)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.action)
-        ships+(set ships.action shil)
+        ships+(st ships.action hl)
     ==
   ::
   ++  remove-members
     |=  =action
     ^-  json
     ?>  ?=(%remove-members -.action)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.action)
-        ships+(set ships.action shil)
+        ships+(st ships.action hl)
     ==
   ::
   ++  add-tag
     |=  =action
     ^-  json
     ?>  ?=(%add-tag -.action)
-    %-  pairs
-    ^-  (^list [p=@t q=json])
+    %-  pr
+    ^-  (list [p=@t q=json])
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ships.action shil)
+        ships+(st ships.action hl)
     ==
   ::
   ++  remove-tag
     |=  =action
     ^-  json
     ?>  ?=(%remove-tag -.action)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.action)
         tag+(tag tag.action)
-        ships+(set ships.action shil)
+        ships+(st ships.action hl)
     ==
   ::
   ++  change-policy
     |=  =action
     ^-  json
     ?>  ?=(%change-policy -.action)
-    %-  pairs
+    %-  pr
     :~  resource+(enjs:resource resource.action)
         diff+(policy-diff diff.action)
     ==

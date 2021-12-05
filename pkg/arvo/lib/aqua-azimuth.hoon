@@ -25,19 +25,19 @@
   ?:  =(method 'eth_blockNumber')
     :-  ~
     %+  answer-request  req
-    (tape (num-to-hex:ethereum latest-block))
+    (ta (num-to-hex:ethereum latest-block))
   ?:  =(method 'eth_getBlockByNumber')
     :-  ~
     %+  answer-request  req
-    %-  pairs
+    %-  pr
     =/  hex  (get-first-param req)
     =/  number  (hex-to-num:ethereum hex)
     =/  hash  (number-to-hash number)
     =/  parent-hash  (number-to-hash ?~(number number (dec number)))
     :~
-      'number'^(tape hex)
-      'hash'^(tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
-      'parentHash'^(tape (num-to-hex:ethereum parent-hash))   ::  not like hash?
+      'number'^(ta hex)
+      'hash'^(ta (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
+      'parentHash'^(ta (num-to-hex:ethereum parent-hash))   ::  not like hash?
     ==
   ?:  =(method 'eth_getLogs')
     :-  ~
@@ -114,8 +114,8 @@
       %-  en-json:html
       :-  %a
       :_  ~
-      %-  pairs
-      :~  id+(cord (get-id req))
+      %-  pr
+      :~  id+(co (get-id req))
           jsonrpc+[%s '2.0']
           result+result
       ==
@@ -163,31 +163,31 @@
     (logs-by-range number number)
   ::
   ++  logs-to-json
-    |=  [count=@ud selected-logs=(^list az-log)]
+    |=  [count=@ud selected-logs=(list az-log)]
     ^-  json
     :-  %a
     |-
     ^-  (list json)
     ?~  selected-logs  ~
     :_  $(count +(count), selected-logs t.selected-logs)
-    %-  pairs
+    %-  pr
     :~
       'logIndex'^[%s '0x0']
       'transactionIndex'^[%s '0x0']
         :- 'transactionHash'
-      (tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 `@`0x5362)))
+      (ta (prefix-hex:ethereum (render-hex-bytes:ethereum 32 `@`0x5362)))
     ::
         =/  hash  (number-to-hash count)
-      'blockHash'^(tape (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
+      'blockHash'^(ta (prefix-hex:ethereum (render-hex-bytes:ethereum 32 hash)))
     ::
-      'blockNumber'^(tape (num-to-hex:ethereum count))
-      'address'^(tape (address-to-hex:ethereum azimuth:contracts:azimuth))
+      'blockNumber'^(ta (num-to-hex:ethereum count))
+      'address'^(ta (address-to-hex:ethereum azimuth:contracts:azimuth))
       'type'^[%s 'mined']
-      'data'^(cord data.i.selected-logs)
+      'data'^(co data.i.selected-logs)
     ::
         :-  'topics'
-        %+  list  topics.i.selected-logs
-      :(cork (cury render-hex-bytes:ethereum 32) prefix-hex:ethereum tape)
+        %+  ls  topics.i.selected-logs
+      :(cork (cury render-hex-bytes:ethereum 32) prefix-hex:ethereum ta)
     ==
   --
 ::

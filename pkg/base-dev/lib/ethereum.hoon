@@ -671,7 +671,7 @@
   ++  batch-read-request
     |=  req=(list proto-read-request)
     ^-  json
-    (list:enjs:format req read-request)
+    (ls:enjs:format req read-request)
   ::
   ++  read-request
     |=  proto-read-request
@@ -686,16 +686,16 @@
     =,  enjs:format
     |=  [riq=(^unit @t) req=request]
     ^-  json
-    %-  pairs
-    =;  r=[met=@t pas=(^list json)]
+    %-  pr
+    =;  r=[met=@t pas=(list json)]
       ::TODO  should use request-to-json:rpc:jstd,
       ::      and probably (fall riq -.req)
       :*  jsonrpc+[%s '2.0']
-          method+(cord met.r)
+          method+(co met.r)
           params+[%a pas.r]
           ::TODO  would just jamming the req noun for id be a bad idea?
           ?~  riq  ~
-          [id+(cord u.riq)]~
+          [id+(co u.riq)]~
       ==
     ?-    -.req
         %eth-block-number
@@ -710,9 +710,9 @@
         %eth-new-filter
       :-  'eth_newFilter'
       :_  ~
-      %-  pairs
+      %-  pr
       =-  (murn - same)
-      ^-  (^list (^unit (pair @t json)))
+      ^-  (list (unit (pair @t json)))
       :~
           ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
@@ -723,8 +723,8 @@
           ::NOTE  tmi
           ?~  adr.req  ~
           :+  ~  'address'
-          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
-          (list (turn adr.req address-to-hex) tape)
+          ?~  t.adr.req  (ta (address-to-hex i.adr.req))
+          (ls (turn adr.req address-to-hex) ta)
         ::
           ?~  top.req  ~
           `['topics' (topics-to-json top.req)]
@@ -733,19 +733,19 @@
         %eth-get-block-by-number
       :-  'eth_getBlockByNumber'
       :~ 
-        (tape (num-to-hex bon.req))
-        (bool txs.req)
+        (ta (num-to-hex bon.req))
+        (bo txs.req)
       ==
     ::
         %eth-get-filter-logs
-      ['eth_getFilterLogs' (tape (num-to-hex fid.req)) ~]
+      ['eth_getFilterLogs' (ta (num-to-hex fid.req)) ~]
     ::
         %eth-get-logs
       :-  'eth_getLogs'
       :_  ~
-      %-  pairs
+      %-  pr
       =-  (murn - same)
-      ^-  (^list (^unit (pair @t json)))
+      ^-  (list (unit (pair @t json)))
       :~ 
           ?~  fro.req  ~
           `['fromBlock' (block-to-json u.fro.req)]
@@ -755,8 +755,8 @@
         ::
           ?~  adr.req  ~
           :+  ~  'address'
-          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
-          (list (turn adr.req address-to-hex) tape)
+          ?~  t.adr.req  (ta (address-to-hex i.adr.req))
+          (ls (turn adr.req address-to-hex) ta)
         ::
           ?~  top.req  ~
           `['topics' (topics-to-json top.req)]
@@ -765,72 +765,72 @@
         %eth-get-logs-by-hash
       :-  'eth_getLogs'
       :_  ~
-      %-  pairs
+      %-  pr
       =-  (murn - same)
-      ^-  (^list (^unit (pair @t json)))
+      ^-  (list (unit (pair @t json)))
       :~ 
-          `['blockHash' (tape (transaction-to-hex has.req))]
+          `['blockHash' (ta (transaction-to-hex has.req))]
         ::
           ?~  adr.req  ~
           :+  ~  'address'
-          ?~  t.adr.req  (tape (address-to-hex i.adr.req))
-          (list (turn adr.req address-to-hex) tape)
+          ?~  t.adr.req  (ta (address-to-hex i.adr.req))
+          (ls (turn adr.req address-to-hex) ta)
         ::
           ?~  top.req  ~
           `['topics' (topics-to-json top.req)]
       ==
     ::
         %eth-get-filter-changes
-      ['eth_getFilterChanges' (tape (num-to-hex fid.req)) ~]
+      ['eth_getFilterChanges' (ta (num-to-hex fid.req)) ~]
     ::
         %eth-get-transaction-count
       :-  'eth_getTransactionCount'
       :~ 
-        (tape (address-to-hex adr.req))
+        (ta (address-to-hex adr.req))
         (block-to-json block.req)
       ==
     ::
         %eth-get-balance
       :-  'eth_getBalance'
       :~
-        (tape (address-to-hex adr.req))
+        (ta (address-to-hex adr.req))
         (block-to-json block.req)
       ==
     ::
         %eth-get-transaction-by-hash
-      ['eth_getTransactionByHash' (tape (transaction-to-hex txh.req)) ~]
+      ['eth_getTransactionByHash' (ta (transaction-to-hex txh.req)) ~]
     ::
         %eth-get-transaction-receipt
-      ['eth_getTransactionReceipt' (tape (transaction-to-hex txh.req)) ~]
+      ['eth_getTransactionReceipt' (ta (transaction-to-hex txh.req)) ~]
     ::
         %eth-send-raw-transaction
-      ['eth_sendRawTransaction' (tape (num-to-hex dat.req)) ~]
+      ['eth_sendRawTransaction' (ta (num-to-hex dat.req)) ~]
     ==
   ::
   ++  eth-call-to-json
     =,  enjs:format
     |=  cal=call
     ^-  json
-    %-  pairs
+    %-  pr
     =-  (murn - same)
-    ^-  (^list (^unit (pair @t json)))
+    ^-  (list (unit (pair @t json)))
     :~
         ?~  from.cal  ~
-        `['from' (tape (address-to-hex u.from.cal))]
+        `['from' (ta (address-to-hex u.from.cal))]
       ::
-        `['to' (tape (address-to-hex to.cal))]
+        `['to' (ta (address-to-hex to.cal))]
       ::
         ?~  gas.cal  ~
-        `['gas' (tape (num-to-hex u.gas.cal))]
+        `['gas' (ta (num-to-hex u.gas.cal))]
       ::
         ?~  gas-price.cal  ~
-        `['gasPrice' (tape (num-to-hex u.gas-price.cal))]
+        `['gasPrice' (ta (num-to-hex u.gas-price.cal))]
       ::
         ?~  value.cal  ~
-        `['value' (tape (num-to-hex u.value.cal))]
+        `['value' (ta (num-to-hex u.value.cal))]
       ::
         ?~  data.cal  ~
-        `['data' (tape data.cal)]
+        `['data' (ta data.cal)]
     ==
   ::
   ++  block-to-json
@@ -838,26 +838,26 @@
     |=  dob=block
     ^-  json
     ?-  -.dob
-      %number   (tape (num-to-hex n.dob))
-      %label    (cord l.dob)
+      %number   (ta (num-to-hex n.dob))
+      %label    (co l.dob)
     ==
   ::
   ++  topics-to-json
     =,  enjs:format
-    |=  tos=(^list ?(@ux (^list @ux)))
+    |=  tos=(list ?(@ux (list @ux)))
     ^-  json
-    %+  list  tos
-    |=  t=?(@ (^list @))
+    %+  ls  tos
+    |=  t=?(@ (list @))
     |^
     ?@  t
       ?:  =(0 t)  ~
       (ttj `@`t)
-    (list t ttj)
+    (ls t ttj)
     ++  ttj
       ;:  cork
         (cury render-hex-bytes 32)
         prefix-hex
-        tape
+        ta
       ==
     --
   ::

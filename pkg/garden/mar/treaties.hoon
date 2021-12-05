@@ -5,7 +5,7 @@
   ++  noun  treaties
   ++  json  
     ^-  ^json
-    %-  pairs:enjs:format
+    %-  pr:enjs:format
     %+  turn  treaties
     |=  t=treaty:treaty
     :-  (crip "{(scow %p ship.t)}/{(trip desk.t)}")

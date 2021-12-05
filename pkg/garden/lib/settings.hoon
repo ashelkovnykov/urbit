@@ -6,7 +6,7 @@
   ++  data
     |=  dat=^data
     ^-  json
-    %+  frond  -.dat
+    %+  ob  -.dat
     ?-  -.dat
       %all     (settings +.dat)
       %bucket  (bucket +.dat)
@@ -26,7 +26,7 @@
   ++  event
     |=  evt=^event
     ^-  json
-    %+  frond  -.evt
+    %+  ob  -.evt
     ?-  -.evt
       %put-bucket  (put-bucket +.evt)
       %del-bucket  (del-bucket +.evt)
@@ -37,37 +37,37 @@
   ++  put-bucket
     |=  [d=desk k=key b=^bucket]
     ^-  json
-    %-  pairs
-    :~  bucket-key+(cord k)
+    %-  pr
+    :~  bucket-key+(co k)
         bucket+(bucket b)
-        desk+(cord d)
+        desk+(co d)
     ==
   ::
   ++  del-bucket
     |=  [d=desk k=key]
     ^-  json
-    %-  pairs
-    :~  bucket-key+(cord k)
-        desk+(cord d)
+    %-  pr
+    :~  bucket-key+(co k)
+        desk+(co d)
     ==
   ::
   ++  put-entry
     |=  [d=desk b=key k=key v=val]
     ^-  json
     %-  pr
-    :~  bucket-key+(cord b)
-        entry-key+(cord k)
+    :~  bucket-key+(co b)
+        entry-key+(co k)
         value+(value v)
-        desk+(cord d)
+        desk+(co d)
     ==
   ::
   ++  del-entry
     |=  [d=desk buc=key =key]
     ^-  json
     %-  pr
-    :~  bucket-key+(cord buc)
-        entry-key+(cord key)
-        desk+(cord d)
+    :~  bucket-key+(co buc)
+        entry-key+(co key)
+        desk+(co d)
     ==
   ::
   ++  value
@@ -76,8 +76,8 @@
     ?-  -.val
       %s  val
       %b  val
-      %n  (numb p.val)
-      %a  (list p.val value)
+      %n  (nu p.val)
+      %a  (ls p.val value)
     ==
   ::
   ++  bucket

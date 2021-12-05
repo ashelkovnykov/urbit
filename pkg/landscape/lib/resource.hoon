@@ -27,14 +27,14 @@
   |=  =resource
   ^-  json
   =,  enjs:format
-  %-  pairs
-  :~  ship+(shil entity.resource)
-      name+(cord name.resource)
+  %-  pr
+  :~  ship+(hl entity.resource)
+      name+(co name.resource)
   ==
 ::
 ++  enjs-path
   |=  =resource
-  (path:enjs:format (en-path resource))
+  (pa:enjs:format (en-path resource))
 ::
 ++  dejs-path
   %-  su:dejs:format

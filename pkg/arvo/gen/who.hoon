@@ -19,7 +19,7 @@
 ?^  t.q.u.url
   [[%404 ~] ~]
 =/  response=json
-  (frond:enjs:format %who (shil:enjs:format p.bek))
+  (ob:enjs:format %who (hl:enjs:format p.bek))
 :-
   :-  %200
   :~  ['content-type' 'application/json']

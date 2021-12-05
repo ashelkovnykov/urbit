@@ -85,14 +85,14 @@
     |=  act=^action
     ^-  json
     ?>  ?=(%pending-indices -.act)
-    %+  frond  %pending-indices
+    %+  ob  %pending-indices
     :-  %o
     ^-  (map @t json)
     %-  ~(run in pending.act)
     |=  [h=hash:store i=index:store]
     =/  idx  (index i)
     ?>  ?=(%s -.idx)
-    [p.idx (numh %ux h)]
+    [p.idx (nh %ux h)]
   ::
   ++  index
     |=  i=index:store

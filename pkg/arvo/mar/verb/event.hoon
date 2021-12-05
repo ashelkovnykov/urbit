@@ -12,23 +12,23 @@
   ++  noun  event
   ++  json
     =,  enjs:format
-    %+  frond  -.event
+    %+  ob  -.event
     ?-  -.event
       %on-init    ~
       %on-load    ~
-      %on-poke    (cord mark.event)
-      %on-watch   (path path.event)
-      %on-leave   (path path.event)
-      %on-agent   %-  pairs
-                  :~  'wire'^(path wire.event)
-                      'sign'^(cord sign.event)
+      %on-poke    (co mark.event)
+      %on-watch   (pa path.event)
+      %on-leave   (pa path.event)
+      %on-agent   %-  pr
+                  :~  'wire'^(pa wire.event)
+                      'sign'^(co sign.event)
                   ==
-      %on-arvo    %-  pairs
-                  :~  'wire'^(path wire.event)
-                      'vane'^(cord vane.event)
-                      'sign'^(cord sign.event)
+      %on-arvo    %-  pr
+                  :~  'wire'^(pa wire.event)
+                      'vane'^(co vane.event)
+                      'sign'^(co sign.event)
                   ==
-      %on-fail    (cord term.event)
+      %on-fail    (co term.event)
     ==
   --
 --

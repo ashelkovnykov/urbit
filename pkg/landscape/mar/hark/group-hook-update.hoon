@@ -5,7 +5,7 @@
   |%
   ++  noun  upd
   ++  json  
-    %+  frond:enjs:format
+    %+  ob:enjs:format
       %hark-group-hook-update
     (update:enjs upd)
   --

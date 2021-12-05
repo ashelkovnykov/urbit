@@ -3369,98 +3369,98 @@
   ::                                                    ::  ++enjs:format
   ++  enjs  ^?                                          ::  json encoders
     |%
-    ::                                                  ::  ++bool:enjs:format
-    ++  bool                                            ::  boolean
+    ::                                                  ::  ++bo:enjs:format
+    ++  bo                                              ::  boolean
       |=  a=?
       ^-  json
       [%b a]
-    ::                                                  ::  ++cord:enjs:format
-    ++  cord                                            ::  string from cord
+    ::                                                  ::  ++co:enjs:format
+    ++  co                                              ::  string from cord
       |=  a=@t
       ^-  json
       [%s a]
-    ::                                                  ::  ++tape:enjs:format
-    ++  tape                                            ::  string from tape
-      |=  a=^tape
+    ::                                                  ::  ++ta:enjs:format
+    ++  ta                                              ::  string from tape
+      |=  a=tape
       ^-  json
       [%s (crip a)]
-    ::                                                  ::  ++path:enjs:format
-    ++  path                                            ::  string from path
-      |=  a=^path
+    ::                                                  ::  ++pa:enjs:format
+    ++  pa                                              ::  string from path
+      |=  a=path
       ^-  json
       [%s (spat a)]
-    ::                                                  ::  ++ship:enjs:format
-    ++  ship                                            ::  string from ship
-      |=  a=^ship
+    ::                                                  ::  ++hp:enjs:format
+    ++  hp                                              ::  string from ship
+      |=  a=ship
       ^-  json
       [%s (scot %p a)]
-    ::                                                  ::  ++shil:enjs:format
-    ++  shil                                            ::  string from ship
-      |=  a=^ship
+    ::                                                  ::  ++hl:enjs:format
+    ++  hl                                              ::  string from ship
+      |=  a=ship
       ^-  json
       [%s (rsh [3 1] (scot %p a))]
-    ::                                                  ::  ++numb:enjs:format
-    ++  numb                                            ::  number to int
+    ::                                                  ::  ++nu:enjs:format
+    ++  nu                                              ::  number to int
       |=  a=@u
       ^-  json
-      [%n (crip (a-co:co a))]
-    ::                                                  ::  ++nums:enjs:format
-    ++  nums                                            ::  number as string
+      [%n (crip (a-co:^co a))]
+    ::                                                  ::  ++ns:enjs:format
+    ++  ns                                              ::  number as string
       |=  a=@u
       ^-  json
-      [%s (crip (a-co:co a))]
-    ::                                                  ::  ++numh:enjs:format
-    ++  numh                                            ::  hoon num as string
+      [%s (crip (a-co:^co a))]
+    ::                                                  ::  ++nh:enjs:format
+    ++  nh                                              ::  hoon num as string
       |=  [t=@tas a=@]
       ^-  json
       [%s (scot t a)]
     ::                                                  ::  ++sect:enjs:format
-    ++  sect                                            ::  s timestamp
-      |=  a=^time
-      (numb (unt:chrono:userlib a))
-    ::                                                  ::  ++time:enjs:format
-    ++  time                                            ::  ms timestamp
-      |=  a=^time
-      (numb (unm:chrono:userlib a))
-    ::                                                  ::  ++date:enjs:format
-    ++  date                                            ::  date as string
+    ++  sc                                              ::  s timestamp
+      |=  a=time
+      (nu (unt:chrono:userlib a))
+    ::                                                  ::  ++ms:enjs:format
+    ++  ms                                              ::  ms timestamp
+      |=  a=time
+      (nu (unm:chrono:userlib a))
+    ::                                                  ::  ++da:enjs:format
+    ++  da                                              ::  da as string
       |=  a=@da
       ^-  json
       [%s (scot %da a)]
-    ::                                                  ::  ++wall:enjs:format
-    ++  wall                                            ::  string from wall
-      |=  a=^wall
+    ::                                                  ::  ++wl:enjs:format
+    ++  wl                                              ::  string from wall
+      |=  a=wall
       ^-  json
-      (tape (of-wall a))
-    ::                                                  ::  ++tank:enjs:format
-    ++  tank                                            ::  tank as string arr
-      |=  a=^tank
+      (ta (of-wall a))
+    ::                                                  ::  ++tk:enjs:format
+    ++  tk                                              ::  tank as string arr
+      |=  a=tank
       ^-  json
-      [%a (turn (wash [0 80] a) tape)]
-    ::                                                  ::  ++list:enjs:format
-    ++  list                                            ::  array from list
-      |*  [lst=(^list) jon=$-(* json)]
+      [%a (turn (wash [0 80] a) ta)]
+    ::                                                  ::  ++ls:enjs:format
+    ++  ls                                              ::  array from list
+      |*  [lst=(list) jon=$-(* json)]
       ^-  json
       :-  %a
       (turn lst jon)
-    ::                                                  ::  ++set:enjs:format
-    ++  set                                             ::  array from set
-      |*  [sit=(^set) jon=$-(* json)]
+    ::                                                  ::  ++st:enjs:format
+    ++  st                                              ::  array from set
+      |*  [sit=(set) jon=$-(* json)]
       ^-  json
-      (list ~(tap in sit) jon)
-    ::                                                  ::  ++frond:enjs:format
-    ++  frond                                           ::  object from k-v pair
+      (ls ~(tap in sit) jon)
+    ::                                                  ::  ++ob:enjs:format
+    ++  ob                                              ::  object from k-v pair
       |=  [p=@t q=json]
       ^-  json
       [%o [[p q] ~ ~]]
-    ::                                                  ::  ++pairs:enjs:format
-    ++  pairs                                           ::  object from k-v list
-      |=  a=(^list [p=@t q=json])
+    ::                                                  ::  ++pr:enjs:format
+    ++  pr                                              ::  object from k-v list
+      |=  a=(list [p=@t q=json])
       ^-  json
       [%o (~(gas by *(map @t json)) a)]
-    ::                                                  ::  ++unit:enjs:format
-    ++  unit                                            ::  unit
-      |*  [a=(^unit) r=$-(* json)]
+    ::                                                  ::  ++un:enjs:format
+    ++  un                                              ::  unit
+      |*  [a=(unit) r=$-(* json)]
       ^-  json
       ?~  a  ~
       (r u.a)

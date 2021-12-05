@@ -10,8 +10,8 @@
   ++  noun  tan
   ++  json
     =,  enjs:format
-    =/  result=(each (^list ^json) tang)
-      (mule |.((list tan tank)))
+    =/  result=(each (list ^json) tang)
+      (mule |.((ls tan tk)))
     ?:  -.result
       a+p.result
     a+[a+[%s '[[output rendering error]]']~]~

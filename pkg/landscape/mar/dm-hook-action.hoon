@@ -5,7 +5,7 @@
   |%
   ++  noun  act
   ++  json  
-    %+  frond:enjs:format  %dm-hook-action
+    %+  ob:enjs:format  %dm-hook-action
     (action:enjs act)
   --
 ::

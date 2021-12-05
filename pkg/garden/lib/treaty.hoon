@@ -13,67 +13,67 @@
   ++  treaty
     |=  t=^treaty
     %+  merge  (docket:enjs:dock docket.t)
-    %-  pairs
-    :~  ship+(ship ship.t)
-        desk+(cord desk.t)
+    %-  pr
+    :~  ship+(hp ship.t)
+        desk+(co desk.t)
         cass+(case case.t)
-        hash+(numh %uv hash.t)
+        hash+(nh %uv hash.t)
     ==
   ::
   ++  case
     |=  c=^case
-    %+  frond  -.c
+    %+  ob  -.c
     ?-  -.c
-      %da   (date p.c)
-      %tas  (cord p.c)
-      %ud   (numb p.c)
+      %da   (da p.c)
+      %tas  (co p.c)
+      %ud   (nu p.c)
     ==
   ++  foreign-desk
-    |=  [s=^ship =desk]
-    ^-  ^cord
+    |=  [s=ship =desk]
+    ^-  cord
     (crip "{(scow %p s)}/{(trip desk)}")
   ::
   ++  alliance
     |=  a=^alliance
     ^-  json
-    %+  set  a
-    |=  [=^ship =desk]
+    %+  st  a
+    |=  [=ship =desk]
     ^-  json
-    (cord (foreign-desk ship desk))
+    (co (foreign-desk ship desk))
   ::
   ++  treaty-update
     |=  u=update:^treaty
     ^-  json
-    %+  frond  -.u
+    %+  ob  -.u
     ?-  -.u
       %add  (treaty treaty.u)
-      %del  (cord (foreign-desk +.u))
+      %del  (co (foreign-desk +.u))
     ::
         %ini
       :-  %o
       ^-  (map @t json)
       %-  (run in init.u)
-      |=  [[s=^ship =desk] t=^treaty]
+      |=  [[s=ship =desk] t=^treaty]
       [(foreign-desk s desk) (treaty t)]
     ==
   ::
   ++  ally-update
     |=  u=update:ally
     ^-  json
-    %+  frond  -.u
+    %+  ob  -.u
     ?-  -.u
-      ?(%add %del)  (ship ship.u)
+      ?(%add %del)  (hp ship.u)
     ::
         %ini
       :-  %o
       ^-  (map @t json)
       %-  (run in init.u)
-      |=  [s=^ship a=^alliance]
+      |=  [s=ship a=^alliance]
       [(scot %p s) (alliance a)]
     ::
         %new
-      %-  pairs
-      :~  ship+(ship ship.u)
+      %-  pr
+      :~  ship+(hp ship.u)
           alliance+(alliance alliance.u)
       ==
     ==

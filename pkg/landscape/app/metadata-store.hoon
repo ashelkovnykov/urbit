@@ -371,7 +371,7 @@
       =/  assoc=(unit association:store)  (~(get by associations) md-resource)
       ?~  assoc  ~
       =/  =json
-        %-  pairs:enjs:format
+        %-  pr:enjs:format
         :~  group+(enjs-path:resource group.u.assoc)
             metadatum+(metadatum:enjs:lib metadatum.u.assoc)
         ==

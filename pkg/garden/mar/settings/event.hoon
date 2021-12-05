@@ -5,7 +5,7 @@
   |%
   ++  noun  evt
   ++  json
-    %+  frond:enjs:format  %settings-event
+    %+  ob:enjs:format  %settings-event
     (event:enjs evt)
   --
 ++  grab

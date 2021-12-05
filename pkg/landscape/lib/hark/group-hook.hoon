@@ -18,10 +18,10 @@
   =,  enjs:format
   ++  update
     |=  upd=^update
-    %+  frond  -.upd
+    %+  ob  -.upd
     ?-  -.upd
       ?(%listen %ignore)  (enjs-path:resource group.upd)
-      %initial  (set watching.upd enjs-path:resource)
+      %initial  (st watching.upd enjs-path:resource)
     ==
   --
 --

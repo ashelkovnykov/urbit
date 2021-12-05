@@ -16,51 +16,51 @@
   ++  json
     ^-  ^json
     =,  enjs:format
-    %+  frond  -.blit
+    %+  ob  -.blit
     ?-  -.blit
-      %bel  (bool &)
-      %clr  (bool &)
-      %hop  (numb p.blit)
-      %lin  (list p.blit (cork tuft cord))
-      %mor  (bool &)
-      %url  (cord p.blit)
+      %bel  (bo &)
+      %clr  (bo &)
+      %hop  (nu p.blit)
+      %lin  (ls p.blit (cork tuft co))
+      %mor  (bo &)
+      %url  (co p.blit)
     ::
         %sag
-      %-  pairs
-      :~  'path'^(path p.blit)
-          'file'^(cord (en:base64:mimes:html (as-octs:mimes:html (jam q.blit))))
+      %-  pr
+      :~  'path'^(pa p.blit)
+          'file'^(co (en:base64:mimes:html (as-octs:mimes:html (jam q.blit))))
       ==
     ::
         %sav
-      %-  pairs
-      :~  'path'^(path p.blit)
-          'file'^(cord (en:base64:mimes:html (as-octs:mimes:html q.blit)))
+      %-  pr
+      :~  'path'^(pa p.blit)
+          'file'^(co (en:base64:mimes:html (as-octs:mimes:html q.blit)))
       ==
     ::
         %klr
-      %+  list  p.blit
-      |=  [=stye text=(^list @c)]
+      %+  ls  p.blit
+      |=  [=stye text=(list @c)]
       |^
-      %-  pairs
+      %-  pr
       :~
-        'text'^(list text (cork tuft cord))
+        'text'^(ls text (cork tuft co))
         ::
           :-  'stye'
-          %-  pairs
+          %-  pr
           :~
             'back'^(color p.q.stye)
             'fore'^(color q.q.stye)
-            'deco'^(set p.stye null-or-cord)
+            'deco'^(st p.stye null-or-cord)
           ==
       ==
       ++  null-or-cord
         |=  t=?(~ @t)
         ?~  t  ~
-        (cord t)
+        (co t)
       ++  color
         |=  =tint
         ?@  tint  (null-or-cord tint)
-        (tape ((x-co:co 6) (rep 3 ~[b g r]:tint)))
+        (ta ((x-co:^co 6) (rep 3 ~[b g r]:tint)))
       --
     ==
   --

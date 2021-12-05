@@ -604,11 +604,11 @@
     ::
     :*  "y_object_duplicated_key"
         '{"a":"b","a":"c"}'
-        (frond ['a' [%s 'c']])
+        (ob ['a' [%s 'c']])
     ==
     :*  "y_object_duplicated_key_and_value"
         '{"a":"b","a":"b"}'
-        (frond ['a' [%s 'b']])
+        (ob ['a' [%s 'b']])
     ==
     :*  "y_object_empty"
         '{}'
@@ -616,7 +616,7 @@
     ==
     :*  "y_object_empty_key"
         '{"":0}'
-        (frond ['' [%n '0']])
+        (ob ['' [%n '0']])
     ==
     :*  "y_object_extreme_numbers"
         '{ "min": -1.0e+28, "max": 1.0e+28 }'
@@ -635,7 +635,7 @@
     :*  "y_object_string_unicode"
         '{"title":"\\u041f\\u043e\\u043b\\u0442\\u043e\\u0440\\u0430 \
         /\\u0417\\u0435\\u043c\\u043b\\u0435\\u043a\\u043e\\u043f\\u0430" }'
-        (frond 'title' [%s 'Полтора Землекопа'])
+        (ob 'title' [%s 'Полтора Землекопа'])
     ==
     :*  "y_object_with_newlines"
         '{\0a"a": "b"\0a}'

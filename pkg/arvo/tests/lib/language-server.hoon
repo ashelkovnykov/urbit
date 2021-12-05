@@ -8,7 +8,7 @@
   [5 3]
 ++  position-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['character' %n '3']
     ['line' %n '5']
@@ -19,7 +19,7 @@
 ::
 ++  range-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['start' position-jon]
     ['end' position-jon]
@@ -27,7 +27,7 @@
 ::
 ++  change-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['text' [%s 'text']]
     ['rangeLength' [%n '3']]
@@ -37,7 +37,7 @@
 ++  changes-jon
   ^-  json
   :-  %a
-  ^-  (^list json)
+  ^-  (list json)
   [change-jon ~]
 ::
 ++  text-document-item
@@ -46,7 +46,7 @@
 ::
 ++  text-document-item-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['uri' [%s 'file://']]
     ['version' [%n '1']]
@@ -59,7 +59,7 @@
 ::
 ++  text-document-id-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['uri' [%s 'file://']]
     ['version' [%n '1']]
@@ -71,7 +71,7 @@
 ::
 ++  diagnostic-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['range' range-jon]
     ['severity' [%n '1']]
@@ -84,7 +84,7 @@
 ::
 ++  completion-item-jon
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['label' [%s 'label']]
     ['detail' [%s 'detail']]
@@ -97,7 +97,7 @@
 ++  make-notification-jon
   |=  [method=@t params=json]
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['method' [%s method]]
     params+params
@@ -105,7 +105,7 @@
 ++  make-request-jon
   |=  [id=@t method=@t params=json]
   ^-  json
-  %-  pairs
+  %-  pr
   :~
     ['id' [%s id]]
     ['method' [%s method]]
@@ -113,7 +113,7 @@
   ==
 ++  make-response-jon
   |=  [id=@t result=json]
-  %-  pairs
+  %-  pr
   :~
     ['id' [%s id]]
     ['result' result]
@@ -127,7 +127,7 @@
     [%text-document--did-change text-document-id [[~ [[5 3] [5 3]]] `3 'text']~]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didChange'
-  %-  pairs
+  %-  pr
   :~
     ['contentChanges' changes-jon]
     ['textDocument' text-document-id-jon]
@@ -139,7 +139,7 @@
     [%text-document--did-save text-document-id]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didSave'
-  (frond ['textDocument' text-document-id-jon])
+  (ob ['textDocument' text-document-id-jon])
 ::
 ++  test-parse-did-close
   %+  expect-eq
@@ -147,7 +147,7 @@
     [%text-document--did-close text-document-id]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didClose'
-  (frond ['textDocument' text-document-id-jon])
+  (ob ['textDocument' text-document-id-jon])
 ::
 ++  test-parse-did-open
   %+  expect-eq
@@ -155,7 +155,7 @@
     [%text-document--did-open text-document-item]
   !>  %-  notification:dejs
   %+  make-notification-jon  'textDocument/didOpen'
-  (frond ['textDocument' text-document-id-jon])
+  (ob ['textDocument' text-document-id-jon])
 ::
 :: Requests
 ::
@@ -166,7 +166,7 @@
   !>  %-  request:dejs
   ^-  json
   %^  make-request-jon  '3'  'textDocument/hover'
-  %-  pairs
+  %-  pr
   :~
     ['position' position-jon]
     ['textDocument' text-document-id-jon]
@@ -178,7 +178,7 @@
   !>  %-  request:dejs
   ^-  json
   %^  make-request-jon  '3'  'textDocument/completion'
-  %-  pairs
+  %-  pr
   :~
     ['position' position-jon]
     ['textDocument' text-document-id-jon]
@@ -193,7 +193,7 @@
     [%text-document--publish-diagnostics 'file://' [diagnostic ~]]
   !>  ^-  json
   %+  make-notification-jon  'textDocument/publishDiagnostics'
-  %-  pairs
+  %-  pr
   :~
     ['uri' [%s 'file://']]
     ['diagnostics' [%a [diagnostic-jon ~]]]
@@ -205,7 +205,7 @@
     [%text-document--hover '1' `'text']
   !>  ^-  json
   %+  make-response-jon  '1'
-  (frond ['contents' [%s 'text']])
+  (ob ['contents' [%s 'text']])
 ::
 ++  test-enjs-completion
   %+  expect-eq

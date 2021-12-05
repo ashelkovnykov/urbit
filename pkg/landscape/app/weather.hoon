@@ -46,8 +46,8 @@
     =,  enjs:format
     ?.  ?=([%all ~] wire)  (on-watch:def wire)
     =/  jon
-      %-  pairs
-      :*  ['location' (cord location)]
+      %-  pr
+      :*  ['location' (co location)]
         ::
           ?.  ?=([%o *] data)  ~
           ~(tap by p.data)
@@ -92,7 +92,7 @@
     :-  %+  weld  lismov
         ^-  (list card)
         :~  [%pass /timer %arvo %b %wait (add now.bol ~h3)]
-            [%give %fact ~[/all] %json !>((frond:enjs:format %location jon))]
+            [%give %fact ~[/all] %json !>((ob:enjs:format %location jon))]
         ==
     %=  state
       location  str
@@ -101,7 +101,7 @@
   :_  state(location str)
   %+  weld  lismov
   ^-  (list card)
-  [%give %fact ~[/all] %json !>((frond:enjs:format %location jon))]~
+  [%give %fact ~[/all] %json !>((ob:enjs:format %location jon))]~
 ::
 ++  request-wttr
   |=  location=@t
@@ -132,8 +132,8 @@
     ~&  "fetching weather failed: {<u.error>}"
     [~ state]
   =/  jon=json
-    %+  frond:enjs:format  %weather
-    %-  pairs:enjs:format
+    %+  ob:enjs:format  %weather
+    %-  pr:enjs:format
     :~  [%current-condition (~(got by p.u.ujon) 'current_condition')]
         [%weather (~(got by p.u.ujon) 'weather')]
         [%nearest-area (~(got by p.u.ujon) 'nearest_area')]

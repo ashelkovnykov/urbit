@@ -9,16 +9,16 @@
   ++  update
     |=  upd=^update
     ^-  json
-    |^  (frond %file-server (frond (encode upd)))
+    |^  (ob %file-server (ob (encode upd)))
     ::
     ++  encode
       |=  upd=^update
-      ^-  [^cord json]
+      ^-  [cord json]
       ?-  -.upd
           %configuration
         =*  prefix  landscape-homepage-prefix.configuration.upd
         :-  %configuration
-        (frond %landscape-homepage-prefix (unit prefix cord))
+        (ob %landscape-homepage-prefix (un prefix co))
       ==
     --
   --

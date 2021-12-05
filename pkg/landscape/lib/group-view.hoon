@@ -53,8 +53,8 @@
   |%
   ++  update
     |=  upd=^update
-    %+  frond  %group-view-update
-    %+  frond  -.upd
+    %+  ob  %group-view-update
+    %+  ob  -.upd
     ?-  -.upd
       %initial    (initial +.upd)
       %progress   (progress +.upd)
@@ -64,27 +64,27 @@
   ::
   ++  started
     |=  [rid=resource req=^request]
-    %-  pairs
+    %-  pr
     :~  resource+(enjs-path:resource rid)
         request+(request req)
     ==
   ::
   ++  progress
     |=  [rid=resource prog=^progress]
-    %-  pairs
+    %-  pr
     :~  resource+(enjs-path:resource rid)
-        progress+(cord prog)
+        progress+(co prog)
     ==
   ++  request
     |=  req=^request
-    %-  pairs
-    :~  started+(time started.req)
-        ship+(shil ship.req)
-        progress+(cord progress.req)
-        'shareContact'^(bool share-co.req)
-        autojoin+(bool autojoin.req)
-        app+(cord app.req)
-        invite+(set invite.req (cury numh %ux))
+    %-  pr
+    :~  started+(ms started.req)
+        ship+(hl ship.req)
+        progress+(co progress.req)
+        'shareContact'^(bo share-co.req)
+        autojoin+(bo autojoin.req)
+        app+(co app.req)
+        invite+(st invite.req (cury nh %ux))
     ==
   ::
   ++  initial

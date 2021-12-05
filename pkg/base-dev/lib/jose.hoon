@@ -99,11 +99,11 @@
     ++  pass
       |=  k=key:rsa
       ^-  json
-      %-  pairs
+      %-  pr
       :~
         kty+[%s 'RSA']
-        n+(cord (numb n.pub.k))
-        e+(cord (numb e.pub.k))
+        n+(co (numb n.pub.k))
+        e+(co (numb e.pub.k))
       ==
     ::  +ring:en:jwk: json encode private key
     ::
@@ -112,14 +112,14 @@
       ^-  json
       ~|  %rsa-need-ring
       ?>  ?=(^ sek.k)
-      %-  pairs
+      %-  pr
       :~
         kty+[%s 'RSA']
-        n+(cord (numb n.pub.k))
-        e+(cord (numb e.pub.k))
-        d+(cord (numb d.u.sek.k))
-        p+(cord (numb p.u.sek.k))
-        q+(cord (numb q.u.sek.k))
+        n+(co (numb n.pub.k))
+        e+(co (numb e.pub.k))
+        d+(co (numb d.u.sek.k))
+        p+(co (numb p.u.sek.k))
+        q+(co (numb q.u.sek.k))
       ==
     --
   ::  |de:jwk: decoding of json cryptographic keys
@@ -181,13 +181,13 @@
     |=  [k=key:rsa pro=json lod=json]
     |^  ^-  json
         =.  pro  header
-        =/  protect=^cord  (encode pro)
-        =/  payload=^cord  (encode lod)
-        %-  pairs
+        =/  protect=cord  (encode pro)
+        =/  payload=cord  (encode lod)
+        %-  pr
         :~
-          protected+(cord protect)
-          payload+(cord payload)
-          signature+(cord (sign protect payload))
+          protected+(co protect)
+          payload+(co payload)
+          signature+(co (sign protect payload))
         ==
     ::  +header:sign:jws: set signature algorithm in header
     ::

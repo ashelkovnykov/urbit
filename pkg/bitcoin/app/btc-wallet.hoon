@@ -1062,11 +1062,11 @@
       [%x %configured ~]
     =/  provider=json
       ?~  prov  ~
-      (ship host.u.prov)
+      (hp host.u.prov)
     =/  result=json
-      %-  pairs
+      %-  pr
       :~  [%provider provider]
-          ['hasWallet' (bool ?=(^ walts))]
+          ['hasWallet' (bo ?=(^ walts))]
       ==
     ``json+!>(result)
   ::
@@ -1081,16 +1081,16 @@
   ~/  %on-watch
   |=  =path
   ^-  (quip card _this)
+  =,  enjs:format
   ?+  path  (on-watch:def path)
       [%check-payee @ ~]
     =/  who  (slav %p i.t.path)
     ?>  =(who our.bowl)
     =/  response=json
-      =,  enjs:format
-      %+  frond  'checkPayee'
-      %-  pairs
-      :~  ['hasWallet' (bool ?=(^ curr-xpub))]
-          ['payee' (shil our.bowl)]
+      %+  ob  'checkPayee'
+      %-  pr
+      :~  ['hasWallet' (bo ?=(^ curr-xpub))]
+          ['payee' (hl our.bowl)]
       ==
     :_  this
     [%give %fact ~ %json !>(response)]~

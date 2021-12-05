@@ -136,8 +136,8 @@
   ++  wal  `json`[%s 'hello\0Aworld\0A']
   ++  foo  ['foo' num]
   ++  bar  ['bar' str]
-  ++  obj  `json`(frond:enjs foo)
-  ++  pai  `json`(pairs:enjs ~[foo bar])
+  ++  obj  `json`(ob:enjs foo)
+  ++  pai  `json`(pr:enjs ~[foo bar])
   --
 ::  functions for creating `json` values
 ::
@@ -148,138 +148,138 @@
     ::
     %+  expect-eq
       !>  [%o (molt ~[foo:ex])]
-      !>  (frond foo:ex)
+      !>  (ob foo:ex)
     ::  complex object
     ::
     %+  expect-eq
       !>  [%o (molt ~[foo:ex bar:ex])]
-      !>  (pairs ~[foo:ex bar:ex])
+      !>  (pr ~[foo:ex bar:ex])
     ::  list
     ::
     %+  expect-eq
       !>  [%a ~[num:ex num:ex num:ex]]
-      !>  (list ~[101 101 101] numb)
+      !>  (ls ~[101 101 101] nu)
     ::  set
     ::
     %+  expect-eq
       !>  [%a ~[[%s 'c'] [%s 'a'] [%s 'b']]]
-      !>  (set (silt ~['a' 'b' 'c' 'c' 'b' 'a']) cord)
+      !>  (st (silt ~['a' 'b' 'c' 'c' 'b' 'a']) co)
     ::  boolean
     ::
     %+  expect-eq
       !>  tru:ex
-      !>  (bool &)
+      !>  (bo &)
     ::  cord
     ::
     %+  expect-eq
       !>  str:ex
-      !>  (cord 'hey')
+      !>  (co 'hey')
     ::  tape
     ::
     %+  expect-eq
       !>  str:ex
-      !>  (tape "hey")
+      !>  (ta "hey")
     ::  wall
     ::
     %+  expect-eq
       ::  uses of-wall, so adds the trailing newline
       ::
       !>  wal:ex
-      !>  (wall ~["hello" "world"])
+      !>  (wl ~["hello" "world"])
     ::  ship name
     ::
     %+  expect-eq
       !>  [%s '~zod']
-      !>  (ship ~zod)
+      !>  (hp ~zod)
     ::  ship name, no '~'
     ::
     %+  expect-eq
       !>  [%s 'zod']
-      !>  (shil ~zod)
+      !>  (hl ~zod)
     ::  number
     ::
     %+  expect-eq
       !>  [%n '0']
-      !>  (numb 0)
+      !>  (nu 0)
     %+  expect-eq
       !>  [%n '10']
-      !>  (numb 0xa)
+      !>  (nu 0xa)
     %+  expect-eq
       !>  num:ex
-      !>  (numb 101)
+      !>  (nu 101)
     %+  expect-eq
       !>  [%n '1000']
-      !>  (numb 1.000)
+      !>  (nu 1.000)
     ::  number as string
     ::
     %+  expect-eq
       !>  [%s '0']
-      !>  (nums 0)
+      !>  (ns 0)
     %+  expect-eq
       !>  [%s '10']
-      !>  (nums 10)
+      !>  (ns 10)
     %+  expect-eq
       !>  [%s '100']
-      !>  (nums 100)
+      !>  (ns 100)
     %+  expect-eq
       !>  [%s '1000']
-      !>  (nums 1.000)
+      !>  (ns 1.000)
     ::  hoon num as string
     ::
     %+  expect-eq
       !>  [%s '0']
-      !>  (numh %u 0)
+      !>  (nh %u 0)
     %+  expect-eq
       !>  [%s '1.000']
-      !>  (numh %ud 1.000)
+      !>  (nh %ud 1.000)
     %+  expect-eq
       !>  [%s '0xa.baca']
-      !>  (numh %ux 0xa.baca)
+      !>  (nh %ux 0xa.baca)
     %+  expect-eq
       !>  [%s '384.319.963']
-      !>  (numh %u 0vb.egger)
+      !>  (nh %u 0vb.egger)
     ::  sec time
     ::
     %+  expect-eq
       !>  tsc:ex
-      !>  (sect ~1970.1.1..0.0.1)
+      !>  (sc ~1970.1.1..0.0.1)
     ::  ms time
     ::
     %+  expect-eq
       !>  tms:ex
-      !>  (time ~1970.1.1..0.0.1)
+      !>  (ms ~1970.1.1..0.0.1)
     %+  expect-eq
       !>  tms:ex
-      !>  (time (from-unix-ms:chrono:userlib 1.000))
+      !>  (ms (from-unix-ms:chrono:userlib 1.000))
     ::  date
     ::
     %+  expect-eq
       !>  [%s '~2016.11.9..07.47.00']
-      !>  (date (from-unix:chrono:userlib 1.478.677.620))
+      !>  (da (from-unix:chrono:userlib 1.478.677.620))
     ::  path
     ::
     %+  expect-eq
       !>  [%s (crip "/~zod/base")]
-      !>  (path [~.~zod ~.base ~])
+      !>  (pa [~.~zod ~.base ~])
     ::  tank
     ::
     %+  expect-eq
       !>  [%a ~[[%s 'abc']]]
-      !>  (tank leaf+"abc")
+      !>  (tk leaf+"abc")
     %+  expect-eq
       !>  [%a ~[[%s '[a b c]']]]
-      !>  (tank [%rose [" " "[" "]"] leaf+"a" leaf+"b" leaf+"c" ~])
+      !>  (tk [%rose [" " "[" "]"] leaf+"a" leaf+"b" leaf+"c" ~])
     %+  expect-eq
       !>  [%a ~[[%s '!(a:b:c)']]]
-      !>  (tank [%palm [":" "!" "(" ")"] leaf+"a" leaf+"b" leaf+"c" ~])
+      !>  (tk [%palm [":" "!" "(" ")"] leaf+"a" leaf+"b" leaf+"c" ~])
     ::  unit
     ::
     %+  expect-eq
       !>  ~
-      !>  (unit ~ numb)
+      !>  (un ~ nu)
     %+  expect-eq
       !>  num:ex
-      !>  (unit (some 101) numb)
+      !>  (un (some 101) nu)
   ==
 ::  dejs - recursive processing of `json` values
 ::
@@ -443,7 +443,7 @@
     ::
     %+  expect-eq
       !>  (molt ~[[12 num:ex] [14 str:ex]])
-      !>  ((op dem same) (pairs:enjs ~[['12' num:ex] ['14' str:ex]]))
+      !>  ((op dem same) (pr:enjs ~[['12' num:ex] ['14' str:ex]]))
   ==
 ::  decoder transformers
 ::
@@ -705,7 +705,7 @@
     ::
     %+  expect-eq
       !>  `(molt ~[[12 num:ex] [14 str:ex]])
-      !>  ((op dem some) (pairs:enjs ~[['12' num:ex] ['14' str:ex]]))
+      !>  ((op dem some) (pr:enjs ~[['12' num:ex] ['14' str:ex]]))
   ==
 ::  decoder transformers
 ::

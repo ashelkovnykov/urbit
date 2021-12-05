@@ -18,10 +18,10 @@
   ++  json
     ^-  ^json
     ?+  -.dib  ~|(unsupported-blit+-.dib !!)
-      %mor  (list p.dib |=(a=dill-blit:dill json(dib a)))
-      %hop  (frond %hop (numb p.dib))
-      ?(%pro %out)  (frond -.dib (tape (tufa p.dib)))
-      ?(%bel %clr)  (frond %act %s -.dib)
+      %mor  (ls p.dib |=(a=dill-blit:dill json(dib a)))
+      %hop  (ob %hop (nu p.dib))
+      ?(%pro %out)  (ob -.dib (ta (tufa p.dib)))
+      ?(%bel %clr)  (ob %act %s -.dib)
     ==
   --
 --

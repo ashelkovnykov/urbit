@@ -6,10 +6,10 @@
   |=  [rune=tape text=tape]
   ^-  json
   =,  enjs:format
-  %-  pairs
-  :~  'label'^(tape rune)
-      'insertTextFormat'^(numb 2)
-      'insertText'^(tape text)
+  %-  pr
+  :~  'label'^(ta rune)
+      'insertTextFormat'^(nu 2)
+      'insertText'^(ta text)
   ==
 ::
 ++  runes

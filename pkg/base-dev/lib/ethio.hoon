@@ -78,7 +78,7 @@
           ^=  body
           %-  some  %-  as-octt:mimes:html
           %-  en-json:html
-          (list:enjs:format reqs request-to-json:rpc:ethereum)
+          (ls:enjs:format reqs request-to-json:rpc:ethereum)
       ==
     ;<  ~  bind:m
       (send-request:strandio request)

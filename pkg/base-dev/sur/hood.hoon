@@ -245,9 +245,9 @@
   =,  enjs:format
   |%
   ++  vats
-    |=  v=(^list ^vat)
+    |=  v=(list ^vat)
     ^-  json
-    %-  pairs
+    %-  pr
     %+  turn  v
     |=  va=^vat
     [desk.va (vat va)]
@@ -255,61 +255,61 @@
   ++  tim
     |=  t=@
     ^-  json
-    (numb (fall (mole |.((unm:chrono:userlib t))) 0))
+    (nu (fall (mole |.((unm:chrono:userlib t))) 0))
   ::
   ++  cass
     |=  c=^cass
-    %-  pairs
-    :~  ud+(numb ud.c)
+    %-  pr
+    :~  ud+(nu ud.c)
         da+(tim da.c)
     ==
   ::
   ++  vat
     |=  v=^vat
-    %-  pairs
-    :~  desk+(cord desk.v)
-        hash+(numh %uv hash.v)
+    %-  pr
+    :~  desk+(co desk.v)
+        hash+(nh %uv hash.v)
         cass+(cass cass.v)
         arak+(arak arak.v)
     ==
   ::
   ++  weft
     |=  w=^weft
-    %-  pairs
-    :~  name+(cord lal.w)
-        kelvin+(numb num.w)
+    %-  pr
+    :~  name+(co lal.w)
+        kelvin+(nu num.w)
     ==
   ::
   ++  rung
     |=  r=^rung
-    %-  pairs
-    :~  aeon+(numb aeon.r)
+    %-  pr
+    :~  aeon+(nu aeon.r)
         weft+(weft weft.r)
     ==
   ::
   ++  rein
     |=  r=^rein
-    %-  pairs
-    :~  add+(set add.r cord)
-        sub+(set sub.r cord)
+    %-  pr
+    :~  add+(st add.r co)
+        sub+(st sub.r co)
     ==
   ::
   ++  arak
     |=  a=^arak
-    %-  pairs
-    :~  rail+(unit rail.a rail)
+    %-  pr
+    :~  rail+(un rail.a rail)
         rein+(rein rein.a)
     ==
   ::
   ++  rail
     |=  r=^rail
-    %-  pairs
-    :~  ship+(ship ship.r)
-        publisher+(unit publisher.r ship)
-        desk+(cord desk.r)
-        paused+(bool paused.r)
-        aeon+(numb aeon.r)
-        next+(list next.r rung)
+    %-  pr
+    :~  ship+(hp ship.r)
+        publisher+(un publisher.r hp)
+        desk+(co desk.r)
+        paused+(bo paused.r)
+        aeon+(nu aeon.r)
+        next+(ls next.r rung)
     ==
   --
 --

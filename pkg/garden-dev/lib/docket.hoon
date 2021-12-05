@@ -127,10 +127,10 @@
   ++  charge-update
     |=  u=^charge-update
     ^-  json
-    %+  frond  -.u
+    %+  ob  -.u
     ^-  json
     ?-  -.u
-      %del-charge  (cord desk.u)
+      %del-charge  (co desk.u)
     ::
         %initial
       :-  %o
@@ -140,72 +140,72 @@
       (charge c)
     ::
         %add-charge
-      %-  pairs
-      :~  desk+(cord desk.u)
+      %-  pr
+      :~  desk+(co desk.u)
           charge+(charge charge.u)
       ==
     ==
   ::
   ++  num
     |=  a=@u
-    ^-  ^tape
-    (a-co:co a)
+    ^-  tape
+    (a-co:^co a)
   ::
   ++  version
     |=  v=^version
     ^-  json
-    %-  tape
+    %-  ta
     "{(num major.v)}.{(num minor.v)}.{(num patch.v)}"
   ::
   ++  href
     |=  h=^href
-    %+  frond  -.h
+    %+  ob  -.h
     ?-    -.h
-        %site  (path path.h)
+        %site  (pa path.h)
         %glob
-      %-  pairs
-      :~  base+(cord base.h)
+      %-  pr
+      :~  base+(co base.h)
           glob-reference+(glob-reference glob-reference.h)
       ==
     ==
   ::
   ++  glob-reference
     |=  ref=^glob-reference
-    %-  pairs
-    :~  hash+(numh %uv hash.ref)
+    %-  pr
+    :~  hash+(nh %uv hash.ref)
         location+(glob-location location.ref)
     ==
   ::
   ++  glob-location
     |=  loc=^glob-location
     ^-  json
-    %+  frond  -.loc
+    %+  ob  -.loc
     ?-  -.loc
-      %http  (cord url.loc)
-      %ames  (ship ship.loc)
+      %http  (co url.loc)
+      %ames  (hp ship.loc)
     ==
   ::
   ++  charge
     |=  c=^charge
     ^-  json
-    %-  pairs
-    :~  title+(cord title.docket.c)
-        info+(cord info.docket.c)
-        color+(numh %ux color.docket.c)
+    %-  pr
+    :~  title+(co title.docket.c)
+        info+(co info.docket.c)
+        color+(nh %ux color.docket.c)
         href+(href href.docket.c)
-        image+(unit image.docket.c cord)
+        image+(un image.docket.c co)
         version+(version version.docket.c)
-        license+(cord license.docket.c)
-        website+(cord website.docket.c)
+        license+(co license.docket.c)
+        website+(co website.docket.c)
         chad+(chad chad.c)
     ==
   ::
   ++  chad
     |=  c=^chad
     ^-  json
-    %+  frond  -.c
+    %+  ob  -.c
     ?+  -.c  ~
-      %hung   (cord err.c)
+      %hung   (co err.c)
     ==
   --
 --

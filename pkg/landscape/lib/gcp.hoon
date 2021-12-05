@@ -4,10 +4,10 @@
   |=  =token
   ^-  json
   =,  enjs:format
-  %+  frond  %gcp-token
-  %-  pairs
+  %+  ob  %gcp-token
+  %-  pr
   :~
-    'accessKey'^(cord access-key.token)
-    'expiresIn'^(numb (div (mul 1.000 expires-in.token) ~s1))
+    'accessKey'^(co access-key.token)
+    'expiresIn'^(nu (div (mul 1.000 expires-in.token) ~s1))
   ==
 --

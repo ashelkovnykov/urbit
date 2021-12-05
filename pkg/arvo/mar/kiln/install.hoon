@@ -9,10 +9,10 @@
   ++  noun  inst
   ++  json
     =,  enjs:format
-    %-  pairs
-    :~  local+(cord local.inst)
-        desk+(cord desk.inst)
-        ship+(ship ship.inst)
+    %-  pr
+    :~  local+(co local.inst)
+        desk+(co desk.inst)
+        ship+(hp ship.inst)
     ==
   --
 ++  grab

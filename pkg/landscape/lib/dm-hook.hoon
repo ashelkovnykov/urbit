@@ -25,11 +25,11 @@
   ::
   ++  action
     |=  act=^action
-    %+  frond  -.act
+    %+  ob  -.act
     ?-  -.act
-      ?(%accept %decline)   (shil +.act)
-      %pendings             (set ships.act shil)
-      %screen               (bool +.act)
+      ?(%accept %decline)   (hl +.act)
+      %pendings             (st ships.act hl)
+      %screen               (bo +.act)
     ==
   --
 --

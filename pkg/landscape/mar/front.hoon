@@ -15,7 +15,7 @@
     :-  %o
     %-  ~(run by all)
     |=  a=cord
-    (cord:enjs:format a)
+    (co:enjs:format a)
   --
 ++  grab  |%                                            ::  convert from
           ++  noun  (map knot cord)                     ::  clam from %noun

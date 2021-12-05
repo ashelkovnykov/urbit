@@ -11,7 +11,7 @@
     |=  upd=^update
     ^-  json
     |^
-    %+  frond  -.upd
+    %+  ob  -.upd
     ?+  -.upd  a+~
         %added          (notification +.upd)
         %add-note       (add-note +.upd)
@@ -31,36 +31,36 @@
     ::
     ++  add-note
       |=  [bi=^bin bo=^body]
-      %-  pairs
+      %-  pr
       :~  bin+(bin bi)
           body+(body bo)
       ==
     ::
     ++  saw-place
-      |=  [p=^place t=(^unit ^time)]
-      %-  pairs
+      |=  [p=^place t=(unit time)]
+      %-  pr
       :~  place+(place p)
-          time+(unit t time)
+          time+(un t ms)
       ==
     ::
     ++  archived
-      |=  [t=^time l=^lid n=^notification]
-      %-  pairs
+      |=  [t=time l=^lid n=^notification]
+      %-  pr
       :~  lid+(lid l)
-          time+(numh %ud t)
+          time+(nh %ud t)
           notification+(notification n)
       ==
     ::
     ++  note-read
       |=  *
-      (pairs ~)
+      (pr ~)
     ::
     ++  all-stats
       |=  places=(map ^place ^stats)
       ^-  json
-      %+  list  ~(tap by places)
+      %+  ls  ~(tap by places)
       |=  [p=^place s=^stats]
-      %-  pairs
+      %-  pr
       :~  stats+(stats s)
           place+(place p)
       ==
@@ -68,102 +68,102 @@
     ++  stats
       |=  s=^stats
       ^-  json
-      %-  pairs
-      :~  each+(set each.s path)
-          last+(time last.s)
-          count+(numb count.s)
+      %-  pr
+      :~  each+(st each.s pa)
+          last+(ms last.s)
+          count+(nu count.s)
       ==
     ++  more
-      |=  upds=(^list ^update)
+      |=  upds=(list ^update)
       ^-  json
-      (list upds update)
+      (ls upds update)
     ::
     ++  place
       |=  =^place
-      %-  pairs
-      :~  desk+(cord desk.place)
-          path+(path path.place)
+      %-  pr
+      :~  desk+(co desk.place)
+          path+(pa path.place)
       ==
     ::
     ++  bin
       |=  =^bin
-      %-  pairs
+      %-  pr
       :~  place+(place place.bin)
-          path+(path path.bin)
+          path+(pa path.bin)
       ==
     ++  notification
       |=  ^notification
       ^-  json
-      %-  pairs
-      :~  time+(time date)
+      %-  pr
+      :~  time+(ms date)
           bin+(^bin bin)
           body+(bodies body)
       ==
     ++  bodies
-      |=  bs=(^list ^body)
+      |=  bs=(list ^body)
       ^-  json
-      (list bs body)
+      (ls bs body)
     ::
     ++  contents
-      |=  cs=(^list ^content)
+      |=  cs=(list ^content)
       ^-  json
-      (list cs content)
+      (ls cs content)
     ::
     ++  content
       |=  c=^content
       ^-  json
-      %+  frond  -.c
+      %+  ob  -.c
       ?-  -.c
-        %ship  (ship ship.c)
-        %text  (cord cord.c)
+        %ship  (hp ship.c)
+        %text  (co cord.c)
       ==
     ::
     ++  body
       |=  ^body
       ^-  json
-      %-  pairs
+      %-  pr
       :~  title+(contents title)
           content+(contents content)
-          time+(^time time)
-          link+(path link)
+          time+(ms time)
+          link+(pa link)
       ==
     :: 
     ++  binned-notification
       |=  [=^bin =^notification]
-      %-  pairs
+      %-  pr
       :~  bin+(^bin bin)
           notification+(^notification notification)
       ==
     ++  lid
       |=  l=^lid
       ^-  json
-      %+  frond  -.l
+      %+  ob  -.l
       ?-  -.l
         ?(%seen %unseen)  ~
-        %archive          (numh %ud time.l)
+        %archive          (nh %ud time.l)
       ==
     ::
     ++  timebox
-      |=  [li=^lid l=(^list ^notification)]
+      |=  [li=^lid l=(list ^notification)]
       ^-  json
-      %-  pairs
+      %-  pr
       :~  lid+(lid li)
-          notifications+(list l notification)
+          notifications+(ls l notification)
       ==
     ::
     ++  read-each
-      |=  [p=^place pax=^path]
-      %-  pairs
+      |=  [p=^place pax=path]
+      %-  pr
       :~  place+(place p)
-          path+(path pax)
+          path+(pa pax)
       ==
     ::
     ++  unread-count
       |=  [p=^place inc=? count=@ud]
-      %-  pairs
+      %-  pr
       :~  place+(place p)
-          inc+(bool inc)
-          count+(numb count)
+          inc+(bo inc)
+          count+(nu count)
       ==
     --
   --

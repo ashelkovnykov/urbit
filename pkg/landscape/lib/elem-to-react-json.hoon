@@ -39,14 +39,14 @@
   =+  atr=(molt `(list (pair mane tape))`a.g.src)
   ?:  (~(has by atr) [%urb %codemirror])
     $(src (urb-codemirror src))
-  %-  pairs:enjs
+  %-  pr:enjs
   :~
-    c+(list elem-to-react-json c.src)
-    gn+(cord (mane-to-cord n.g.src))
-    =<  ga+(pairs:enjs (turn a.g.src .))
+    c+(ls elem-to-react-json c.src)
+    gn+(co (mane-to-cord n.g.src))
+    =<  ga+(pr:enjs (turn a.g.src .))
     |=  [a=mane b=tape]
-    ^-  [^cord json]
-    :_  (tape:enjs b)
+    ^-  [cord json]
+    :_  (ta:enjs b)
     ?^  a  (mane-to-cord a)
     (~(gut by react-attrs) a a)
   ==

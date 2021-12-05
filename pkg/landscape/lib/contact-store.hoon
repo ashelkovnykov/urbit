@@ -14,44 +14,44 @@
   ++  update
     |=  upd=^update
     ^-  json
-    %+  frond  %contact-update
-    %-  pairs
+    %+  ob  %contact-update
+    %-  pr
     :_  ~
-    ^-  [^cord json]
+    ^-  [cord json]
     ?-  -.upd
         %initial
       :-  %initial
-      %-  pairs
+      %-  pr
       :~  [%rolodex (rolo rolodex.upd)]
-          [%is-public (bool is-public.upd)]
+          [%is-public (bo is-public.upd)]
       ==
     ::
         %add
       :-  %add
-      %-  pairs
-      :~  [%ship (shil ship.upd)]
+      %-  pr
+      :~  [%ship (hl ship.upd)]
           [%contact (cont contact.upd)]
       ==
     ::
         %remove
-      [%remove (frond %ship (shil ship.upd))]
+      [%remove (ob %ship (hl ship.upd))]
     ::
         %edit
       :-  %edit
-      %-  pairs
-      :~  [%ship (shil ship.upd)]
+      %-  pr
+      :~  [%ship (hl ship.upd)]
           [%edit-field (edit edit-field.upd)]
-          [%timestamp (time timestamp.upd)]
+          [%timestamp (ms timestamp.upd)]
       ==
     ::
         %allow
-      [%allow (frond %beings (beng beings.upd))]
+      [%allow (ob %beings (beng beings.upd))]
     ::
         %disallow
-      [%disallow (frond %beings (beng beings.upd))]
+      [%disallow (ob %beings (beng beings.upd))]
     ::
         %set-public
-      [%set-public (bool public.upd)]
+      [%set-public (bo public.upd)]
     ==
   ::
   ++  rolo
@@ -60,34 +60,34 @@
     :-  %o
     ^-  (map @t json)
     %-  ~(run in rolodex)
-    |=  [=^ship =contact]
+    |=  [=ship =contact]
     [(scot %p ship) (cont contact)]
   ::
   ++  cont
     |=  =contact
     ^-  json
-    %-  pairs
-    :~  [%nickname (cord nickname.contact)]
-        [%bio (cord bio.contact)]
-        [%status (cord status.contact)]
-        [%color (numh %ux color.contact)]
-        [%avatar (unit avatar.contact cord)]
-        [%cover (unit cover.contact cord)]
-        [%groups (set groups.contact enjs-path:res)]
-        [%last-updated (time last-updated.contact)]
+    %-  pr
+    :~  [%nickname (co nickname.contact)]
+        [%bio (co bio.contact)]
+        [%status (co status.contact)]
+        [%color (nh %ux color.contact)]
+        [%avatar (un avatar.contact co)]
+        [%cover (un cover.contact co)]
+        [%groups (st groups.contact enjs-path:res)]
+        [%last-updated (ms last-updated.contact)]
     ==
   ::
   ++  edit
     |=  field=edit-field
     ^-  json
-    %+  frond  -.field
+    %+  ob  -.field
     ?-  -.field
-      %nickname      (cord nickname.field)
-      %bio           (cord bio.field)
-      %status        (cord status.field)
-      %color         (numh %ux color.field)
-      %avatar        (unit avatar.field cord)
-      %cover         (unit cover.field cord)
+      %nickname      (co nickname.field)
+      %bio           (co bio.field)
+      %status        (co status.field)
+      %color         (nh %ux color.field)
+      %avatar        (un avatar.field co)
+      %cover         (un cover.field co)
       %add-group     (enjs-path:res resource.field)
       %remove-group  (enjs-path:res resource.field)
     ==
@@ -96,7 +96,7 @@
     |=  =beings
     ^-  json
     ?-  -.beings
-      %ships  (set ships.beings ship)
+      %ships  (st ships.beings hp)
       %group  (enjs:res resource.beings)
     ==
   --

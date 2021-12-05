@@ -7,7 +7,7 @@
   ++  json  
     =,  enjs:format
     |^
-    %+  frond  -.diff
+    %+  ob  -.diff
     ?-  -.diff
       %block  (block +.diff)
       ?(%merge-sunk %merge-fail)  (desk-arak-err +.diff)
@@ -17,23 +17,23 @@
     ++  block
       |=  [=desk =arak:hood =weft:hood blockers=(set desk)]
       %+  merge  (desk-arak desk arak)
-      %-  pairs
+      %-  pr
       :~  weft+(weft:enjs:hood weft)
-          blockers+(set blockers cord)
+          blockers+(st blockers co)
       ==
     ::
     ++  desk-arak
       |=  [=desk =arak:hood]
-      %-  pairs
-      :~  desk+(cord desk)
+      %-  pr
+      :~  desk+(co desk)
           arak+(arak:enjs:hood arak)
       ==
     ::
     ++  desk-arak-err
       |=  [=desk =arak:hood =tang]
       %+  merge  (desk-arak desk arak)
-      %+  frond   %tang
-      (list tang tank)
+      %+  ob   %tang
+      (ls tang tk)
     ::
     ++  merge
       |=  [a=^json b=^json]

@@ -19,24 +19,24 @@
       =,  enjs
       =;  edi
         =,  cha
-        %-  pairs
+        %-  pr
         :~
           ted+(edi ted)
-          ler+(list ~[own.ler his.ler] numb)
+          ler+(ls ~[own.ler his.ler] nu)
         ==
       |=  det=sole-edit
       ?-  -.det
-          %nop  (cord 'nop')
-          %mor  (list p.det json)
-          %del  (frond %del (numb p.det))
-          %set  (frond %set (tape (tufa p.det)))
+          %nop  (co 'nop')
+          %mor  (ls p.det json)
+          %del  (ob %del (nu p.det))
+          %set  (ob %set (ta (tufa p.det)))
         ::
           %ins
-        %+  frond  %ins
-        %-  pairs
+        %+  ob  %ins
+        %-  pr
         :~
-          at+(numb p.det)
-          cha+(cord (tuft q.det))
+          at+(nu p.det)
+          cha+(co (tuft q.det))
         ==
       ==
     --
@@ -68,33 +68,33 @@
     ^-  ^json
     ?+    -.sef
               ~|(unsupported-effect+-.sef !!)
-        %mor  (list p.sef json)
-        %err  (frond %hop (numb p.sef))
-        %txt  (frond %txt (tape p.sef))
-        %tan  (frond %tan (tape (wush 160 p.sef)))
-        %det  (frond %det json:~(grow mar-sole-change +.sef))
+        %mor  (ls p.sef json)
+        %err  (ob %hop (nu p.sef))
+        %txt  (ob %txt (ta p.sef))
+        %tan  (ob %tan (ta (wush 160 p.sef)))
+        %det  (ob %det json:~(grow mar-sole-change +.sef))
     ::
         %pro
-      %+  frond  %pro
-      %-  pairs
+      %+  ob  %pro
+      %-  pr
       :~
-        vis+(bool vis.sef)
-        tag+(cord tag.sef)
-        cad+(tape (purge cad.sef))
+        vis+(bo vis.sef)
+        tag+(co tag.sef)
+        cad+(ta (purge cad.sef))
       ==
     ::
         %tab
-      %+  list  p.sef
-      |=  [c=^cord =^tank]
-      %+  frond  %tab
-      %-  pairs
+      %+  ls  p.sef
+      |=  [=cord =tank]
+      %+  ob  %tab
+      %-  pr
       :~
-        match+(cord c)
-        info+(tape ~(ram re tank))
+        match+(co cord)
+        info+(ta ~(ram re tank))
       ==
     ::
         ?(%bel %clr %nex %bye)
-      (frond %act (cord -.sef))
+      (ob %act (co -.sef))
     ==
   --
 --

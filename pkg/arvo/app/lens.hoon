@@ -105,10 +105,10 @@
       =/  =atom  (jam (export-all our.bowl now.bowl))
       =/  =octs  [(met 3 atom) atom]
       =/  enc    (en:base64:mimes:html octs)
-      %-  pairs
+      %-  pr
       :~
-        file+(cord output)
-        data+(cord enc)
+        file+(co output)
+        data+(co enc)
       ==
     :_  this
     %+  give-simple-payload:app  eyre-id
@@ -206,10 +206,10 @@
       =/  =atom  (jam data)
       =/  =octs  [(met 3 atom) atom]
       =/  enc  (en:base64:mimes:html octs)
-      %-  pairs
+      %-  pr
       :~
-        file+(cord output)
-        data+(cord enc)
+        file+(co output)
+        data+(co enc)
       ==
     ::
     :_  this
@@ -229,11 +229,11 @@
           %tan
         %-  some
         :-  %json
-        %-  wall
-        (turn (flop p.fec) |=(=^tank ~(ram re tank)))
+        %-  wl
+        (turn (flop p.fec) |=(=tank ~(ram re tank)))
       ::
           %txt
-        (some %json (tape p.fec))
+        (some %json (ta p.fec))
       ::
           %sag
         %-  some
@@ -242,9 +242,9 @@
           %sav
         %-  some
         :-  %json
-        %-  pairs
-        :~  file+(tape <`^path`p.fec>)
-            data+(cord (en:base64:mimes:html (met 3 q.fec) q.fec))
+        %-  pr
+        :~  file+(ta <`path`p.fec>)
+            data+(co (en:base64:mimes:html (met 3 q.fec) q.fec))
         ==
       ::
           %mor

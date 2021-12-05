@@ -19,11 +19,11 @@
   |%
   ++  update
     |=  upd=^update
-    %+  frond  -.upd
+    %+  ob  -.upd
     ?-  -.upd
-      ?(%listen %ignore)  (path chat.upd)
-      %set-mentions       (bool mentions.upd)
-      %initial            (set watching.upd path)
+      ?(%listen %ignore)  (pa chat.upd)
+      %set-mentions       (bo mentions.upd)
+      %initial            (st watching.upd pa)
     ==
   --
 --

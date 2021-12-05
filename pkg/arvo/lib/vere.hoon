@@ -52,12 +52,12 @@
       ^-  octs
       %-  as-octt:mimes:html
       %-  en-json:html
-      %+  list  (gulf 0 255)
+      %+  ls  (gulf 0 255)
       |=  gal=@
       %+  request-to-json
         (cat 3 'gal-' (scot %ud gal))
       :-  'getPoint'
-      (~(put by *(map @t json)) 'ship' (ship gal))
+      (~(put by *(map @t json)) 'ship' (hp gal))
     ::  +point:give:dawn: Eth RPC for ship's contract state
     ::
     ++  point
@@ -68,7 +68,7 @@
       %+  request-to-json
         ~.
       :-  'getPoint'
-      (~(put by *(map @t json)) 'ship' (ship who))
+      (~(put by *(map @t json)) 'ship' (hp who))
     ::  +turf:give:dawn: Eth RPC for network domains
     ::
     ++  turf
@@ -86,10 +86,10 @@
     ++  request-to-json
       |=  [id=@t method=@t params=(map @t json)]
       ^-  json
-      %-  pairs
+      %-  pr
       :~  jsonrpc+[%s '2.0']
-          id+(cord id)
-          method+(cord method)
+          id+(co id)
+          method+(co method)
           params+[%o params]
       ==
     --

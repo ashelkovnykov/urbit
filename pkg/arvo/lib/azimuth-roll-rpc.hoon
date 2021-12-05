@@ -187,9 +187,9 @@
       ++  pending-tx
         |=  pend-tx
         ^-  json
-        %-  pairs
-        :~  ['force' (bool force)]
-            ['time' (time ^time)]
+        %-  pr
+        :~  ['force' (bo force)]
+            ['time' (ms time)]
             ['rawTx' (^raw-tx raw-tx)]
             (en-address address)
         ==
@@ -197,7 +197,7 @@
       ++  pending-txs
         |=  pending=(^list pend-tx)
         ^-  json
-        (list pending pending-tx)
+        (ls pending pending-tx)
       ::
       ++  en-address   |=(a=@ux address+(hex 20 a))
       ::
@@ -205,26 +205,26 @@
         |=  raw-tx:naive
         ^-  json
         |^
-        %-  pairs
+        %-  pr
         :~
           ['tx' (parse-tx +.tx)]
           ['sig' (hex (as-octs:mimes:html sig))]
         ::
           :-  'from'
-          %-  pairs
+          %-  pr
           :~
-            ['ship' (shil ship.from.tx)]
-            ['proxy' (cord proxy.from.tx)]
+            ['ship' (hl ship.from.tx)]
+            ['proxy' (co proxy.from.tx)]
         ==  ==
         ::
         ++  parse-tx
           |=  tx=skim-tx:naive
           ^-  json
-          %-  pairs
-          :~  ['type' (cord -.tx)]
+          %-  pr
+          :~  ['type' (co -.tx)]
             ::
               :-  'data'
-              %-  pairs
+              %-  pr
               ?-  -.tx
                 %transfer-point        (en-transfer +.tx)
                 %spawn                 (en-spawn +.tx)
@@ -239,41 +239,41 @@
                 %set-transfer-proxy    ~[(en-address address.tx)]
           ==  ==
         ::
-        ++  en-ship      |=(s=@p ship+(numb `@ud`s))
+        ++  en-ship      |=(s=@p ship+(nu `@ud`s))
         ++  en-spawn     |=([s=@p a=@ux] ~[(en-ship s) (en-address a)])
-        ++  en-transfer  |=([a=@ux r=?] ~[(en-address a) reset+(bool r)])
+        ++  en-transfer  |=([a=@ux r=?] ~[(en-address a) reset+(bo r)])
         ++  en-keys
           |=  [encrypt=@ auth=@ crypto-suite=@ breach=?]
           ^-  (list [@t json])
-          :~  ['encrypt' (numb encrypt)]
-              ['auth' (numb auth)]
-              ['cryptoSuite' (numb crypto-suite)]
-              ['breach' (bool breach)]
+          :~  ['encrypt' (nu encrypt)]
+              ['auth' (nu auth)]
+              ['cryptoSuite' (nu crypto-suite)]
+              ['breach' (bo breach)]
           ==
         --
       ::
       ++  hist-txs
         |=  txs=(^list hist-tx)
         ^-  json
-        %+  list  txs
+        %+  ls  txs
         |=  hist-tx
         ^-  json
-        %-  pairs
-        :~  ['time' (time p)]
-            ['status' (cord status.q)]
+        %-  pr
+        :~  ['time' (ms p)]
+            ['status' (co status.q)]
             ['hash' (hex (as-octs:mimes:html hash.q))]
-            ['type' (cord type.q)]
-            ['ship' (shil ship.q)]
+            ['type' (co type.q)]
+            ['ship' (hl ship.q)]
         ==
       ::
       ++  point
         |=  =point:naive
         ^-  json
-        %-  pairs
-        :~  ['dominion' (cord dominion.point)]
+        %-  pr
+        :~  ['dominion' (co dominion.point)]
           ::
             :-  'ownership'
-            %-  pairs
+            %-  pr
             =*  own  own.point
             ^-  (list [@t json])
             :~  ['owner' (ownership owner.own)]
@@ -284,97 +284,97 @@
             ==
           ::
             :-  'network'
-            %-  pairs
+            %-  pr
             =*  net  net.point
-            :*  ['rift' (nums rift.net)]
+            :*  ['rift' (ns rift.net)]
               ::
                 :-  'keys'
-                %-  pairs
-                :~  ['life' (nums life.keys.net)]
-                    ['suite' (nums suite.keys.net)]
+                %-  pr
+                :~  ['life' (ns life.keys.net)]
+                    ['suite' (ns suite.keys.net)]
                     ['auth' (hex 32 auth.keys.net)]
                     ['crypt' (hex 32 crypt.keys.net)]
                 ==
               ::
                 :-  'sponsor'
-                %-  pairs
-                :~  ['has' (bool has.sponsor.net)]
-                    ['who' (numb `@ud`who.sponsor.net)]
+                %-  pr
+                :~  ['has' (bo has.sponsor.net)]
+                    ['who' (nu `@ud`who.sponsor.net)]
                 ==
               ::
                 ?~  escape.net  ~
-                ['escape' (numb `@ud`u.escape.net)]~
+                ['escape' (nu `@ud`u.escape.net)]~
         ==  ==
       ::
       ++  points
         |=  points=(^list [@p point:naive])
         ^-  json
-        %+  list  points
-        |=  [s=@p =point:naive]
-        %-  pairs
-        :~  ['ship' (shil s)]
+        %+  ls  points
+        |=  [ship=@p =point:naive]
+        %-  pr
+        :~  ['ship' (hl ship)]
             ['point' (^point point)]
         ==
       ::
       ++  ownership
         |=  [=address:naive =nonce:naive]
         ^-  json
-        %-  pairs
+        %-  pr
         :~  (en-address address)
-            ['nonce' (numb nonce)]
+            ['nonce' (nu nonce)]
         ==
       ::
       ++  spawned
         |=  children=(^list [@p @ux])
         ^-  json
-        %+  list  children
+        %+  ls  children
         |=  [child=@p address=@ux]
-        %-  pairs
-        :~  ['ship' (shil child)]
+        %-  pr
+        :~  ['ship' (hl child)]
             (en-address address)
         ==
       ::
       ++  sponsored
         |=  [res=(^list @p) req=(^list @p)]
         ^-  json
-        %-  pairs
-        :~  ['residents' (list res numb)]
-            ['requests' (list req numb)]
+        %-  pr
+        :~  ['residents' (ls res nu)]
+            ['requests' (ls req nu)]
         ==
       ::
       ++  roller-config
         |=  [az=^azimuth-config ro=^roller-config]
         ^-  json
-        %-  pairs
-        :~  ['azimuthRefreshRate' (numb (div refresh-rate.az ~s1))]
-            ['nextBatch' (time next-batch.ro)]
-            ['frequency' (numb (div frequency.ro ~s1))]
-            ['rollerResendTime' (numb (div resend-time.ro ~s1))]
-            ['rollerUpdateRate' (numb (div update-rate.ro ~s1))]
+        %-  pr
+        :~  ['azimuthRefreshRate' (nu (div refresh-rate.az ~s1))]
+            ['nextBatch' (ms next-batch.ro)]
+            ['frequency' (nu (div frequency.ro ~s1))]
+            ['rollerResendTime' (nu (div resend-time.ro ~s1))]
+            ['rollerUpdateRate' (nu (div update-rate.ro ~s1))]
             ['contract' (hex 20 contract.ro)]
-            ['chainId' (numb chain-id.ro)]
-            ['timeSlice' (numb (div slice.ro ~s1))]
-            ['rollerQuota' (numb quota.ro)]
+            ['chainId' (nu chain-id.ro)]
+            ['timeSlice' (nu (div slice.ro ~s1))]
+            ['rollerQuota' (nu quota.ro)]
         ==
       ::
       ++  azimuth-config
         |=  config=^azimuth-config
         ^-  json
-        (frond 'refreshRate' (nu (div refresh-rate.config ~s1)))
+        (ob 'refreshRate' (nu (div refresh-rate.config ~s1)))
       ::
       ++  hex
         |=  [p=@ q=@]
         ^-  json
-        (tape ['0' 'x' ((x-co:co (mul 2 p)) q)])
+        (ta ['0' 'x' ((x-co:co (mul 2 p)) q)])
       ::
       ++  naive-state
         |=  =^state:naive
         ^-  json
         |^
-        %-  pairs
+        %-  pr
         :~  ['points' (points (tap:orp points.state))]
             ['operators' (operators operators.state)]
-            ['dns' (list dns.state cord)]
+            ['dns' (ls dns.state co)]
         ==
         ::
         ++  orp  ((on ship point:naive) por:naive)
@@ -382,12 +382,12 @@
         ++  operators
           |=  =operators:naive
           ^-  json
-          %+  list  ~(tap by operators)
+          %+  ls  ~(tap by operators)
           |=  [op=@ux addrs=(set @ux)]
           ^-  json
-          %-  pairs
+          %-  pr
           :~  ['operator' (hex 20 op)]
-              ['addresses' (set addrs (cury hex 20))]
+              ['addresses' (st addrs (cury hex 20))]
           ==
         --
       --
@@ -462,7 +462,7 @@
   =,  enjs:format
   ?.  =((lent ~(tap by params)) 0)
     ~(params error:json-rpc id)
-  [%result id (list dns cord)]
+  [%result id (ls dns co)]
 ::
 ++  cancel-tx
   |=  [id=@t params=(map @t json)]
@@ -494,7 +494,7 @@
     ~(params error:json-rpc id)
   ?~  ship=(ship:from-json params)
     ~(params error:json-rpc id)
-  [%result id (numb:enjs:format (lent (scry u.ship)))]
+  [%result id (nu:enjs:format (lent (scry u.ship)))]
 ::
 ++  sponsored-points
   |=  [id=@t params=(map @t json) scry=$-(@p [(list @p) (list @p)])]
@@ -536,7 +536,7 @@
     ~(parse error:json-rpc id)
   ?~  nonce=(scry u.from)
     ~(not-found error:json-rpc id)
-  [%result id (numb:enjs:format u.nonce)]
+  [%result id (nu:enjs:format u.nonce)]
 ::
 ++  pending
   |%
@@ -592,7 +592,7 @@
   ^-  response:rpc
   ?.  =((lent ~(tap by params)) 0)
     ~(params error:json-rpc id)
-  [%result id (time:enjs:format when)]
+  [%result id (ms:enjs:format when)]
 ::
 ++  history
   |=  [id=@t params=(map @t json) scry=$-(address:naive (list hist-tx))]
