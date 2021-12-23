@@ -283,10 +283,7 @@
   ==
 ::  dejs - recursive processing of `json` values
 ::
-::    This version crashes when used on improper input. Prefer using dejs-soft
-::    (tested below) which returns units instead.
-::
-::  decoders for nulls, booleans, numbers, and strings
+::  decoders for nulls, booleans, integers, and strings
 ::
 ++  test-dejs-primitives
   =,  dejs
@@ -343,6 +340,448 @@
       !>  (so str:ex)
     %-  expect-fail
       |.  (so tru:ex)
+  ==
+::  decoder for real numbers
+::
+::    The json parser (+de-json:html) only matches real numbers to a regex. The
+::    real parsing work is done by +ne:dejs:format. Therefore, every valid
+::    +de-json:html real number regex must be tested here.
+::
+++  test-dejs-real
+  =,  dejs
+  ;:  weld
+    ::  various ways of expressing 0
+    ::
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e+0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e+0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e+000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e+000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e+1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e+1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e-0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e-0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e-000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e-000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0e-1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0e-1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E+0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E+0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E+000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E+000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E+1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E+1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E-0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E-0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E-000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E-000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0E-1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0E-1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e+0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e+0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e+000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e+000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e+1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e+1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e-0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e-0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e-000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e-000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0e-1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0e-1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E+0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E+0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E+000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E+000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E+1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E+1'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E-0'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E-0'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E-000'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E-000'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '0.0E-1'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-0.0E-1'])
+    ::  non-zero floating points
+    ::
+    %+  expect-eq
+      !>  .~1
+      !>  (ne [%n '1.0'])
+    %+  expect-eq
+      !>  .~1.1
+      !>  (ne [%n '1.1'])
+    %+  expect-eq
+      !>  .~-1.1
+      !>  (ne [%n '-1.1'])
+    %+  expect-eq
+      !>  .~123.456
+      !>  (ne [%n '123.456'])
+    %+  expect-eq
+      !>  .~-123.456
+      !>  (ne [%n '-123.456'])
+    ::  non-zero exponent & base
+    ::
+    %+  expect-eq
+      !>  .~10
+      !>  (ne [%n '1e1'])
+    %+  expect-eq
+      !>  .~-10
+      !>  (ne [%n '-1e1'])
+    %+  expect-eq
+      !>  .~10
+      !>  (ne [%n '1e+1'])
+    %+  expect-eq
+      !>  .~-10
+      !>  (ne [%n '-1e+1'])
+    %+  expect-eq
+      !>  .~0.1
+      !>  (ne [%n '1e-1'])
+    %+  expect-eq
+      !>  .~-0.1
+      !>  (ne [%n '-1e-1'])
+    %+  expect-eq
+      !>  .~10
+      !>  (ne [%n '1E1'])
+    %+  expect-eq
+      !>  .~-10
+      !>  (ne [%n '-1E1'])
+    %+  expect-eq
+      !>  .~10
+      !>  (ne [%n '1E+1'])
+    %+  expect-eq
+      !>  .~-10
+      !>  (ne [%n '-1E+1'])
+    %+  expect-eq
+      !>  .~0.1
+      !>  (ne [%n '1E-1'])
+    %+  expect-eq
+      !>  .~-0.1
+      !>  (ne [%n '-1E-1'])
+    ::  floating point exponent base
+    ::
+    %+  expect-eq
+      !>  .~11
+      !>  (ne [%n '1.1e1'])
+    %+  expect-eq
+      !>  .~-11
+      !>  (ne [%n '-1.1e1'])
+    %+  expect-eq
+      !>  .~11
+      !>  (ne [%n '1.1e+1'])
+    %+  expect-eq
+      !>  .~-11
+      !>  (ne [%n '-1.1e+1'])
+    %+  expect-eq
+      !>  .~0.11
+      !>  (ne [%n '1.1e-1'])
+    %+  expect-eq
+      !>  .~-0.11
+      !>  (ne [%n '-1.1e-1'])
+    %+  expect-eq
+      !>  .~11
+      !>  (ne [%n '1.1E1'])
+    %+  expect-eq
+      !>  .~-11
+      !>  (ne [%n '-1.1E1'])
+    %+  expect-eq
+      !>  .~11
+      !>  (ne [%n '1.1E+1'])
+    %+  expect-eq
+      !>  .~-11
+      !>  (ne [%n '-1.1E+1'])
+    %+  expect-eq
+      !>  .~0.11
+      !>  (ne [%n '1.1E-1'])
+    %+  expect-eq
+      !>  .~-0.11
+      !>  (ne [%n '-1.1E-1'])
+    ::  large base and exponent
+    ::
+    %+  expect-eq
+      !>  .~1.23e9
+      !>  (ne [%n '123e7'])
+    %+  expect-eq
+      !>  .~-1.23e9
+      !>  (ne [%n '-123e7'])
+    %+  expect-eq
+      !>  .~1.23e9
+      !>  (ne [%n '123e+7'])
+    %+  expect-eq
+      !>  .~-1.23e9
+      !>  (ne [%n '-123e+7'])
+    %+  expect-eq
+      !>  .~1.23e-5
+      !>  (ne [%n '123e-7'])
+    %+  expect-eq
+      !>  .~-1.23e-5
+      !>  (ne [%n '-123e-7'])
+    %+  expect-eq
+      !>  .~1.23e9
+      !>  (ne [%n '123E7'])
+    %+  expect-eq
+      !>  .~-1.23e9
+      !>  (ne [%n '-123E7'])
+    %+  expect-eq
+      !>  .~1.23e9
+      !>  (ne [%n '123E+7'])
+    %+  expect-eq
+      !>  .~-1.23e9
+      !>  (ne [%n '-123E+7'])
+    %+  expect-eq
+      !>  .~1.23e-5
+      !>  (ne [%n '123E-7'])
+    %+  expect-eq
+      !>  .~-1.23e-5
+      !>  (ne [%n '-123E-7'])
+    :: large floating point base
+    ::
+    %+  expect-eq
+      !>  .~1.23456e9
+      !>  (ne [%n '123.456e7'])
+    %+  expect-eq
+      !>  .~-1.23456e9
+      !>  (ne [%n '-123.456e7'])
+    %+  expect-eq
+      !>  .~1.23456e9
+      !>  (ne [%n '123.456e+7'])
+    %+  expect-eq
+      !>  .~-1.23456e9
+      !>  (ne [%n '-123.456e+7'])
+    %+  expect-eq
+      !>  .~1.23456e-5
+      !>  (ne [%n '123.456e-7'])
+    %+  expect-eq
+      !>  .~-1.23456e-5
+      !>  (ne [%n '-123.456e-7'])
+    %+  expect-eq
+      !>  .~1.23456e9
+      !>  (ne [%n '123.456E7'])
+    %+  expect-eq
+      !>  .~-1.23456e9
+      !>  (ne [%n '-123.456E7'])
+    %+  expect-eq
+      !>  .~1.23456e9
+      !>  (ne [%n '123.456E+7'])
+    %+  expect-eq
+      !>  .~-1.23456e9
+      !>  (ne [%n '-123.456E+7'])
+    %+  expect-eq
+      !>  .~1.23456e-5
+      !>  (ne [%n '123.456E-7'])
+    %+  expect-eq
+      !>  .~-1.23456e-5
+      !>  (ne [%n '-123.456E-7'])
+    ::  ambiguous input
+    ::
+    %+  expect-eq
+      !>  .~1e-78
+      !>  (ne [%n '0.0000000000000000000000000000000000000000000000\
+            /00000000000000000000000000000001'])
+    %+  expect-eq
+      !>  .~1.23123123123123123123e29
+      !>  (ne [%n '123123123123123123123123123123'])
+    %+  expect-eq
+      !>  .~-1.23123123123123123123e29
+      !>  (ne [%n '-123123123123123123123123123123'])
+    %+  expect-eq
+      !>  .~inf
+      !>  (ne [%n '1e88888888'])
+    %+  expect-eq
+      !>  .~-inf
+      !>  (ne [%n '-1e88888888'])
+    %+  expect-eq
+      !>  .~0
+      !>  (ne [%n '1e-88888888'])
+    %+  expect-eq
+      !>  .~-0
+      !>  (ne [%n '-1e-88888888'])
+    %+  expect-eq
+      !>  .~inf
+      !>  (ne [%n '1e0000000088888888'])
+    %+  expect-eq
+      !>  .~-inf
+      !>  (ne [%n '-1e0000000088888888'])
+    %+  expect-eq
+      !>  .~1.23123e100005
+      !>  (ne [%n '123123e100000'])
+    %+  expect-eq
+      !>  .~-1.23123e100005
+      !>  (ne [%n '-123123e100000'])
+    %+  expect-eq
+      !>  .~1.23e-1000002
+      !>  (ne [%n '123e-1000000'])
   ==
 ::  decoder transformers
 ::
