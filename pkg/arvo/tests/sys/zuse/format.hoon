@@ -1101,67 +1101,6 @@
       !>  ~
       !>  ((pe 'a' ni) tru:ex)
   ==
-::  unit/collection decoder helpers
-::
-++  test-dejs-soft-helpers
-  =,  dejs-soft
-  =+  all=`(list (unit @))`~[(some 1) (some 2) (some 3)]
-  =+  nall=`(list (unit @))`~[(some 1) ~ (some 3)]
-  ;:  weld
-    ::  collapse list of units to boolean (true if all full, false otherwise)
-    ::
-    %+  expect-eq
-      !>  &
-      !>  (za ~)
-    %+  expect-eq
-      !>  &
-      !>  (za all)
-    %+  expect-eq
-      !>  |
-      !>  (za nall)
-    ::  collapse (list (unit)) -> (unit (list))
-    ::
-    %+  expect-eq
-      !>  (some ~[1 2 3])
-      !>  (zl all)
-    %+  expect-eq
-      !>  (some ~)
-      !>  (zl ~)
-    %+  expect-eq
-      !>  ~
-      !>  (zl nall)
-    ::  collapse (map * (unit *)) -> (unit (map * *))
-    ::
-    %+  expect-eq
-      !>  (some (malt ~[['a' 1] ['b' 2]]))
-      !>  (zm (malt (limo ~[['a' (some 1)] ['b' (some 2)]])))
-    %+  expect-eq
-      !>  (some ~)
-      !>  (zm ~)
-    %+  expect-eq
-      !>  ~
-      !>  (zm (malt (limo ~[['a' (some 1)] ['b' ~]])))
-    ::  collapse (pole (unit)) -> (unit (pole))
-    ::
-    %+  expect-eq
-      !>  [1 2 3]
-      !>  (zp all)
-    %-  expect-fail
-      |.  (zp nall)
-    %-  expect-fail
-      |.  (zp ~)
-    ::  collapse (set (unit *)) -> (unit (set *))
-    ::
-    %+  expect-eq
-      !>  (some (silt ~[1 2]))
-      !>  (zs (silt (limo ~[(some 1) (some 2)])))
-    %+  expect-eq
-      !>  (some ~)
-      !>  (zs ~)
-    %+  expect-eq
-      !>  ~
-      !>  (zs (silt (limo ~[(some 1) ~])))
-  ==
 ::  array decoders
 ::
 ++  test-dejs-soft-arrays

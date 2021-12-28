@@ -3271,25 +3271,31 @@
     |-
     ?~  lut  ~
     [i=u:+.i.lut t=$(lut t.lut)]
+  ::                                                    ::  ++drop-set:unity
+  ++  drop-set                                          ::  collapse unit set
+    |*  lus=(set (unit))
+    ?.  (~(all in lus) |=(a=(unit) ?~(a | &)))
+      ~
+    (some (~(run in lus) need))
   ::                                                    ::  ++drop-map:unity
   ++  drop-map                                          ::  collapse unit map
     |*  lum=(map term (unit))
-    ?:  (~(rep by lum) |=([[@ a=(unit)] b=_|] |(b ?=(~ a))))
+    ?.  (~(all by lum) |=(a=(unit) ?~(a | &)))
       ~
     (some (~(run by lum) need))
   ::                                                    ::  ++drop-pole:unity
   ++  drop-pole                                         ::  collapse to tuple
     |^  |*  pul=(pole (unit))
-        ?:  (test-pole pul)  ~
+        ?~  pul  ~
+        ?.  (test-pole pul)  ~
         (some (need-pole pul))
     ::
     ++  test-pole
       |*  pul=(pole (unit))
       ^-  ?
       ?~  pul  &
-      ?|  ?=(~ -.pul)
-          ?~(+.pul | (test-pole +.pul))
-      ==
+      ?~  -.pul  |
+      (test-pole +.pul)
     ::
     ++  need-pole
       |*  pul=(pole (unit))
@@ -3642,7 +3648,7 @@
       |*  wit=fist                                      ::  single type
       |=  jon=json
       ?.  ?=([%a *] jon)  ~
-      %-  zl
+      %-  drop-list:unity
       |-
       ?~  p.jon  ~
       [i=(wit i.p.jon) t=$(p.jon t.p.jon)]
@@ -3652,8 +3658,8 @@
       |=  jon=json
       ?.  ?=([%a *] jon)  ~
       ?.  =((lent wil) (lent p.jon))  ~
-      =+  raw=((at-raw wil) p.jon)
-      ?.((za raw) ~ (some (zp raw)))
+      %-  drop-pole:unity
+      ((at-raw wil) p.jon)
     ::                                                  ::  ++at-raw:dejs-soft:format
     ++  at-raw                                          ::  array as tuple,
       |*  wil=(pole fist)                               ::  helper
@@ -3708,8 +3714,8 @@
       |*  wer=(pole [cord fist])                        ::  specific keys,
       |=  jon=json                                      ::  multi type
       ?.  ?=([%o *] jon)  ~
-      =+  raw=((ot-raw wer) p.jon)
-      ?.((za raw) ~ (some (zp raw)))
+      %-  drop-pole:unity
+      ((ot-raw wer) p.jon)
     ::                                                  ::  ++ot-raw:dejs-soft:format
     ++  ot-raw                                          ::  object as tuple,
       |*  wer=(pole [cord fist])                        ::  helper
@@ -3722,14 +3728,15 @@
       |*  wit=fist                                      ::  arbitrary keys,
       |=  jon=json                                      ::  single type
       ?.  ?=([%o *] jon)  ~
-      (zm (~(run by p.jon) wit))
+      %-  drop-map:unity
+      (~(run by p.jon) wit)
     ::                                                  ::  ++op:dejs-soft:format
     ++  op                                              ::  object as map,
       |*  [fel=rule wit=fist]                           ::  rule-based keys,
       |=  jon=json                                      ::  single type
       ?.  ?=([%o *] jon)  ~
       ^-  (unit (map _(wonk *fel) _(need *wit)))
-      %-  zs
+      %-  drop-set:unity
       ^-  (set (unit [_(wonk *fel) _(need *wit)]))
       %-  ~(run in p.jon)
       |=  [p=cord q=json]
@@ -3755,41 +3762,6 @@
     ::                                                  ::  ++ul:dejs-soft:format
     ++  ul                                              ::  null
       |=  jon=json  ?~(jon (some ~) ~)
-    ::                                                  ::  ++za:dejs-soft:format
-    ++  za                                              ::  units in pole full?
-      |*  pod=(pole (unit))
-      ?~  pod  &
-      ?~  -.pod  |
-      (za +.pod)
-    ::                                                  ::  ++zl:dejs-soft:format
-    ++  zl                                              ::  collapse to unit list
-      |*  lut=(list (unit))
-      ?.  |-  ^-  ?
-          ?~(lut & ?~(i.lut | $(lut t.lut)))
-        ~
-      %-  some
-      |-
-      ?~  lut  ~
-      [i=u:+.i.lut t=$(lut t.lut)]
-    ::                                                  ::  ++zm:dejs-soft:format
-    ++  zm                                              ::  collapse to unit map
-      |*  lum=(map term (unit))
-      ?.  (~(all by lum) |=(a=(unit) ?~(a | &)))
-        ~
-      (some (~(run by lum) need))
-    ::                                                  ::  ++zp:dejs-soft:format
-    ++  zp                                              ::  collapse to unit tuple
-      |*  but=(pole (unit))
-      ?~  but  !!
-      ?~  +.but
-        u:->.but
-      [u:->.but (zp +.but)]
-    ::                                                  ::  ++zs:dejs-soft:format
-    ++  zs                                              ::  collapse to unit map
-      |*  lus=(set (unit))
-      ?.  (~(all in lus) |=(a=(unit) ?~(a | &)))
-        ~
-      (some (~(run in lus) need))
     --  ::dejs-soft
   --
 ::  |cloy: clay helpers
@@ -5729,7 +5701,7 @@
       =<  |=  a=cord                                    ::  expose parsers
           %+  biff  (rush a (more sepa elem))
           |=  b=(list _(wonk *elem))  ^-  (unit date)
-          =-  ?.((za:dejs-soft:format -) ~ (some (zp:dejs-soft:format -)))
+          =-  (drop-pole:unity -)
           ^+  =+  [*date u=unit]
               *[(u _[a y]) (u _m) (u _d.t) (u _+.t) ~]
           :~
