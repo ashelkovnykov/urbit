@@ -87,12 +87,12 @@
   ::
   ++  order
     ^-  $-(json order:body)
-    %-  ou
-    :~  'expires'^(un json-date)
-        'status'^(un so)
-        'authorizations'^(uf ~ (ar json-purl))
-        'finalize'^(uf ~ (mu json-purl))
-        'certificate'^(uf ~ (mu json-purl))
+    %-  ot
+    :~  'expires'^json-date
+        'status'^so
+        'authorizations'^(ar json-purl)
+        'finalize'^(mu json-purl)
+        'certificate'^(mu json-purl)
     ==
   ::  +auth: parse authorization
   ::
@@ -123,18 +123,21 @@
   ::
   ++  challenge
     ^-  $-(json challenge:body)
-    %-  ou
-    :~  'type'^(un so)
-        'status'^(un so)
-        'url'^(un json-purl)
-        'token'^(un so)
-        'error'^(uf ~ (mu error))
+    %-  ot
+    :~  'type'^so
+        'status'^so
+        'url'^json-purl
+        'token'^so
+        'error'^(mu error)
     ==
   ::  +error: parse ACME service error response
   ::
   ++  error
     ^-  $-(json error:body)
-    (ot type+so detail+so ~)
+    %-  ot
+    :~  'type'^so
+        'detail'^so
+    ==
   --
 --
 ::

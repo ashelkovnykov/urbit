@@ -917,23 +917,6 @@
       |.  ((of ~[['foo' so]]) obj:ex)
     %-  expect-fail                               ::  crash if 2+ properties
       |.  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
-    ::  exact-shape object to tuple
-    ::
-    %+  expect-eq
-      !>  [101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
-    %+  expect-eq
-      !>  ['hey' 101]
-      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
-    %+  expect-eq
-      !>  ['hey']
-      !>  ((ot ~[['bar' so]]) pai:ex)
-    %-  expect-fail
-      |.  ((ot ~[['foo' ni]]) num:ex)
-    %-  expect-fail                               ::  crash if no matching key
-      |.  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
-    %-  expect-fail                               ::  crash on decoder mismatch
-      |.  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
     ::  simple object to map (arbitrary keys, single type)
     ::
     %+  expect-eq
@@ -965,6 +948,43 @@
       |.  ((op nix so) obj:ex)
     %-  expect-fail                               ::  crash on rule mismatch
       |.  ((op (jest 'bar') ni) obj:ex)
+    ::  exact-shape object to tuple
+    ::
+    %+  expect-eq
+      !>  [101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  ['hey' 101]
+      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+    %+  expect-eq
+      !>  ['hey']
+      !>  ((ot ~[['bar' so]]) pai:ex)
+    %-  expect-fail
+      |.  ((ot ~[['foo' ni]]) num:ex)
+    %-  expect-fail                               ::  crash if no matching key
+      |.  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
+    ::  exact-shape object to tuple with defaults
+    ::
+    %+  expect-eq
+      !>  [101 'hey']
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) pai:ex)
+    %+  expect-eq
+      !>  &
+      !>  ((ou ~[['gaz' (some &) bo]]) pai:ex)
+    %+  expect-eq
+      !>  [101 'hey' &]
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
+    %+  expect-eq
+      !>  ['hey' & 101]
+      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ ni]]) pai:ex)
+    %-  expect-fail
+      |.  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) num:ex)
+    %-  expect-fail                               ::  crash if no matching key
+      |.  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
+    %-  expect-fail                               ::  crash on decoder mismatch
+      |.  ((ou ~[['foo' ~ ni] ['bar' (some 'hey') ni]]) pai:ex)
   ==
 ::  dejs-soft - recursive processing of `json` values
 ::
@@ -1168,26 +1188,6 @@
     %+  expect-eq                                 ::  >1 property
       !>  ~
       !>  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
-    ::  exact-shape object to tuple
-    ::
-    %+  expect-eq
-      !>  `[101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
-    %+  expect-eq
-      !>  `['hey' 101]
-      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
-    %+  expect-eq
-      !>  `['hey']
-      !>  ((ot ~[['bar' so]]) pai:ex)
-    %+  expect-eq
-      !>  ~
-      !>  ((ot ~[['foo' ni]]) num:ex)
-    %+  expect-eq                                 ::  no matching key
-      !>  ~
-      !>  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
-    %+  expect-eq                                 ::  decoder mismatch
-      !>  ~
-      !>  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
     ::  simple object to map (arbitrary keys, single type)
     ::
     %+  expect-eq
@@ -1222,5 +1222,48 @@
     %+  expect-eq                                 ::  rule mismatch
       !>  ~
       !>  ((op (jest 'bar') ni) obj:ex)
+    ::  exact-shape object to tuple
+    ::
+    %+  expect-eq
+      !>  `[101 'hey']
+      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  `['hey' 101]
+      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+    %+  expect-eq
+      !>  `['hey']
+      !>  ((ot ~[['bar' so]]) pai:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((ot ~[['foo' ni]]) num:ex)
+    %+  expect-eq                                 ::  no matching key
+      !>  ~
+      !>  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
+    ::  exact-shape object to tuple with defaults
+    ::
+    %+  expect-eq
+      !>  `[101 'hey']
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) pai:ex)
+    %+  expect-eq
+      !>  `&
+      !>  ((ou ~[['gaz' (some &) bo]]) pai:ex)
+    %+  expect-eq
+      !>  `[101 'hey' &]
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
+    %+  expect-eq
+      !>  `['hey' & 101]
+      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ ni]]) pai:ex)
+    %+  expect-eq
+      !>  ~
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) num:ex)
+    %+  expect-eq                                 ::  no matching key
+      !>  ~
+      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
+    %+  expect-eq                                 ::  decoder mismatch
+      !>  ~
+      !>  ((ou ~[['foo' ~ ni] ['bar' (some 'hey') ni]]) pai:ex)
   ==
 --

@@ -24,13 +24,13 @@
     ==
     ::
     ++  create
-      %-  ou
-      :~  resource+(un dejs:resource)
-          title+(un so)
-          description+(un so)
-          mark+(uf ~ (mu so))
-          associated+(un associated)
-          module+(un so)
+      %-  ot
+      :~  resource+dejs:resource
+          title+so
+          description+so
+          mark+(mu so)
+          associated+associated
+          module+so
       ==
     ::
     ++  leave
@@ -50,9 +50,9 @@
       ==
     ::
     ++  groupify  
-      %-  ou
-      :~  resource+(un dejs:resource)
-          to+(uf ~ (mu dejs:resource))
+      %-  ot
+      :~  resource+dejs:resource
+          to+(mu dejs:resource)
       ==
     ::
     ++  pending-indices  (op hex (su ;~(pfix fas (more fas dem))))

@@ -129,19 +129,17 @@
     ==
   ::
   ++  text-document-id
-    %:  ou
-      uri+(un so)
-      version+(uf ~ (pe ~ ni))
-      ~
+    %-  ot
+    :~  'uri'^so
+        'version'^(pe ~ ni)
     ==
   ::
   ++  text-document-changes
     %-  ar
-    %:  ou
-        range+(uf ~ (pe ~ range))
-        'rangeLength'^(uf ~ (pe ~ ni))
-        text+(un so)
-        ~
+    %-  ot
+    :~  'range'^(pe ~ range)
+        'rangeLength'^(pe ~ ni)
+        'text'^so
     ==
   ::
   ++  method

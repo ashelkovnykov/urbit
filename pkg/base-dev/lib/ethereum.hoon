@@ -885,31 +885,31 @@
     (ar:dejs:format parse-event-log)
   ::
   ++  parse-event-log
-    =,  dejs:format
     |=  log=json
     ^-  event-log
-    =-  ((ot -) log)
-    :~  =-  ['logIndex'^(cu - (mu so))]
-        |=  li=(unit @t)
-        ?~  li  ~
-        =-  ``((ou -) log)  ::TODO  not sure if elegant or hacky.
-        :~  'logIndex'^(un (cu hex-to-num so))
-            'transactionIndex'^(un (cu hex-to-num so))
-            'transactionHash'^(un (cu hex-to-num so))
-            'blockNumber'^(un (cu hex-to-num so))
-            'blockHash'^(un (cu hex-to-num so))
-            'removed'^(uf | bo)
+    :-  =,  dejs-soft:format
+        %.  log
+        %+  pe  ~
+        %-  ou
+        :~  'logIndex'^[~ (cu hex-to-num so)]
+            'transactionIndex'^[~ (cu hex-to-num so)]
+            'transactionHash'^[~ (cu hex-to-num so)]
+            'blockNumber'^[~ (cu hex-to-num so)]
+            'blockHash'^[~ (cu hex-to-num so)]
+            'removed'^[(some |) bo]
         ==
+    =,  dejs:format
+    %.  log
+    %-  ot
+    :~  'address'^(cu hex-to-num so)
+        'data'^so
       ::
-        address+(cu hex-to-num so)
-        data+so
-      ::
-        =-  topics+(cu - (ar so))
-        |=  r=(list @t)
-        ^-  (lest @ux)
-        ?>  ?=([@t *] r)
-        :-  (hex-to-num i.r)
-        (turn t.r hex-to-num)
+        :-  'topics'
+        %+  cu
+          |=  r=(list @ux)
+          ^-  (lest @ux)
+          ?~(r !! r)
+        (ar (cu hex-to-num so))
     ==
   ::
   ++  parse-transaction-result

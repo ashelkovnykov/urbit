@@ -522,29 +522,28 @@
   |=  hit=httr:eyre
   ^-  response:json-rpc
   ~|  hit
-  =/  jon=json  (need (de-json:html q:(need r.hit)))
-  ?.  =(%2 (div p.hit 100))
+  =/  jon=json
+    (need (de-json:html q:(need r.hit)))
+  ?.  =(2 (div p.hit 100))
     (parse-rpc-error jon)
-  =,  dejs-soft:format
   ^-  response:json-rpc
   =;  dere
-    =+  res=((ar dere) jon)
+    =+  res=((ar:dejs-soft:format dere) jon)
     ?~  res  (need (dere jon))
     [%batch u.res]
   |=  jon=json
   ^-  (unit response:json-rpc)
-  =/  res=[id=(unit @t) res=(unit json) err=(unit json)]
-    %.  jon
-    =,  dejs:format
-    =-  (ou -)
-    :~  ['id' (lift so)]
-        ['result' (lift same)]
-        ['error' (lift same)]
-    ==
-  ?:  ?=([^ * ~] res)
-    `[%result [u.id.res ?~(res.res ~ u.res.res)]]
-  ~|  jon
-  `(parse-rpc-error jon)
+  =,  dejs:format
+  %-  some
+  ?.  =(~ ((ot ~[['error' same]]) jon))
+    ~|  jon
+    (parse-rpc-error jon)
+  :-  %result
+  %.  jon
+  %-  ot
+  :~  'id'^so
+      'result'^same
+  ==
 ::
 ++  get-rpc-response
   |=  response=client-response:iris
@@ -556,20 +555,21 @@
     full-file.response
 ::
 ++  parse-rpc-error
-  |=  =json
+  |=  jon=json
   ^-  response:json-rpc
-  :-  %error
-  ?~  json  ['' '' '']
-  %.  json
   =,  dejs:format
-  =-  (ou -)
+  :-  %error
+  ?~  jon  ['' '' '']
+  %.  jon
+  %-  ou
   :~
-    ['id' (uf '' so)]
+    'id'^[(some '') so]
+    ::
     :-  'error'
-    =-  (uf ['' ''] (ou -))
-    :~
-      ['code' (uf '' no)]
-      ['message' (uf '' so)]
+    :-  (some ['' ''])
+    %-  ou
+    :~  'code'^[(some '') no]
+        'message'^[(some '') so]
     ==
   ==
 --
