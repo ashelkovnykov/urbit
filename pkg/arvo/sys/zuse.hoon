@@ -3669,6 +3669,10 @@
       |-
       ?~  p.jon  ~
       [i=(wit i.p.jon) t=$(p.jon t.p.jon)]
+    ::                                                  ::  ++as:dejs-soft:format
+    ++  as                                              ::  array as set,
+      |*  wit=fist                                      ::  single type
+      (cu silt (ar wit))
     ::                                                  ::  ++at:dejs-soft:format
     ++  at                                              ::  array as tuple,
       |^  |*  wil=(pole fist)                           ::  multi type
@@ -3703,6 +3707,9 @@
     ::                                                  ::  ++di:dejs-soft:format
     ++  di                                              ::  millisecond date
       (cu from-unix-ms:chrono:userlib nu)
+    ::                                                  ::  ++du:dejs-soft:format
+    ++  du                                              ::  second date
+      (cu from-unix:chrono:userlib nu)
     ::                                                  ::  ++ne:dejs-soft:format
     ++  ne                                              ::  number as real
       |=  jon=json
@@ -3721,6 +3728,12 @@
       ^-  (unit @ud)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon dem)
+    ::                                                  ::  ++nu:dejs-soft:format
+    ++  nx                                              ::  number as hex
+      |=  jon=json
+      ^-  (unit @ux)
+      ?.  ?=([%n *] jon)  ~
+      (rush p.jon hex)
     ::                                                  ::  ++of:dejs-soft:format
     ++  of                                              ::  simple object XOR
       |*  wer=(pole [cord fist])
@@ -3782,6 +3795,9 @@
             (->+.wer u.ten)
         ((raw +.wer) jom)
       --
+    ::                                                  ::  ++pa:dejs-stop:format
+    ++  pa                                              ::  path
+      (su stap)
     ::                                                  ::  ++pe:dejs-soft:format
     ++  pe                                              ::  prefix transformer
       |*  [pre=* wit=fist]

@@ -1031,6 +1031,14 @@
     %+  expect-eq
       !>  ~
       !>  (nu tru:ex)
+    ::  number as hex
+    ::
+    %+  expect-eq
+      !>  `0x101
+      !>  (nx num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (nx tru:ex)
     :: string as tape
     ::
     %+  expect-eq
@@ -1112,6 +1120,14 @@
     %+  expect-eq
       !>  ~
       !>  (di tru:ex)
+    ::  date as unix ms timestamp
+    ::
+    %+  expect-eq
+      !>  `~1970.1.1..00.00.01
+      !>  (du tsc:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (du tru:ex)
     ::  add prefix to decoded value
     ::
     %+  expect-eq
@@ -1120,6 +1136,14 @@
     %+  expect-eq
       !>  ~
       !>  ((pe 'a' nu) tru:ex)
+    ::  path
+    ::
+    %+  expect-eq
+      !>  `~[%a %b %c]
+      !>  (pa [%s '/a/b/c'])
+    %+  expect-eq
+      !>  ~
+      !>  (pa tru:ex)
   ==
 ::  array decoders
 ::
@@ -1143,6 +1167,13 @@
     %+  expect-eq
       !>  ~
       !>  ((ar nu) [%a ~[num:ex str:ex]])
+    ::  array as set of single type
+    ::
+    ::    `as` is just a transformed `ar`
+    ::
+    %+  expect-eq
+      !>  `(silt ~[101])
+      !>  ((as nu) [%a ~[num:ex]])
     ::  array as tuple of any types
     ::
     ::    Decoders must match exactly
