@@ -3516,10 +3516,10 @@
       (poq (wit jon))
     ::                                                  ::  ++di:dejs:format
     ++  di                                              ::  millisecond date
-      (cu from-unix-ms:chrono:userlib ni)
+      (cu from-unix-ms:chrono:userlib nu)
     ::                                                  ::  ++du:dejs:format
     ++  du                                              ::  second date
-      (cu from-unix:chrono:userlib ni)
+      (cu from-unix:chrono:userlib nu)
     ::                                                  ::  ++mu:dejs:format
     ++  mu                                              ::  true unit
       |*  wit=fist
@@ -3532,20 +3532,20 @@
       ^-  @rd
       ?>  ?=([%n *] jon)
       (rash p.jon (cook ryld (cook royl-cell:^so json-rn)))
-    ::                                                  ::  ++ni:dejs:format
-    ++  ni                                              ::  number as integer
-      |=  jon=json
-      ^-  @ud
-      ?>  ?=([%n *] jon)
-      (rash p.jon dem)
     ::                                                  ::  ++no:dejs:format
     ++  no                                              ::  number as cord
       |=  jon=json
       ^-  @t
       ?>  ?=([%n *] jon)
       p.jon
+    ::                                                  ::  ++ni:dejs:format
+    ++  nu                                              ::  number as integer
+      |=  jon=json
+      ^-  @ud
+      ?>  ?=([%n *] jon)
+      (rash p.jon dem)
     ::                                                  ::  ++nu:dejs:format
-    ++  nu                                              ::  number as hex
+    ++  nx                                              ::  number as hex
       |=  jon=json
       ^-  @ux
       ?>  ?=([%n *] jon)
@@ -3702,25 +3702,25 @@
       (bind (wit jon) poq)
     ::                                                  ::  ++di:dejs-soft:format
     ++  di                                              ::  millisecond date
-      (cu from-unix-ms:chrono:userlib ni)
+      (cu from-unix-ms:chrono:userlib nu)
     ::                                                  ::  ++ne:dejs-soft:format
     ++  ne                                              ::  number as real
       |=  jon=json
       ^-  (unit @rd)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon (cook ryld (cook royl-cell:^so json-rn)))
-    ::                                                  ::  ++ni:dejs-soft:format
-    ++  ni                                              ::  number as integer
-      |=  jon=json
-      ^-  (unit @ud)
-      ?.  ?=([%n *] jon)  ~
-      (rush p.jon dem)
     ::                                                  ::  ++no:dejs-soft:format
     ++  no                                              ::  number as cord
       |=  jon=json
       ^-  (unit @t)
       ?.  ?=([%n *] jon)  ~
       (some p.jon)
+    ::                                                  ::  ++ni:dejs-soft:format
+    ++  nu                                              ::  number as integer
+      |=  jon=json
+      ^-  (unit @ud)
+      ?.  ?=([%n *] jon)  ~
+      (rush p.jon dem)
     ::                                                  ::  ++of:dejs-soft:format
     ++  of                                              ::  simple object XOR
       |*  wer=(pole [cord fist])

@@ -123,7 +123,7 @@
     %.  jon
     %:  ot
       uri+so
-      version+(mu ni)
+      version+(mu nu)
       text+so
       ~
     ==
@@ -131,14 +131,14 @@
   ++  text-document-id
     %-  ot
     :~  'uri'^so
-        'version'^(pe ~ ni)
+        'version'^(pe ~ nu)
     ==
   ::
   ++  text-document-changes
     %-  ar
     %-  ot
     :~  'range'^(pe ~ range)
-        'rangeLength'^(pe ~ ni)
+        'rangeLength'^(pe ~ nu)
         'text'^so
     ==
   ::
@@ -171,8 +171,8 @@
   ::
   ++  position
     %:  ot
-        line+ni
-        character+ni
+        line+nu
+        character+nu
         ~
     ==
   --

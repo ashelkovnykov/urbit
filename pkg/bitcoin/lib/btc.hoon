@@ -419,7 +419,7 @@
       [%broadcast-tx (broadcast-tx res.res)]
       ::
         %get-block-count
-      [id.res (ni res.res)]
+      [id.res (nu res.res)]
       ::
         %get-block-info
       [id.res (block-info res.res)]
@@ -430,31 +430,31 @@
       :~  [%address (cu from-cord:adr:bc so)]
           [%utxos (as utxo)]
           [%used bo]
-          [%block ni]
+          [%block nu]
       ==
     ++  utxo
     %-  ot
-      :~  ['tx_pos' ni]
+      :~  ['tx_pos' nu]
           ['tx_hash' (cu from-cord:hxb:bcu so)]
-          [%height ni]
-          [%value ni]
-          [%recvd (cu from-epoch ni)]
+          [%height nu]
+          [%value nu]
+          [%recvd (cu from-epoch nu)]
       ==
     ++  tx-vals
       %-  ot
       :~  [%included bo]
           [%txid (cu from-cord:hxb:bcu so)]
-          [%confs ni]
-          [%recvd (cu from-epoch ni)]
+          [%confs nu]
+          [%recvd (cu from-epoch nu)]
           [%inputs (ar tx-val)]
           [%outputs (ar tx-val)]
       ==
     ++  tx-val
       %-  ot
       :~  [%txid (cu from-cord:hxb:bcu so)]
-          [%pos ni]
+          [%pos nu]
           [%address (cu from-cord:adr:bc so)]
-          [%value ni]
+          [%value nu]
       ==
     ++  raw-tx
       %-  ot
@@ -469,8 +469,8 @@
       ==
     ++  block-info
       %-  ot
-      :~  [%block ni]
-          [%fee (mu ni)]
+      :~  [%block nu]
+          [%fee (mu nu)]
           [%blockhash (cu from-cord:hxb:bcu so)]
           [%blockfilter (cu from-cord:hxb:bcu so)]
       ==

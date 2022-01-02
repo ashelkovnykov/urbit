@@ -330,7 +330,7 @@
       ^-  ^maybe-post
       ?~  jon    !!
       ?+  -.jon  !!
-        %n  [%| (nu jon)]
+        %n  [%| (nx jon)]
         %o  [%& (post jon)]
       ==
     ::
@@ -421,7 +421,7 @@
       %-  ot
       :~  [%hash (su hex)]
           [%ship (su ;~(pfix sig fed:ag))]
-          [%life ni]
+          [%life nu]
       ==
     ::
     ++  uid

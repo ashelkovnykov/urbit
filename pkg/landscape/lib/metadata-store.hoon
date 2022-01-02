@@ -185,7 +185,7 @@
     %-  of
     :~  [%title so]
         [%description so]
-        [%color nu]
+        [%color nx]
         [%picture so]
         [%preview bo]
         [%hidden bo]
@@ -204,7 +204,7 @@
     %-  ot
     :~  [%title so]
         [%description so]
-        [%color nu]
+        [%color nx]
         [%date-created (cu da-slav so)]
         [%creator (su ;~(pfix sig fed:ag))]
         [%config config]

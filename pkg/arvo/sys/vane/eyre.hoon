@@ -222,13 +222,13 @@
                   %+  pe  %ack
                   %-  ot
                   :~
-                    [%event-id ni]
+                    [%event-id nu]
                   ==
       %poke         %.  item
                     %+  pe  %poke
                     %-  ot
                     :~
-                      [%id ni]
+                      [%id nu]
                       [%ship (su fed:ag)]
                       [%app so]
                       [%mark (su sym)]
@@ -238,7 +238,7 @@
                     %+  pe  %subscribe
                     %-  ot
                     :~
-                      [%id ni]
+                      [%id nu]
                       [%ship (su fed:ag)]
                       [%app so]
                       [%path (su stap)]
@@ -247,8 +247,8 @@
                     %+  pe  %unsubscribe
                     %-  ot
                     :~
-                      [%id ni]
-                      [%subscription ni]
+                      [%id nu]
+                      [%subscription nu]
                     ==
       %delete       `[%delete ~]
     ==

@@ -305,20 +305,6 @@
       !>  (bo [%b |])
     %-  expect-fail
       |.  (bo [%n '0'])
-    ::  number as integer
-    ::
-    %+  expect-eq
-      !>  101
-      !>  (ni num:ex)
-    %-  expect-fail
-      |.  (ni tru:ex)
-    ::  number as hex
-    ::
-    %+  expect-eq
-      !>  0x101
-      !>  (nu num:ex)
-    %-  expect-fail
-      |.  (nu tru:ex)
     ::  number as cord
     ::
     %+  expect-eq
@@ -326,6 +312,20 @@
       !>  (no num:ex)
     %-  expect-fail
       |.  (no tru:ex)
+    ::  number as integer
+    ::
+    %+  expect-eq
+      !>  101
+      !>  (nu num:ex)
+    %-  expect-fail
+      |.  (nu tru:ex)
+    ::  number as hex
+    ::
+    %+  expect-eq
+      !>  0x101
+      !>  (nx num:ex)
+    %-  expect-fail
+      |.  (nx tru:ex)
     :: string as tape
     ::
     %+  expect-eq
@@ -792,25 +792,25 @@
     ::
     %+  expect-eq
       !>  100
-      !>  ((cu dec ni) num:ex)
+      !>  ((cu dec nu) num:ex)
     %+  expect-eq
       !>  1
-      !>  ((cu |=(a=@u (mod a 10)) ni) num:ex)
+      !>  ((cu |=(a=@u (mod a 10)) nu) num:ex)
     %+  expect-eq
       !>  10
-      !>  ((cu |=(a=@u (div a 10)) ni) num:ex)
+      !>  ((cu |=(a=@u (div a 10)) nu) num:ex)
     %-  expect-fail                               ::  crash on decoder mismatch
-      |.  ((cu |=(a=@u (div a 10)) ni) tru:ex)
+      |.  ((cu |=(a=@u (div a 10)) nu) tru:ex)
     ::  parse to unit
     ::
     %+  expect-eq
       !>  ~
-      !>  ((mu ni) nul:ex)
+      !>  ((mu nu) nul:ex)
     %+  expect-eq
       !>  (some 101)
-      !>  ((mu ni) num:ex)
+      !>  ((mu nu) num:ex)
     %-  expect-fail
-      |.  ((mu ni) tru:ex)
+      |.  ((mu nu) tru:ex)
     ::  generic string parser
     ::
     %+  expect-eq
@@ -845,9 +845,9 @@
     ::
     %+  expect-eq
       !>  ['a' 101]
-      !>  ((pe 'a' ni) num:ex)
+      !>  ((pe 'a' nu) num:ex)
     %-  expect-fail
-      |.  ((pe 'a' ni) tru:ex)
+      |.  ((pe 'a' nu) tru:ex)
     ::  path
     ::
     %+  expect-eq
@@ -865,36 +865,36 @@
     ::
     %+  expect-eq
       !>  ~[101]
-      !>  ((ar ni) [%a ~[num:ex]])
+      !>  ((ar nu) [%a ~[num:ex]])
     %+  expect-eq
       !>  ~[1 2 3]
-      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
+      !>  ((ar nu) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
     %-  expect-fail
-      |.  ((ar ni) num:ex)
+      |.  ((ar nu) num:ex)
     %-  expect-fail
-      |.  ((ar ni) [%a ~[str:ex]])
+      |.  ((ar nu) [%a ~[str:ex]])
     %-  expect-fail
-      |.  ((ar ni) [%a ~[num:ex str:ex]])
+      |.  ((ar nu) [%a ~[num:ex str:ex]])
     ::  array as set of single type
     ::
     ::    `as` is just a transformed `ar`
     ::
     %+  expect-eq
       !>  (silt ~[101])
-      !>  ((as ni) [%a ~[num:ex]])
+      !>  ((as nu) [%a ~[num:ex]])
     ::  array as tuple of any types
     ::
     ::    Decoders must match exactly
     ::
     %+  expect-eq
       !>  [101 'hey']
-      !>  ((at ~[ni so]) [%a ~[num:ex str:ex]])
+      !>  ((at ~[nu so]) [%a ~[num:ex str:ex]])
     %-  expect-fail                               ::  crash on too many decoders
-      |.  ((at ~[ni so]) [%a ~[num:ex]])
+      |.  ((at ~[nu so]) [%a ~[num:ex]])
     %-  expect-fail                               ::  crash on too few decoders
-      |.  ((at ~[ni]) [%a ~[num:ex str:ex]])
+      |.  ((at ~[nu]) [%a ~[num:ex str:ex]])
     %-  expect-fail                               ::  crash on decoder mismatch
-      |.  ((at ~[ni so]) [%a ~[str:ex num:ex]])
+      |.  ((at ~[nu so]) [%a ~[str:ex num:ex]])
   ==
 ::  object decoders
 ::
@@ -905,86 +905,86 @@
     ::
     %+  expect-eq
       !>  ['foo' 101]
-      !>  ((of ~[['foo' ni]]) obj:ex)
+      !>  ((of ~[['foo' nu]]) obj:ex)
     %+  expect-eq
       !>  ['foo' 101]
-      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+      !>  ((of ~[['bar' so] ['foo' nu]]) obj:ex)
     %-  expect-fail
-      |.  ((of ~[['foo' ni]]) num:ex)
+      |.  ((of ~[['foo' nu]]) num:ex)
     %-  expect-fail                               ::  crash if no matching key
       |.  ((of ~[['bar' so]]) obj:ex)
     %-  expect-fail                               ::  crash on decoder mismatch
       |.  ((of ~[['foo' so]]) obj:ex)
     %-  expect-fail                               ::  crash if 2+ properties
-      |.  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
+      |.  ((of ~[['bar' so] ['foo' nu]]) pai:ex)
     ::  simple object to map (arbitrary keys, single type)
     ::
     %+  expect-eq
       !>  `(tree [p=@t q=@])`~
-      !>  ((om ni) [%o ~])
+      !>  ((om nu) [%o ~])
     %+  expect-eq
       !>  (malt ~[['foo' 101]])
-      !>  ((om ni) obj:ex)
+      !>  ((om nu) obj:ex)
     %+  expect-eq
       !>  (malt ~[['a' 101] ['b' 101]])
-      !>  ((om ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+      !>  ((om nu) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
     %-  expect-fail                               ::  crash on decoder mismatch
-      |.  ((om ni) pai:ex)
+      |.  ((om nu) pai:ex)
     ::  simple bject to map, but keys must match rule
     ::
     %+  expect-eq
       !>  `(tree [p=@t q=@])`~
-      !>  ((op nix ni) [%o ~])
+      !>  ((op nix nu) [%o ~])
     %+  expect-eq
       !>  (malt ~[['foo' 101]])
-      !>  ((op nix ni) obj:ex)
+      !>  ((op nix nu) obj:ex)
     %+  expect-eq
       !>  (malt ~[['foo' 101]])
-      !>  ((op (jest 'foo') ni) obj:ex)
+      !>  ((op (jest 'foo') nu) obj:ex)
     %+  expect-eq
       !>  (malt ~[['a' 101] ['b' 101]])
-      !>  ((op alf ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+      !>  ((op alf nu) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
     %-  expect-fail                               ::  crash on decoder mismatch
       |.  ((op nix so) obj:ex)
     %-  expect-fail                               ::  crash on rule mismatch
-      |.  ((op (jest 'bar') ni) obj:ex)
+      |.  ((op (jest 'bar') nu) obj:ex)
     ::  exact-shape object to tuple
     ::
     %+  expect-eq
       !>  [101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+      !>  ((ot ~[['foo' nu] ['bar' so]]) pai:ex)
     %+  expect-eq
       !>  ['hey' 101]
-      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+      !>  ((ot ~[['bar' so] ['foo' nu]]) pai:ex)
     %+  expect-eq
       !>  ['hey']
       !>  ((ot ~[['bar' so]]) pai:ex)
     %-  expect-fail
-      |.  ((ot ~[['foo' ni]]) num:ex)
+      |.  ((ot ~[['foo' nu]]) num:ex)
     %-  expect-fail                               ::  crash if no matching key
-      |.  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+      |.  ((ot ~[['foo' nu] ['bar' so] ['baz' so]]) pai:ex)
     %-  expect-fail                               ::  crash on decoder mismatch
       |.  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
     ::  exact-shape object to tuple with defaults
     ::
     %+  expect-eq
       !>  [101 'hey']
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so]]) pai:ex)
     %+  expect-eq
       !>  &
       !>  ((ou ~[['gaz' (some &) bo]]) pai:ex)
     %+  expect-eq
       !>  [101 'hey' &]
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
     %+  expect-eq
       !>  ['hey' & 101]
-      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ ni]]) pai:ex)
+      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ nu]]) pai:ex)
     %-  expect-fail
-      |.  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) num:ex)
+      |.  ((ou ~[['foo' ~ nu] ['bar' ~ so]]) num:ex)
     %-  expect-fail                               ::  crash if no matching key
-      |.  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
+      |.  ((ou ~[['foo' ~ nu] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
     %-  expect-fail                               ::  crash on decoder mismatch
-      |.  ((ou ~[['foo' ~ ni] ['bar' (some 'hey') ni]]) pai:ex)
+      |.  ((ou ~[['foo' ~ nu] ['bar' (some 'hey') nu]]) pai:ex)
   ==
 ::  dejs-soft - recursive processing of `json` values
 ::
@@ -1015,14 +1015,6 @@
     %+  expect-eq
       !>  ~
       !>  (bo [%n '0'])
-    ::  number as integer
-    ::
-    %+  expect-eq
-      !>  `101
-      !>  (ni num:ex)
-    %+  expect-eq
-      !>  ~
-      !>  (ni tru:ex)
     ::  number as cord
     ::
     %+  expect-eq
@@ -1031,6 +1023,14 @@
     %+  expect-eq
       !>  ~
       !>  (no tru:ex)
+    ::  number as integer
+    ::
+    %+  expect-eq
+      !>  `101
+      !>  (nu num:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (nu tru:ex)
     :: string as tape
     ::
     %+  expect-eq
@@ -1057,33 +1057,33 @@
     ::
     %+  expect-eq
       !>  `100
-      !>  ((ci |=(a=@u (some (dec a))) ni) num:ex)
+      !>  ((ci |=(a=@u (some (dec a))) nu) num:ex)
     %+  expect-eq
       !>  `1
-      !>  ((ci |=(a=@u (some (mod a 10))) ni) num:ex)
+      !>  ((ci |=(a=@u (some (mod a 10))) nu) num:ex)
     %+  expect-eq
       !>  `10
-      !>  ((ci |=(a=@u (some (div a 10))) ni) num:ex)
+      !>  ((ci |=(a=@u (some (div a 10))) nu) num:ex)
     %+  expect-eq
       !>  ~
-      !>  ((ci |=(a=@u (some (div a 10))) ni) tru:ex)
+      !>  ((ci |=(a=@u (some (div a 10))) nu) tru:ex)
     %+  expect-eq
       !>  ~
-      !>  ((ci |=(* ~) ni) num:ex)
+      !>  ((ci |=(* ~) nu) num:ex)
     ::  generic transformer (gate returns non-unit)
     ::
     %+  expect-eq
       !>  `100
-      !>  ((cu dec ni) num:ex)
+      !>  ((cu dec nu) num:ex)
     %+  expect-eq
       !>  `1
-      !>  ((cu |=(a=@u (mod a 10)) ni) num:ex)
+      !>  ((cu |=(a=@u (mod a 10)) nu) num:ex)
     %+  expect-eq
       !>  `10
-      !>  ((cu |=(a=@u (div a 10)) ni) num:ex)
+      !>  ((cu |=(a=@u (div a 10)) nu) num:ex)
     %+  expect-eq
       !>  ~
-      !>  ((cu |=(a=@u (div a 10)) ni) tru:ex)
+      !>  ((cu |=(a=@u (div a 10)) nu) tru:ex)
     ::  generic string parser
     ::
     %+  expect-eq
@@ -1116,10 +1116,10 @@
     ::
     %+  expect-eq
       !>  `['a' 101]
-      !>  ((pe 'a' ni) num:ex)
+      !>  ((pe 'a' nu) num:ex)
     %+  expect-eq
       !>  ~
-      !>  ((pe 'a' ni) tru:ex)
+      !>  ((pe 'a' nu) tru:ex)
   ==
 ::  array decoders
 ::
@@ -1130,35 +1130,35 @@
     ::
     %+  expect-eq
       !>  `~[101]
-      !>  ((ar ni) [%a ~[num:ex]])
+      !>  ((ar nu) [%a ~[num:ex]])
     %+  expect-eq
       !>  `~[1 2 3]
-      !>  ((ar ni) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
+      !>  ((ar nu) [%a ~[[%n '1'] [%n '2'] [%n '3']]])
     %+  expect-eq
       !>  ~
-      !>  ((ar ni) num:ex)
+      !>  ((ar nu) num:ex)
     %+  expect-eq
       !>  ~
-      !>  ((ar ni) [%a ~[str:ex]])
+      !>  ((ar nu) [%a ~[str:ex]])
     %+  expect-eq
       !>  ~
-      !>  ((ar ni) [%a ~[num:ex str:ex]])
+      !>  ((ar nu) [%a ~[num:ex str:ex]])
     ::  array as tuple of any types
     ::
     ::    Decoders must match exactly
     ::
     %+  expect-eq
       !>  `[101 'hey']
-      !>  ((at ~[ni so]) [%a ~[num:ex str:ex]])
+      !>  ((at ~[nu so]) [%a ~[num:ex str:ex]])
     %+  expect-eq                                 ::  too many decoders
       !>  ~
-      !>  ((at ~[ni so]) [%a ~[num:ex]])
+      !>  ((at ~[nu so]) [%a ~[num:ex]])
     %+  expect-eq                                 ::  too few decoders
       !>  ~
-      !>  ((at ~[ni]) [%a ~[num:ex str:ex]])
+      !>  ((at ~[nu]) [%a ~[num:ex str:ex]])
     %+  expect-eq                                 ::  decoder order mismatch
       !>  ~
-      !>  ((at ~[ni so]) [%a ~[str:ex num:ex]])
+      !>  ((at ~[nu so]) [%a ~[str:ex num:ex]])
   ==
 ::  decoding objects
 ::
@@ -1169,16 +1169,16 @@
     ::
     %+  expect-eq
       !>  `['foo' 101]
-      !>  ((of ~[['foo' ni]]) obj:ex)
+      !>  ((of ~[['foo' nu]]) obj:ex)
     %+  expect-eq
       !>  `['foo' 101]
-      !>  ((of ~[['bar' so] ['foo' ni]]) obj:ex)
+      !>  ((of ~[['bar' so] ['foo' nu]]) obj:ex)
     %+  expect-eq
       !>  ~
       !>  ((of ~) num:ex)
     %+  expect-eq
       !>  ~
-      !>  ((of ~[['foo' ni]]) num:ex)
+      !>  ((of ~[['foo' nu]]) num:ex)
     %+  expect-eq                                 ::  no matching key
       !>  ~
       !>  ((of ~[['bar' so]]) obj:ex)
@@ -1187,58 +1187,58 @@
       !>  ((of ~[['foo' so]]) obj:ex)
     %+  expect-eq                                 ::  >1 property
       !>  ~
-      !>  ((of ~[['bar' so] ['foo' ni]]) pai:ex)
+      !>  ((of ~[['bar' so] ['foo' nu]]) pai:ex)
     ::  simple object to map (arbitrary keys, single type)
     ::
     %+  expect-eq
       !>  [~ `(tree [p=@t q=@])`~]
-      !>  ((om ni) [%o ~])
+      !>  ((om nu) [%o ~])
     %+  expect-eq
       !>  `(malt ~[['foo' 101]])
-      !>  ((om ni) obj:ex)
+      !>  ((om nu) obj:ex)
     %+  expect-eq
       !>  `(malt ~[['a' 101] ['b' 101]])
-      !>  ((om ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+      !>  ((om nu) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
     %+  expect-eq                                 ::  decoder mismatch
       !>  ~
-      !>  ((om ni) pai:ex)
+      !>  ((om nu) pai:ex)
     ::  simple object to map, but keys must match rule
     ::
     %+  expect-eq
       !>  [~ `(tree [p=@t q=@])`~]
-      !>  ((op nix ni) [%o ~])
+      !>  ((op nix nu) [%o ~])
     %+  expect-eq
       !>  `(malt ~[['foo' 101]])
-      !>  ((op nix ni) obj:ex)
+      !>  ((op nix nu) obj:ex)
     %+  expect-eq
       !>  `(malt ~[['foo' 101]])
-      !>  ((op (jest 'foo') ni) obj:ex)
+      !>  ((op (jest 'foo') nu) obj:ex)
     %+  expect-eq
       !>  `(malt ~[['a' 101] ['b' 101]])
-      !>  ((op alf ni) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
+      !>  ((op alf nu) (pr:enjs ~[['a' num:ex] ['b' num:ex]]))
     %+  expect-eq                                 ::  decoder mismatch
       !>  ~
       !>  ((op nix so) obj:ex)
     %+  expect-eq                                 ::  rule mismatch
       !>  ~
-      !>  ((op (jest 'bar') ni) obj:ex)
+      !>  ((op (jest 'bar') nu) obj:ex)
     ::  exact-shape object to tuple
     ::
     %+  expect-eq
       !>  `[101 'hey']
-      !>  ((ot ~[['foo' ni] ['bar' so]]) pai:ex)
+      !>  ((ot ~[['foo' nu] ['bar' so]]) pai:ex)
     %+  expect-eq
       !>  `['hey' 101]
-      !>  ((ot ~[['bar' so] ['foo' ni]]) pai:ex)
+      !>  ((ot ~[['bar' so] ['foo' nu]]) pai:ex)
     %+  expect-eq
       !>  `['hey']
       !>  ((ot ~[['bar' so]]) pai:ex)
     %+  expect-eq
       !>  ~
-      !>  ((ot ~[['foo' ni]]) num:ex)
+      !>  ((ot ~[['foo' nu]]) num:ex)
     %+  expect-eq                                 ::  no matching key
       !>  ~
-      !>  ((ot ~[['foo' ni] ['bar' so] ['baz' so]]) pai:ex)
+      !>  ((ot ~[['foo' nu] ['bar' so] ['baz' so]]) pai:ex)
     %+  expect-eq                                 ::  decoder mismatch
       !>  ~
       !>  ((ot ~[['foo' so] ['bar' so]]) pai:ex)
@@ -1246,24 +1246,24 @@
     ::
     %+  expect-eq
       !>  `[101 'hey']
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so]]) pai:ex)
     %+  expect-eq
       !>  `&
       !>  ((ou ~[['gaz' (some &) bo]]) pai:ex)
     %+  expect-eq
       !>  `[101 'hey' &]
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so] ['gaz' (some &) bo]]) pai:ex)
     %+  expect-eq
       !>  `['hey' & 101]
-      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ ni]]) pai:ex)
+      !>  ((ou ~[['bar' ~ so] ['gaz' (some &) bo] ['foo' ~ nu]]) pai:ex)
     %+  expect-eq
       !>  ~
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so]]) num:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so]]) num:ex)
     %+  expect-eq                                 ::  no matching key
       !>  ~
-      !>  ((ou ~[['foo' ~ ni] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' ~ so] ['gaz' ~ bo]]) pai:ex)
     %+  expect-eq                                 ::  decoder mismatch
       !>  ~
-      !>  ((ou ~[['foo' ~ ni] ['bar' (some 'hey') ni]]) pai:ex)
+      !>  ((ou ~[['foo' ~ nu] ['bar' (some 'hey') nu]]) pai:ex)
   ==
 --
