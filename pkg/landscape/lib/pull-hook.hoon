@@ -31,7 +31,7 @@
     ==
   ++  add
     %-  ot
-    :~  ship+(su ;~(pfix sig fed:ag))
+    :~  ship+sp
         resource+dejs:resource
     ==
   --

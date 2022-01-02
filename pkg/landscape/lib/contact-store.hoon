@@ -123,22 +123,22 @@
     ::
     ++  add-contact
       %-  ot
-      :~  [%ship (su ;~(pfix sig fed:ag))]
+      :~  [%ship sp]
           [%contact cont]
       ==
     ::
-    ++  remove-contact  (ot [%ship (su ;~(pfix sig fed:ag))]~)
+    ++  remove-contact  (ot [%ship sp]~)
     ::
     ++  edit-contact
       %-  ot
-      :~  [%ship (su ;~(pfix sig fed:ag))]
+      :~  [%ship sp]
           [%edit-field edit]
           [%timestamp di]
       ==
     ::
     ++  beings
       %-  of
-      :~  [%ships (as (su ;~(pfix sig fed:ag)))]
+      :~  [%ships (as sp)]
           [%group dejs:res]
       ==
     ::
@@ -173,6 +173,6 @@
   |%
   ++  share  
       ^-  $-(json [%share ship])
-      (of share+(su ;~(pfix sig fed:ag)) ~)
+      (of share+sp ~)
   --
 --

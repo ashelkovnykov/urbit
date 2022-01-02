@@ -132,6 +132,7 @@
   ++  num  `json`[%n '101']
   ++  tms  `json`[%n '1000']
   ++  tsc  `json`[%n '1']
+  ++  pat  `json`[%s '~wet']
   ++  str  `json`[%s 'hey']
   ++  wal  `json`[%s 'hello\0Aworld\0A']
   ++  foo  ['foo' num]
@@ -340,6 +341,13 @@
       !>  (so str:ex)
     %-  expect-fail
       |.  (so tru:ex)
+    :: string as address
+    ::
+    %+  expect-eq
+      !>  ~wet
+      !>  (sp pat:ex)
+    %-  expect-fail
+      |.  (sp tru:ex)
   ==
 ::  decoder for real numbers
 ::
@@ -1055,6 +1063,14 @@
     %+  expect-eq
       !>  ~
       !>  (so tru:ex)
+    :: string as address
+    ::
+    %+  expect-eq
+      !>  `~wet
+      !>  (sp pat:ex)
+    %+  expect-eq
+      !>  ~
+      !>  (sp tru:ex)
   ==
 ::  decoder transformers
 ::

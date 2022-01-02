@@ -46,7 +46,7 @@
     ++  join
       %-  ot
       :~  resource+dejs:resource
-          ship+(su ;~(pfix sig fed:ag))
+          ship+sp
       ==
     ::
     ++  groupify  

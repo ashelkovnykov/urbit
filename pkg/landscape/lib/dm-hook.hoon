@@ -13,7 +13,7 @@
         screen+bo
     ==
     ::
-    ++  ship  (su ;~(pfix sig fed:ag))
+    ++  ship  sp
     ::
     ++  ships  (as ship)
     --

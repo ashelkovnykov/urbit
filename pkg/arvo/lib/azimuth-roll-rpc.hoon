@@ -23,10 +23,10 @@
     ++  parse-ship
       |=  jon=json
       ^-  (unit @p)
-      ?:  ?=([%n *] jon)
-        (rush p.jon dem)
-      ?.  ?=([%s *] jon)  ~
-      (rush p.jon ;~(pfix sig fed:ag))
+      =/  res=(nu jon)
+      ?~  res
+        (sp jon)
+      res
     ::  TODO: from /lib/group-store (move to zuse?)
     ++  enkebab
       |=  str=cord

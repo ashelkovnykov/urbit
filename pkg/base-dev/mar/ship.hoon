@@ -12,7 +12,7 @@
 ++  grab
   |%
   ++  noun  ship
-  ++  json  (su:dejs:format ;~(pfix sig fed:ag))
+  ++  json  sp:dejs:format
   ++  mime
     |=  [=mite len=@ tex=@]
     (slav %p (snag 0 (to-wain:format tex)))

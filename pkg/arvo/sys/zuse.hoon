@@ -3641,6 +3641,12 @@
       ^-  @t
       ?>  ?=([%s *] jon)
       p.jon
+    ::                                                  ::  ++sp:dejs:format
+    ++  sp                                              ::  string as address
+      |=  jon=json
+      ^-  @p
+      ?>  ?=([%s *] jon)
+      (rash p.jon ;~(pfix sig fed:ag))
     ::                                                  ::  ++su:dejs:format
     ++  su                                              ::  string parser
       |*  sab=rule
@@ -3814,6 +3820,12 @@
       ^-  (unit @t)
       ?.  ?=([%s *] jon)  ~
       (some p.jon)
+    ::                                                  ::  ++sp:dejs-soft:format
+    ++  sp                                              ::  string as address
+      |=  jon=json
+      ^-  (unit @p)
+      ?.  ?=([%s *] jon)  ~
+      (rush p.jon ;~(pfix sig fed:ag))
     ::                                                  ::  ++su:dejs-soft:format
     ++  su                                              ::  string parser
       |*  sab=rule

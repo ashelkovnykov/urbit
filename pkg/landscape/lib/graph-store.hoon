@@ -336,7 +336,7 @@
     ::
     ++  post
       %-  ot
-      :~  [%author (su ;~(pfix sig fed:ag))]
+      :~  [%author sp]
           [%index index]
           [%time-sent di]
           [%contents (ar content)]
@@ -346,7 +346,7 @@
     ::
     ++  content
       %-  of
-      :~  [%mention (su ;~(pfix sig fed:ag))]
+      :~  [%mention sp]
           [%text so]
           [%url so]
           [%reference reference]
@@ -370,7 +370,7 @@
       ::
       ++  app
         %-  ot
-        :~  ship+(su ;~(pfix sig fed:ag))
+        :~  ship+sp
             desk+so
             path+pa
         ==
@@ -420,7 +420,7 @@
     ++  signature
       %-  ot
       :~  [%hash (su hex)]
-          [%ship (su ;~(pfix sig fed:ag))]
+          [%ship sp]
           [%life nu]
       ==
     ::

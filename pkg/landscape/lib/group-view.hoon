@@ -34,7 +34,7 @@
   ++  join
     %-  ot
     :~  resource+dejs:resource
-        ship+(su ;~(pfix sig fed:ag))
+        ship+sp
         app+(su (perk %groups %graph ~))
         'shareContact'^bo
         autojoin+bo
@@ -43,7 +43,7 @@
   ++  invite
     %-  ot
     :~  resource+dejs:resource
-        ships+(as (su ;~(pfix sig fed:ag)))
+        ships+(as sp)
         description+so
     ==
   --

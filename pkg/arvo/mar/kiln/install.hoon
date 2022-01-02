@@ -23,7 +23,7 @@
     =,  dejs:format
     %-  ot
     :~  local+so
-        ship+(su ;~(pfix sig fed:ag))
+        ship+sp
         desk+so
     ==
   --

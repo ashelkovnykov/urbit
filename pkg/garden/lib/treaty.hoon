@@ -81,7 +81,7 @@
 ++  dejs
   =,  dejs:format
   |%
-  ++  ship  (su ;~(pfix sig fed:ag))
+  ++  ship  sp
   ++  ally-update
     ^-  $-(json update:ally)
     %-  of

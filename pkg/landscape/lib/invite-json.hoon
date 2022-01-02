@@ -101,10 +101,10 @@
   ::
   ++  invi
     %-  ot
-    :~  [%ship (su ;~(pfix sig fed:ag))]
+    :~  [%ship sp]
         [%app so]
         [%resource dejs:resource]
-        [%recipient (su ;~(pfix sig fed:ag))]
+        [%recipient sp]
         [%text so]
     ==
   --

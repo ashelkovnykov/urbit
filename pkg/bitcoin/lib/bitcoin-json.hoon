@@ -21,7 +21,7 @@
         gen-new-address+|=(json ~)
     ==
   ::
-  ++  ship  (su ;~(pfix sig fed:ag))
+  ++  ship  sp
   ::
   ++  add-wallet
     %-  ot

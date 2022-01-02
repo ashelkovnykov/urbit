@@ -206,7 +206,7 @@
         [%description so]
         [%color nx]
         [%date-created (cu da-slav so)]
-        [%creator (su ;~(pfix sig fed:ag))]
+        [%creator sp]
         [%config config]
         [%picture so]
         [%preview bo]

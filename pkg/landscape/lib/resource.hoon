@@ -50,7 +50,7 @@
   ~|  dejs+%resource
   %.  jon
   %-  ot
-  :~  ship+(su ;~(pfix sig fed:ag))
+  :~  ship+sp
       name+so
   ==
 --

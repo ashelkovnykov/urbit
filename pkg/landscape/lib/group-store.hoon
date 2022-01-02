@@ -309,8 +309,7 @@
         resource+dejs-path:resource
         tag+so
     ==
-  ++  ship
-    (su ;~(pfix sig fed:ag))
+  ++  ship  sp
   ++  policy
     ^-  $-(json ^policy)
     %-  of
