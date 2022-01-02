@@ -315,7 +315,7 @@
     ::  number as hex
     ::
     %+  expect-eq
-      !>  257
+      !>  0x101
       !>  (nu num:ex)
     %-  expect-fail
       |.  (nu tru:ex)

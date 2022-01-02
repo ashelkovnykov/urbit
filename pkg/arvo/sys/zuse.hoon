@@ -3477,7 +3477,8 @@
     ::                                                  ::  ++ar:dejs:format
     ++  ar                                              ::  array as list,
       |*  wit=fist                                      ::  single type
-      |=  jon=json  ^-  (list _(wit *json))
+      |=  jon=json
+      ^-  (list _*wit)
       ?>  ?=([%a *] jon)
       (turn p.jon wit)
     ::                                                  ::  ++as:dejs:format
@@ -3504,7 +3505,10 @@
       ==
     ::                                                  ::  ++bo:dejs:format
     ++  bo                                              ::  boolean
-      |=(jon=json ?>(?=([%b *] jon) p.jon))
+      |=  jon=json
+      ^-  ?
+      ?>  ?=([%b *] jon)
+      p.jon
     ::                                                  ::  ++cu:dejs:format
     ++  cu                                              ::  generic transform
       |*  [poq=gate wit=fist]
@@ -3520,6 +3524,7 @@
     ++  mu                                              ::  true unit
       |*  wit=fist
       |=  jon=json
+      ^-  (unit _*wit)
       ?~(jon ~ (some (wit jon)))
     ::                                                  ::  ++ne:dejs:format
     ++  ne                                              ::  number as real
@@ -3530,14 +3535,19 @@
     ::                                                  ::  ++ni:dejs:format
     ++  ni                                              ::  number as integer
       |=  jon=json
+      ^-  @ud
       ?>  ?=([%n *] jon)
       (rash p.jon dem)
     ::                                                  ::  ++no:dejs:format
     ++  no                                              ::  number as cord
-      |=(jon=json ?>(?=([%n *] jon) p.jon))
+      |=  jon=json
+      ^-  @t
+      ?>  ?=([%n *] jon)
+      p.jon
     ::                                                  ::  ++nu:dejs:format
     ++  nu                                              ::  number as hex
       |=  jon=json
+      ^-  @ux
       ?>  ?=([%n *] jon)
       (rash p.jon hex)
     ::                                                  ::  ++of:dejs:format
@@ -3559,6 +3569,7 @@
     ++  om                                              ::  object as map,
       |*  wit=fist                                      ::  arbitrary keys,
       |=  jon=json                                      ::  single type
+      ^-  (map @t _*wit)
       ?>  ?=([%o *] jon)
       (~(run by p.jon) wit)
     ::                                                  ::  ++op:dejs:format
@@ -3620,19 +3631,27 @@
       (cu |*(* [pre +<]) wit)
     ::                                                  ::  ++sa:dejs:format
     ++  sa                                              ::  string as tape
-      |=(jon=json ?>(?=([%s *] jon) (trip p.jon)))
+      |=  jon=json
+      ^-  tape
+      ?>  ?=([%s *] jon)
+      (trip p.jon)
     ::                                                  ::  ++so:dejs:format
     ++  so                                              ::  string as cord
-      |=(jon=json ?>(?=([%s *] jon) p.jon))
+      |=  jon=json
+      ^-  @t
+      ?>  ?=([%s *] jon)
+      p.jon
     ::                                                  ::  ++su:dejs:format
     ++  su                                              ::  string parser
       |*  sab=rule
-      |=  jon=json  ^+  (wonk *sab)
+      |=  jon=json
+      ^+  (wonk *sab)
       ?>  ?=([%s *] jon)
       (rash p.jon sab)
     ::                                                  ::  ++ul:dejs:format
     ++  ul                                              ::  null
-      |=  jon=json  ?~(jon ~ !!)
+      |=  jon=json
+      ?~(jon ~ !!)
     --  ::dejs
   ::                                                    ::  ++dejs-soft:format
   ++  dejs-soft                                         ::  json reparse to unit
@@ -3644,6 +3663,7 @@
     ++  ar                                              ::  array as list,
       |*  wit=fist                                      ::  single type
       |=  jon=json
+      ^-  (unit (list _(need *wit)))
       ?.  ?=([%a *] jon)  ~
       %-  drop-list:unity
       |-
@@ -3666,7 +3686,10 @@
       ((at-raw +.wil) ?~(jol ~ t.jol))
     ::                                                  ::  ++bo:dejs-soft:format
     ++  bo                                              ::  boolean
-      |=(jon=json ?.(?=([%b *] jon) ~ [~ u=p.jon]))
+      |=  jon=json
+      ^-  (unit ?)
+      ?.  ?=([%b *] jon)  ~
+      [~ u=p.jon]
     ::                                                  ::  ++ci:dejs-soft:format
     ++  ci                                              ::  generic transformer
       |*  [poq=gate wit=fist]
@@ -3689,11 +3712,13 @@
     ::                                                  ::  ++ni:dejs-soft:format
     ++  ni                                              ::  number as integer
       |=  jon=json
+      ^-  (unit @ud)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon dem)
     ::                                                  ::  ++no:dejs-soft:format
     ++  no                                              ::  number as cord
       |=  jon=json
+      ^-  (unit @t)
       ?.  ?=([%n *] jon)  ~
       (some p.jon)
     ::                                                  ::  ++of:dejs-soft:format
@@ -3710,6 +3735,7 @@
     ++  om                                              ::  object as map,
       |*  wit=fist                                      ::  arbitrary keys,
       |=  jon=json                                      ::  single type
+      ^-  (unit (map @t _(need *wit)))
       ?.  ?=([%o *] jon)  ~
       %-  drop-map:unity
       (~(run by p.jon) wit)
@@ -3763,20 +3789,26 @@
     ::                                                  ::  ++sa:dejs-soft:format
     ++  sa                                              ::  string as tape
       |=  jon=json
-      ?.(?=([%s *] jon) ~ (some (trip p.jon)))
+      ^-  (unit tape)
+      ?.  ?=([%s *] jon)  ~
+      (some (trip p.jon))
     ::                                                  ::  ++so:dejs-soft:format
     ++  so                                              ::  string as cord
       |=  jon=json
-      ?.(?=([%s *] jon) ~ (some p.jon))
+      ^-  (unit @t)
+      ?.  ?=([%s *] jon)  ~
+      (some p.jon)
     ::                                                  ::  ++su:dejs-soft:format
     ++  su                                              ::  string parser
       |*  sab=rule
       |=  jon=json
+      ^-  (unit _(wonk *sab))
       ?.  ?=([%s *] jon)  ~
       (rush p.jon sab)
     ::                                                  ::  ++ul:dejs-soft:format
     ++  ul                                              ::  null
-      |=  jon=json  ?~(jon (some ~) ~)
+      |=  jon=json
+      ?~(jon (some ~) ~)
     --  ::dejs-soft
   --
 ::  |cloy: clay helpers

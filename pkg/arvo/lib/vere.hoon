@@ -191,7 +191,7 @@
               ==
             ::
               ::TODO  inconsistent @p string
-              'sponsor'^(ot 'has'^bo 'who'^ni ~)
+              'sponsor'^(ot 'has'^bo 'who'^(cu @p ni) ~)
             ::
               ::TODO  escape
               ::TODO  what if escape or sponsor not present? possible?
