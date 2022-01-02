@@ -3487,22 +3487,22 @@
       (cu silt (ar wit))
     ::                                                  ::  ++at:dejs:format
     ++  at                                              ::  array as tuple,
-      |*  wil=(pole fist)                               ::  multi type
-      |=  jon=json
-      ?>  ?=([%a *] jon)
-      ((at-raw wil) p.jon)
-    ::                                                  ::  ++at-raw:dejs:format
-    ++  at-raw                                          ::  array as tuple,
-      |*  wil=(pole fist)                               ::  helper
-      |=  jol=(list json)
-      ?~  jol  !!
-      ?-    wil                                         ::  mull-skip on empty
-          :: [wit=* t=*]
-          [* t=*]
-        =>  .(wil [wit *]=wil)
-        ?~  t.wil  ?^(t.jol !! (wit.wil i.jol))
-        [(wit.wil i.jol) ((at-raw t.wil) t.jol)]
-      ==
+      |^  |*  wil=(pole fist)                           ::  multi type
+          |=  jon=json
+          ?>  ?=([%a *] jon)
+          ((raw wil) p.jon)
+      ++  raw
+        |*  wil=(pole fist)
+        |=  jol=(list json)
+        ?~  jol  !!
+        ?-    wil                                       ::  mull-skip on empty
+            :: [wit=* t=*]
+            [* t=*]
+          =>  .(wil [wit *]=wil)
+          ?~  t.wil  ?^(t.jol !! (wit.wil i.jol))
+          [(wit.wil i.jol) ((raw t.wil) t.jol)]
+        ==
+      --
     ::                                                  ::  ++bo:dejs:format
     ++  bo                                              ::  boolean
       |=  jon=json
@@ -3583,45 +3583,45 @@
       [(rash p fel) (wit q)]
     ::                                                  ::  ++ot:dejs:format
     ++  ot                                              ::  object as tuple,
-      |*  wer=(pole [cord fist])                        ::  specific keys,
-      |=  jon=json                                      ::  multi type
-      ?>  ?=([%o *] jon)
-      ((ot-raw wer) p.jon)
-    ::                                                  ::  ++ot-raw:dejs:format
-    ++  ot-raw                                          ::  ot helper
-      |*  wer=(pole [cord fist])
-      |=  jom=(map @t json)
-      ?-    wer                                         ::  mull-skip on empty
-          :: [[key=@t wit=*] t=*]
-          [[key=@t *] t=*]
-        =>  .(wer [[* wit] *]=wer)
-        =/  ten  ~|(key+key.wer (wit.wer (~(got by jom) key.wer)))
-        ?~(t.wer ten [ten ((ot-raw t.wer) jom)])
-      ==
+      |^  |*  wer=(pole [cord fist])                    ::  specific keys,
+          |=  jon=json                                  ::  multi type
+          ?>  ?=([%o *] jon)
+          ((raw wer) p.jon)
+      ++  raw
+        |*  wer=(pole [cord fist])
+        |=  jom=(map @t json)
+        ?-    wer                                       ::  mull-skip on empty
+            :: [[key=@t wit=*] t=*]
+            [[key=@t *] t=*]
+          =>  .(wer [[* wit] *]=wer)
+          =/  ten  ~|(key+key.wer (wit.wer (~(got by jom) key.wer)))
+          ?~(t.wer ten [ten ((raw t.wer) jom)])
+        ==
+      --
     ::                                                  ::  ++ou:dejs:format
     ++  ou                                              ::  object as tuple,
-      |*  wer=(pole [cord (unit) fist])                 ::  specific keys,
-      |=  jon=json                                      ::  multi type,
-      ?>  ?=([%o *] jon)                                ::  defaults
-      ((ou-raw wer) p.jon)
-    ::                                                  ::  ++ou-raw:dejs:format
-    ++  ou-raw                                          ::  ou helper 
-      |*  wer=(pole [cord (unit) fist])
-      |=  jom=(map @t json)
-      ?-    wer                                         :: mint-vain on empty
-          :: [[key=@t [def=* wit=*]] t=*]
-          [[key=@t * *] t=*]
-        =>  .(wer [[* def wit] *]=wer)
-        ~|  key+key.wer
-        =/  ten
-          (bind (~(get by jom) key.wer) wit.wer)
-        =/  net
-          ?~  ten
-            ?~(def.wer !! u.def.wer)
-          u.ten
-        ?~  t.wer  net
-        [net ((ou-raw t.wer) jom)]
-      ==
+      |^  |*  wer=(pole [cord (unit) fist])             ::  specific keys,
+          |=  jon=json                                  ::  multi type,
+          ?>  ?=([%o *] jon)                            ::  defaults
+          ((raw wer) p.jon)
+      ++  raw
+        |*  wer=(pole [cord (unit) fist])
+        |=  jom=(map @t json)
+        ?-    wer                                       ::  mull-skip on empty
+            :: [[key=@t [def=* wit=*]] t=*]
+            [[key=@t * *] t=*]
+          =>  .(wer [[* def wit] *]=wer)
+          ~|  key+key.wer
+          =/  ten
+            (bind (~(get by jom) key.wer) wit.wer)
+          =/  net
+            ?~  ten
+              ?~(def.wer !! u.def.wer)
+            u.ten
+          ?~  t.wer  net
+          [net ((raw t.wer) jom)]
+        ==
+      --
     ::                                                  ::  ++pa:dejs:format
     ++  pa                                              ::  path
       (su stap)
@@ -3671,19 +3671,19 @@
       [i=(wit i.p.jon) t=$(p.jon t.p.jon)]
     ::                                                  ::  ++at:dejs-soft:format
     ++  at                                              ::  array as tuple,
-      |*  wil=(pole fist)                               ::  multi type
-      |=  jon=json
-      ?.  ?=([%a *] jon)  ~
-      ?.  =((lent wil) (lent p.jon))  ~
-      %-  drop-pole:unity
-      ((at-raw wil) p.jon)
-    ::                                                  ::  ++at-raw:dejs-soft:format
-    ++  at-raw                                          ::  array as tuple,
-      |*  wil=(pole fist)                               ::  helper
-      |=  jol=(list json)
-      ?~  wil  ~
-      :-  ?~(jol ~ (-.wil i.jol))
-      ((at-raw +.wil) ?~(jol ~ t.jol))
+      |^  |*  wil=(pole fist)                           ::  multi type
+          |=  jon=json
+          ?.  ?=([%a *] jon)  ~
+          ?.  =((lent wil) (lent p.jon))  ~
+          %-  drop-pole:unity
+          ((raw wil) p.jon)
+      ++  raw
+        |*  wil=(pole fist)
+        |=  jol=(list json)
+        ?~  wil  ~
+        :-  ?~(jol ~ (-.wil i.jol))
+        ((raw +.wil) ?~(jol ~ t.jol))
+      --
     ::                                                  ::  ++bo:dejs-soft:format
     ++  bo                                              ::  boolean
       |=  jon=json
@@ -3752,36 +3752,36 @@
       (both (rush p fel) (wit q))
     ::                                                  ::  ++ot:dejs-soft:format
     ++  ot                                              ::  object as tuple,
-      |*  wer=(pole [cord fist])                        ::  specific keys,
-      |=  jon=json                                      ::  multi type
-      ?.  ?=([%o *] jon)  ~
-      %-  drop-pole:unity
-      ((ot-raw wer) p.jon)
-    ::                                                  ::  ++ot-raw:dejs-soft:format
-    ++  ot-raw                                          ::  object as tuple,
-      |*  wer=(pole [cord fist])                        ::  helper
-      |=  jom=(map @t json)
-      ?~  wer  ~
-      =+  ten=(~(get by jom) -<.wer)
-      :-  ?~  ten  ~
-          (->.wer u.ten)
-      ((ot-raw +.wer) jom)
+      |^  |*  wer=(pole [cord fist])                    ::  specific keys,
+          |=  jon=json                                  ::  multi type
+          ?.  ?=([%o *] jon)  ~
+          %-  drop-pole:unity
+          ((raw wer) p.jon)
+      ++  raw
+        |*  wer=(pole [cord fist])
+        |=  jom=(map @t json)
+        ?~  wer  ~
+        =+  ten=(~(get by jom) -<.wer)
+        :-  ?~  ten  ~
+            (->.wer u.ten)
+        ((raw +.wer) jom)
+      --
     ::                                                  ::  ++ou:dejs-soft:format
     ++  ou                                              ::  object as tuple,
-      |*  wer=(pole [cord (unit) fist])                 ::  specific keys,
-      |=  jon=json                                      ::  multi type,
-      ?.  ?=([%o *] jon)  ~                             ::  defaults
-      %-  drop-pole:unity
-      ((ou-raw wer) p.jon)
-    ::                                                  ::  ++ou-raw:dejs-soft:format
-    ++  ou-raw                                          ::  ou helper 
-      |*  wer=(pole [cord (unit) fist])
-      |=  jom=(map @t json)
-      ?~  wer  ~
-      =/  ten  (~(get by jom) -<.wer)
-      :-  ?~  ten  ->-.wer
-          (->+.wer u.ten)
-      ((ou-raw +.wer) jom)
+      |^  |*  wer=(pole [cord (unit) fist])             ::  specific keys,
+          |=  jon=json                                  ::  multi type,
+          ?.  ?=([%o *] jon)  ~                         ::  defaults
+          %-  drop-pole:unity
+          ((raw wer) p.jon)
+      ++  raw
+        |*  wer=(pole [cord (unit) fist])
+        |=  jom=(map @t json)
+        ?~  wer  ~
+        =/  ten  (~(get by jom) -<.wer)
+        :-  ?~  ten  ->-.wer
+            (->+.wer u.ten)
+        ((raw +.wer) jom)
+      --
     ::                                                  ::  ++pe:dejs-soft:format
     ++  pe                                              ::  prefix transformer
       |*  [pre=* wit=fist]
