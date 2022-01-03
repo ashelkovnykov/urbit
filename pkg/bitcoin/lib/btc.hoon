@@ -528,7 +528,7 @@
     (parse-rpc-error jon)
   ^-  response:json-rpc
   =;  dere
-    =+  res=((ar:dejs-soft:format dere) jon)
+    =+  res=((ar:dujs:format dere) jon)
     ?~  res  (need (dere jon))
     [%batch u.res]
   |=  jon=json

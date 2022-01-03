@@ -3659,13 +3659,13 @@
       |=  jon=json
       ?~(jon ~ !!)
     --  ::dejs
-  ::                                                    ::  ++dejs-soft:format
-  ++  dejs-soft                                         ::  json reparse to unit
+  ::                                                    ::  ++dujs:format
+  ++  dujs                                              ::  json reparse to unit
     =>  |%  ++  grub  (unit *)                          ::  result
             ++  fist  $-(json grub)                     ::  reparser instance
         --  ::
     |%
-    ::                                                  ::  ++ar:dejs-soft:format
+    ::                                                  ::  ++ar:dujs:format
     ++  ar                                              ::  array as list,
       |*  wit=fist                                      ::  single type
       |=  jon=json
@@ -3675,11 +3675,11 @@
       |-
       ?~  p.jon  ~
       [i=(wit i.p.jon) t=$(p.jon t.p.jon)]
-    ::                                                  ::  ++as:dejs-soft:format
+    ::                                                  ::  ++as:dujs:format
     ++  as                                              ::  array as set,
       |*  wit=fist                                      ::  single type
       (cu silt (ar wit))
-    ::                                                  ::  ++at:dejs-soft:format
+    ::                                                  ::  ++at:dujs:format
     ++  at                                              ::  array as tuple,
       |^  |*  wil=(pole fist)                           ::  multi type
           |=  jon=json
@@ -3694,53 +3694,53 @@
         :-  ?~(jol ~ (-.wil i.jol))
         ((raw +.wil) ?~(jol ~ t.jol))
       --
-    ::                                                  ::  ++bo:dejs-soft:format
+    ::                                                  ::  ++bo:dujs:format
     ++  bo                                              ::  boolean
       |=  jon=json
       ^-  (unit ?)
       ?.  ?=([%b *] jon)  ~
       [~ u=p.jon]
-    ::                                                  ::  ++ci:dejs-soft:format
+    ::                                                  ::  ++ci:dujs:format
     ++  ci                                              ::  generic transformer
       |*  [poq=gate wit=fist]
       |=  jon=json
       (biff (wit jon) poq)
-    ::                                                  ::  ++cu:dejs-soft:format
+    ::                                                  ::  ++cu:dujs:format
     ++  cu                                              ::  generic transform
       |*  [poq=gate wit=fist]
       |=  jon=json
       (bind (wit jon) poq)
-    ::                                                  ::  ++di:dejs-soft:format
+    ::                                                  ::  ++di:dujs:format
     ++  di                                              ::  millisecond date
       (cu from-unix-ms:chrono:userlib nu)
-    ::                                                  ::  ++du:dejs-soft:format
+    ::                                                  ::  ++du:dujs:format
     ++  du                                              ::  second date
       (cu from-unix:chrono:userlib nu)
-    ::                                                  ::  ++ne:dejs-soft:format
+    ::                                                  ::  ++ne:dujs:format
     ++  ne                                              ::  number as real
       |=  jon=json
       ^-  (unit @rd)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon (cook ryld (cook royl-cell:^so json-rn)))
-    ::                                                  ::  ++no:dejs-soft:format
+    ::                                                  ::  ++no:dujs:format
     ++  no                                              ::  number as cord
       |=  jon=json
       ^-  (unit @t)
       ?.  ?=([%n *] jon)  ~
       (some p.jon)
-    ::                                                  ::  ++ni:dejs-soft:format
+    ::                                                  ::  ++ni:dujs:format
     ++  nu                                              ::  number as integer
       |=  jon=json
       ^-  (unit @ud)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon dem)
-    ::                                                  ::  ++nu:dejs-soft:format
+    ::                                                  ::  ++nu:dujs:format
     ++  nx                                              ::  number as hex
       |=  jon=json
       ^-  (unit @ux)
       ?.  ?=([%n *] jon)  ~
       (rush p.jon hex)
-    ::                                                  ::  ++of:dejs-soft:format
+    ::                                                  ::  ++of:dujs:format
     ++  of                                              ::  simple object XOR
       |*  wer=(pole [cord fist])
       |=  jon=json
@@ -3750,7 +3750,7 @@
       ?:  =(-<.wer p.n.p.jon)
         ((pe -<.wer ->.wer) q.n.p.jon)
       ((of +.wer) jon)
-    ::                                                  ::  ++om:dejs-soft:format
+    ::                                                  ::  ++om:dujs:format
     ++  om                                              ::  object as map,
       |*  wit=fist                                      ::  arbitrary keys,
       |=  jon=json                                      ::  single type
@@ -3758,7 +3758,7 @@
       ?.  ?=([%o *] jon)  ~
       %-  drop-map:unity
       (~(run by p.jon) wit)
-    ::                                                  ::  ++op:dejs-soft:format
+    ::                                                  ::  ++op:dujs:format
     ++  op                                              ::  object as map,
       |*  [fel=rule wit=fist]                           ::  rule-based keys,
       |=  jon=json                                      ::  single type
@@ -3769,7 +3769,7 @@
       %-  ~(run in p.jon)
       |=  [p=cord q=json]
       (both (rush p fel) (wit q))
-    ::                                                  ::  ++ot:dejs-soft:format
+    ::                                                  ::  ++ot:dujs:format
     ++  ot                                              ::  object as tuple,
       |^  |*  wer=(pole [cord fist])                    ::  specific keys,
           |=  jon=json                                  ::  multi type
@@ -3785,7 +3785,7 @@
             (->.wer u.ten)
         ((raw +.wer) jom)
       --
-    ::                                                  ::  ++ou:dejs-soft:format
+    ::                                                  ::  ++ou:dujs:format
     ++  ou                                              ::  object as tuple,
       |^  |*  wer=(pole [cord (unit) fist])             ::  specific keys,
           |=  jon=json                                  ::  multi type,
@@ -3804,40 +3804,40 @@
     ::                                                  ::  ++pa:dejs-stop:format
     ++  pa                                              ::  path
       (su stap)
-    ::                                                  ::  ++pe:dejs-soft:format
+    ::                                                  ::  ++pe:dujs:format
     ++  pe                                              ::  prefix transformer
       |*  [pre=* wit=fist]
       (cu |*(* [pre +<]) wit)
-    ::                                                  ::  ++sa:dejs-soft:format
+    ::                                                  ::  ++sa:dujs:format
     ++  sa                                              ::  string as tape
       |=  jon=json
       ^-  (unit tape)
       ?.  ?=([%s *] jon)  ~
       (some (trip p.jon))
-    ::                                                  ::  ++so:dejs-soft:format
+    ::                                                  ::  ++so:dujs:format
     ++  so                                              ::  string as cord
       |=  jon=json
       ^-  (unit @t)
       ?.  ?=([%s *] jon)  ~
       (some p.jon)
-    ::                                                  ::  ++sp:dejs-soft:format
+    ::                                                  ::  ++sp:dujs:format
     ++  sp                                              ::  string as address
       |=  jon=json
       ^-  (unit @p)
       ?.  ?=([%s *] jon)  ~
       (rush p.jon ;~(pfix sig fed:ag))
-    ::                                                  ::  ++su:dejs-soft:format
+    ::                                                  ::  ++su:dujs:format
     ++  su                                              ::  string parser
       |*  sab=rule
       |=  jon=json
       ^-  (unit _(wonk *sab))
       ?.  ?=([%s *] jon)  ~
       (rush p.jon sab)
-    ::                                                  ::  ++ul:dejs-soft:format
+    ::                                                  ::  ++ul:dujs:format
     ++  ul                                              ::  null
       |=  jon=json
       ?~(jon (some ~) ~)
-    --  ::dejs-soft
+    --  ::dujs
   --
 ::  |cloy: clay helpers
 ::

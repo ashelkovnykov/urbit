@@ -19,7 +19,7 @@
   ++  json
     |=  jon=^json  ^-  sole-action
     %-  need  %.  jon
-    =>  [dejs-soft:format ..sole-action]
+    =>  [dujs:format ..sole-action]
     |^  (ot id+so dat+(fo %ret (of det+change tab+ni ~)) ~)
     ++  fo
       |*  [a=term b=fist]

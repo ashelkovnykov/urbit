@@ -994,15 +994,15 @@
     %-  expect-fail                               ::  crash on decoder mismatch
       |.  ((ou ~[['foo' ~ nu] ['bar' (some 'hey') nu]]) pai:ex)
   ==
-::  dejs-soft - recursive processing of `json` values
+::  dujs - recursive processing of `json` values
 ::
 ::    These functions return units, which will be nil if the input doesn't match
 ::    the defined structure.
 ::
 ::  decoders for nulls, booleans, numbers, and strings
 ::
-++  test-dejs-soft-primitives
-  =,  dejs-soft
+++  test-dujs-primitives
+  =,  dujs
   ;:  weld
     ::  null
     ::
@@ -1074,8 +1074,8 @@
   ==
 ::  decoder transformers
 ::
-++  test-dejs-soft-transformers
-  =,  dejs-soft
+++  test-dujs-transformers
+  =,  dujs
   ;:  weld
     ::  generic transformer (gate returns unit)
     ::
@@ -1125,8 +1125,8 @@
   ==
 ::  transformed primitive decoders
 ::
-++  test-dejs-soft-transformed-primitives
-  =,  dejs-soft
+++  test-dujs-transformed-primitives
+  =,  dujs
   ;:  weld
     ::  date as unix ms timestamp
     ::
@@ -1163,8 +1163,8 @@
   ==
 ::  array decoders
 ::
-++  test-dejs-soft-arrays
-  =,  dejs-soft
+++  test-dujs-arrays
+  =,  dujs
   ;:  weld
     ::  array as list of single type
     ::
@@ -1209,8 +1209,8 @@
   ==
 ::  decoding objects
 ::
-++  test-dejs-soft-objects
-  =,  dejs-soft
+++  test-dujs-objects
+  =,  dujs
   ;:  weld
     ::  single-property object XOR
     ::

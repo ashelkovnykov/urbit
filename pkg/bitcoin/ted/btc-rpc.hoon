@@ -52,17 +52,16 @@
   (to-script-pubkey:adr:bc a)
 ::
 ++  parse-json-rpc
+  =,  dujs:format
   |=  =json
   ^-  (unit response:rpc)
   =/  res=(unit [@t ^json])
     %.  json
-    =,  dejs-soft:format
     (ot id+so result+some ~)
   ?^  res  `[%result u.res]
   ~|  parse-one-response=json
   :+  ~  %error  %-  need
   %.  json
-  =,  dejs-soft:format
   (ot id+so error+(ot code+no message+so ~) ~)
 ::
 ++  parse-response

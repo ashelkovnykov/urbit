@@ -18,7 +18,7 @@
           source+source
           sink+sink
         ==
-    =,  dejs-soft:format
+    =,  dujs:format
     |%
     ++  source
       ^-  $-(^^json (unit source:lens))

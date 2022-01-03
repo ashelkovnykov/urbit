@@ -100,7 +100,7 @@
     ?~  jon
       (pure:m ~)
     =/  array=(unit (list response:rpc))
-      ((ar:dejs-soft:format parse-one-response) u.jon)
+      ((ar:dujs:format parse-one-response) u.jon)
     ?~  array
       (strand-fail:strandio %rpc-result-incomplete-batch >u.jon< ~)
     (pure:m array)
@@ -111,14 +111,14 @@
     ?.  &(?=([%o *] json) (~(has by p.json) 'error'))
       =/  res=(unit [@t ^json])
         %.  json
-        =,  dejs-soft:format
+        =,  dujs:format
         (ot id+so result+some ~)
       ?~  res  ~
       `[%result u.res]
     ~|  parse-one-response=json
     =/  error=(unit [id=@t ^json code=@ta mssg=@t])
       %.  json
-      =,  dejs-soft:format
+      =,  dujs:format
       ::  A 'result' member is present in the error
       ::  response when using ganache, even though
       ::  that goes against the JSON-RPC spec
@@ -208,7 +208,7 @@
     ^-  (unit [@ @ @])
     ~|  json
     %.  json
-    =,  dejs-soft:format
+    =,  dujs:format
     %-  ot
     :~  hash+parse-hex
         number+parse-hex

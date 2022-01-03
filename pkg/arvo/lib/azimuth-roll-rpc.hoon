@@ -47,7 +47,7 @@
       ;~(plug (star low) (star name))
     ::
     ++  from-json
-      =,  dejs-soft:format
+      =,  dujs:format
       |%
       ++  data
         |%

@@ -87,7 +87,7 @@
   ++  get-param-obj-maybe
     |=  [req=@t param=@t]
     ^-  (unit @ud)
-    =,  dejs-soft:format
+    =,  dujs:format
     =/  array
       %.  (get-single-req req)
       (ot params+(ar (ot param^so ~)) ~)

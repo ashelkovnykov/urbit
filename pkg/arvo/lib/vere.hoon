@@ -99,7 +99,7 @@
     =,  abi:ethereum
     =,  rpc:ethereum
     =,  azimuth
-    =,  dejs-soft:format
+    =,  dujs:format
     |%
     ::  +czar:take:dawn: parse galaxy table
     ::
@@ -111,7 +111,7 @@
         ~&([%czar-take-dawn %invalid-json] ~)
       =/  res=(unit (list [@t @ud @ud @]))
         %.  u.jon
-        =,  dejs-soft:format
+        =,  dujs:format
         =-  (ar (ot id+so result+(ot network+- ~) ~))
         %-  ot
         :~  :-  'rift'  (su dim:ag)
@@ -160,7 +160,7 @@
               [=rift =life =pass sponsor=[? ship]]
           ==
       %.  u.jon
-      =,  dejs-soft:format
+      =,  dujs:format
       =-  (ot result+- ~)
       %-  ot
       :~  :-  'ownership'

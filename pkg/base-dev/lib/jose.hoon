@@ -125,7 +125,7 @@
   ::  |de:jwk: decoding of json cryptographic keys
   ::
   ++  de
-    =,  dejs-soft:format
+    =,  dujs:format
     =>  |%
         ::  +numb:de:jwk: parse base64-url big-endian number
         ::

@@ -25,8 +25,8 @@
   [%& %oauth-json "json credentials: "]
 %+  parse  apex:de-json
 |=  jon=json
-=+  ~|  bad-json+jon
-    =-  `[cid=@t cis=@t]`(need (rep jon))
-    rep=(ot web+(ot 'client_id'^so 'client_secret'^so ~) ~):dejs-soft:format
+=/  [cid=@t cis=@t]
+  ~|  bad-json+jon
+  (ot web+(ot 'client_id'^so 'client_secret'^so ~) ~):dejs:format
 %+  produce  %write-sec-atom    :: XX typed pair
 [hot (of-wain:format cid cis ~)]

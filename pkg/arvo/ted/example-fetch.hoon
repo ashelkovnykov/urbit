@@ -99,7 +99,7 @@
   %-  (slog leaf+"fetching item #{+>:(scow %ui i.top-stories)}" ~)
   ;<  =story-info=json  bind:m  (fetch-json (item:urls i.top-stories))
   =/  story-comments=(unit (list @ud))
-    ((ot kids+(ar ni) ~):dejs-soft:format story-info-json)
+    ((ot kids+(ar ni) ~):dujs:format story-info-json)
   ::
   ::  If no comments, say so
   ::
@@ -111,7 +111,7 @@
   ::
   ;<  =comment-info=json  bind:m  (fetch-json (item:urls i.u.story-comments))
   =/  comment-text=(unit tape)
-    ((ot text+sa ~):dejs-soft:format comment-info-json)
+    ((ot text+sa ~):dujs:format comment-info-json)
   ::
   ::  If no text (eg comment deleted), record that
   ::

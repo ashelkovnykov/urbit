@@ -23,7 +23,7 @@
       (need (de-json q:u.r.hit))
     fail+hit
   ++  json                                              ::  from json
-    =,  dejs-soft:format
+    =,  dujs:format
     |=  a=json
     ^-  response
     =;  dere

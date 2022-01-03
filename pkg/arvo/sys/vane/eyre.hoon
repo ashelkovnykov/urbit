@@ -209,7 +209,7 @@
   ^-  (unit (list channel-request))
   ::  parse top
   ::
-  =,  dejs-soft:format
+  =,  dujs:format
   =-  ((ar -) request-list)
   ::
   |=  item=json

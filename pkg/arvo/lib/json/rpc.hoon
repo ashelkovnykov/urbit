@@ -67,7 +67,7 @@
   ^-  (unit batch-request)
   ?~  body  ~
   ?~  jon=(de-json:html q.u.body)  ~
-  =,  dejs-soft:format
+  =,  dujs:format
   =;  reparser
     ?:  ?=([%a *] u.jon)
       (bind ((ar reparser) u.jon) (lead %a))

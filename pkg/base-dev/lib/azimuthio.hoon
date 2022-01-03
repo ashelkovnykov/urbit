@@ -65,7 +65,7 @@
     =/  jon=(unit json)  (de-json:html body)
     ?~  jon
       (pure:m ~)
-    =,  dejs-soft:format
+    =,  dujs:format
     =/  array=(unit (list response:rpc))
       ((ar parse-one-response) u.jon)
     ?~  array
@@ -81,17 +81,16 @@
     ::  (pure:m `[%batch u.array])
   ::
   ++  parse-one-response
+    =,  dujs:format
     |=  =json
     ^-  (unit response:rpc)
     =/  res=(unit [@t ^json])
       %.  json
-      =,  dejs-soft:format
       (ot id+so result+some ~)
     ?^  res  `[%result u.res]
     ~|  parse-one-response=json
     :+  ~  %error  %-  need
     %.  json
-    =,  dejs-soft:format
     (ot id+so error+(ot code+no message+so ~) ~)
   --
 ::

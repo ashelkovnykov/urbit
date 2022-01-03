@@ -887,7 +887,7 @@
   ++  parse-event-log
     |=  log=json
     ^-  event-log
-    :-  =,  dejs-soft:format
+    :-  =,  dujs:format
         %.  log
         %+  pe  ~
         %-  ou
