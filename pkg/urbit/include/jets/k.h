@@ -161,3 +161,13 @@
   */
     u3_noun
     u3kfu_repo(u3_noun, u3_noun);
+
+  /* u3ke_dejs_ne: parse real number from string, bail on error.
+  */
+    u3_atom
+    u3ke_dejs_ne(u3_noun);
+
+  /* u3ke_dujs_ne: parse real number from string, null on error.
+  */
+    u3_weak
+    u3ke_dujs_ne(u3_noun);

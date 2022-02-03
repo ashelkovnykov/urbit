@@ -48,6 +48,36 @@ static c3_c* _140_hex_mimes_ha[] = {
   0
 };
 
+static u3j_harm _140_hex_dujs_ne_a[] = {{".2", u3we_dujs_ne}, {}};
+static c3_c* _140_hex_dujs_ne_ha[] = {
+  "", // TODO
+  0
+};
+
+static u3j_core _140_hex_dujs_d[] =
+  { { "ne", 7, 0, _140_hex_dujs_ne_a, _140_hex_dujs_ne_ha },
+    {}
+  };
+static c3_c* _140_hex_dujs_ha[] = {
+  "", // TODO
+  0
+};
+
+static u3j_harm _140_hex_dejs_ne_a[] = {{".2", u3we_dejs_ne}, {}};
+static c3_c* _140_hex_dejs_ne_ha[] = {
+  "", // TODO
+  0
+};
+
+static u3j_core _140_hex_dejs_d[] =
+  { { "ne", 7, 0, _140_hex_dejs_ne_a, _140_hex_dejs_ne_ha },
+    {}
+  };
+static c3_c* _140_hex_dejs_ha[] = {
+  "", // TODO
+  0
+};
+
 static u3j_harm _140_hex_aes_ecba_en_a[] = {{".2", u3wea_ecba_en}, {}};
 static c3_c* _140_hex_aes_ecba_en_ha[] = {
   "d7674ad72666a787580c52785c5d4d37ca462ba05e904efbeded5d1bd8b02b4b",
@@ -488,6 +518,8 @@ static u3j_core _140_hex_d[] =
   { "ripemd", 31, 0, _140_hex_ripe_d,  _140_hex_ripe_ha  },
   { "scr",    31, 0, _140_hex_scr_d,   _140_hex_scr_ha   },
   { "secp",    6, 0, _140_hex_secp_d,  _140_hex_secp_ha },
+  { "dejs",   63, 0, _140_hex_dejs_d,  _140_hex_dejs_ha },
+  { "dujs",   63, 0, _140_hex_dujs_d,  _140_hex_dujs_ha },
   { "mimes",  31, 0, _140_hex_mimes_d, _140_hex_mimes_ha  },
   {}
 };

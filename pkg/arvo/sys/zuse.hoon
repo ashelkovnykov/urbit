@@ -3470,10 +3470,10 @@
     --  ::enjs
   ::                                                    ::  ++dejs:format
   ++  dejs                                              ::  json reparser
-    =>  |%  ++  grub  *                                 ::  result
-            ++  fist  $-(json grub)                     ::  reparser instance
-        --  ::
+    ~%  %dejs  ..part  ~
     |%
+    +$  grub  *                                         ::  result
+    +$  fist  $-(json grub)                             ::  reparser instance
     ::                                                  ::  ++ar:dejs:format
     ++  ar                                              ::  array as list,
       |*  wit=fist                                      ::  single type
@@ -3528,6 +3528,7 @@
       ?~(jon ~ (some (wit jon)))
     ::                                                  ::  ++ne:dejs:format
     ++  ne                                              ::  number as real
+      ~/  %ne
       |=  jon=json
       ^-  @rd
       ?>  ?=([%n *] jon)
@@ -3661,10 +3662,10 @@
     --  ::dejs
   ::                                                    ::  ++dujs:format
   ++  dujs                                              ::  json reparse to unit
-    =>  |%  ++  grub  (unit *)                          ::  result
-            ++  fist  $-(json grub)                     ::  reparser instance
-        --  ::
+    ~%  %dujs  ..part  ~
     |%
+    +$  grub  (unit *)                                  ::  result
+    +$  fist  $-(json grub)                             ::  reparser instance
     ::                                                  ::  ++ar:dujs:format
     ++  ar                                              ::  array as list,
       |*  wit=fist                                      ::  single type
@@ -3718,6 +3719,7 @@
       (cu from-unix:chrono:userlib nu)
     ::                                                  ::  ++ne:dujs:format
     ++  ne                                              ::  number as real
+      ~/  %ne
       |=  jon=json
       ^-  (unit @rd)
       ?.  ?=([%n *] jon)  ~
