@@ -3356,10 +3356,7 @@
             (mask "eE")
             ;~  plug
               ;~(pose (cold | hep) (cold & lus) (easy &))
-              ;~  pose
-                ;~(pfix (plus (just '0')) dim:ag)
-                dim:ag
-              ==
+              dum:ag
             ==
           ==
           (easy [& 0])
