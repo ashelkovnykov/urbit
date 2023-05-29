@@ -3316,30 +3316,30 @@
   |%
   ::  0 ending a line (invalid @t) is not preserved     ::  ++to-wain:format
   ++  to-wain                                           ::  cord to line list
-    ~%  %leer  ..part  ~
-    |=  txt=cord
-    ^-  wain
+    ~%  %leer  ..part  ~                :: register this core for jetting with name 'leer', parent jetted core at wing '..path', and no named Nock formulas which act on this core
+    |=  txt=cord                        :: take string as input with name "txt"
+    ^-  wain                            :: return wain
     ?~  txt  ~
-    =/  len=@  (met 3 txt)
-    =/  cut  =+(cut -(a 3, c 1, d txt))
-    =/  sub  sub
-    =|  [i=@ out=wain]
-    |-  ^+  out
-    =+  |-  ^-  j=@
+    =/  len=@  (met 3 txt)              :: save length of "txt" in characters as "len"
+    =/  cut  =+(cut -(a 3, c 1, d txt)) :: save "cut" as a version of the STL function 'cut', with default settings '(cut 3 [0 1] txt)' (take first letter of "txt")
+    =/  sub  sub                        :: save "sub" as 'sub'
+    =|  [i=@ out=wain]                  :: save variables "i" and "out" with default values '0' and '~' respectively
+    |-  ^+  out                         :: create a loop, casting the result of which as a wain
+    =+  |-  ^-  j=@                     :: save "j" to the subject with the pos of the end of "txt" or the next newline
         ?:  ?|  =(i len)
                 =(10 (cut(b i)))
             ==
           i
         $(i +(i))
-    =.  out  :_  out
+    =.  out  :_  out                          :: cut the text from index "i" to "j" in "txt" and prepend it to "out"
       (cut(b i, c (sub j i)))
-    ?:  =(j len)
-      (flop out)
-    $(i +(j))
+    ?:  =(j len)                              :: if "j" has reached the end of "txt"
+      (flop out)                              :: then return "out" in reverse order
+    $(i +(j))                                 :: otherwise, repeat the loop with "i" now starting at "j"
   ::                                                    ::  ++of-wain:format
   ++  of-wain                                           ::  line list to cord
-    |=  tez=wain  ^-  cord
-    (rap 3 (join '\0a' tez))
+    |=  tez=wain  ^-  cord                    :: gate, takes a wain as input, produces a cord
+    (rap 3 (join '\0a' tez))                  :: bit-wise concat the list of cords, with newline characters inserted between cords
   ::                                                    ::  ++of-wall:format
   ++  of-wall                                           ::  line list to tape
     |=  a=wall  ^-  tape
@@ -3404,7 +3404,7 @@
     ++  ship                                            ::  string from ship
       |=  a=^ship
       ^-  json
-      [%n (rap 3 '"' (rsh [3 1] (scot %p a)) '"' ~)]
+      [%n (rap 3 '"' (rsh [3 1] (scot %p a)) '"' ~)]  :: convert point to planet name cord, right-shift to remove '~', concat with double-quotes
     ::                                                  ::  ++numb:enjs:format
     ++  numb                                            ::  number from unsigned
       |=  a=@u
@@ -3435,134 +3435,131 @@
       [%a (turn (wash [0 80] a) tape)]
     --  ::enjs
   ::                                                    ::  ++dejs:format
-  ++  dejs                                              ::  json reparser
-    =>  |%  ++  grub  *                                 ::  result
-            ++  fist  $-(json grub)                     ::  reparser instance
+  ++  dejs                                              :: JSON reparser
+    =>  |%  ++  grub  *                                 ::
+            ++  fist  $-(json grub)                     :: fist = function that takes a json and returns anything
         --  ::
     |%
-    ::                                                  ::  ++ar:dejs:format
-    ++  ar                                              ::  array as list
-      |*  wit=fist
-      |=  jon=json  ^-  (list _(wit *json))
-      ?>  ?=([%a *] jon)
-      (turn p.jon wit)
-    ::                                                  ::  ++as:dejs:format
+    ::
+    ++  ar                                              :: array as list
+      |*  wit=fist          :: wet gate taking fist as input
+      |=  jon=json  ^-  (list _(wit *json))    :: take JSON as input, return a list of whatever type the input fist returns
+      ?>  ?=([%a *] jon)          :: assert that input JSON is array
+      (turn p.jon wit)          :: apply .wit to every item in the JSON array, and return the result
+    ::
     ++  as                                              ::  array as set
-      |*  a=fist
-      (cu ~(gas in *(set _$:a)) (ar a))
-    ::                                                  ::  ++at:dejs:format
+      |*  a=fist            :: wet gate taking fist as input
+      %+  cu            :: transform array using gate
+        ~(gas in *(set _$:a))        ::   - call .gas arm in door .in for the set produce from the bunt value of a set of the default output of .a
+        (ar a)            ::   - JSON array converted to list using ar
+    ::
     ++  at                                              ::  array as tuple
-      |*  wil=(pole fist)
-      |=  jon=json
-      ?>  ?=([%a *] jon)
-      ((at-raw wil) p.jon)
-    ::                                                  ::  ++at-raw:dejs:format
+      |*  wil=(pole fist)          :: wet gate taking a faceless list of fist
+      |=  jon=json          :: produce a gate taking JSON as input
+      ?>  ?=([%a *] jon)          :: assert that the JSON is an array
+      ((at-raw wil) p.jon)        ::
+    ::
     ++  at-raw                                          ::  array as tuple
-      |*  wil=(pole fist)
-      |=  jol=(list json)
-      ?~  jol  !!
-      ?-    wil                                         :: mint-vain on empty
-          :: [wit=* t=*]
-          [* t=*]
-        =>  .(wil [wit *]=wil)
-        ?~  t.wil  ?^(t.jol !! (wit.wil i.jol))
-        [(wit.wil i.jol) ((at-raw t.wil) t.jol)]
+      |*  wil=(pole fist)          :: wet gate taking a faceless list of fist
+      |=  jol=(list json)          :: produce a gate taking a list of JSON as input
+      ?~  jol  !!            :: crash if the list of JSON is null
+      ?-    wil            ::
+        [* t=*]            :: if wil is non-empty, rename tail of wil to 't'
+        =>  .(wil [wit *]=wil)        :: rename wil to have faces 'wit' and 't'
+          ?~  t.wil          :: if tail of wil is null...
+            ?^(t.jol !! (wit.wil i.jol))      :: crash if tail of JSON input is a cell, otherwise call head of .wil on head of JSON
+            [(wit.wil i.jol) ((at-raw t.wil) t.jol)]  :: if tail of .wil is not null, return tuple of '[
       ==
-    ::                                                  ::  ++bo:dejs:format
+    ::
     ++  bo                                              ::  boolean
-      |=(jon=json ?>(?=([%b *] jon) p.jon))
-    ::                                                  ::  ++bu:dejs:format
+      |=(jon=json ?>(?=([%b *] jon) p.jon))    :: assert that input JSON is boolean and return its value
+    ::
     ++  bu                                              ::  boolean not
-      |=(jon=json ?>(?=([%b *] jon) !p.jon))
-    ::                                                  ::  ++ci:dejs:format
+      |=(jon=json ?>(?=([%b *] jon) !p.jon))    :: assert that input JSON is boolean and return the opposite of its value
+    ::
     ++  ci                                              ::  maybe transform
-      |*  [poq=gate wit=fist]
-      |=  jon=json
-      (need (poq (wit jon)))
-    ::                                                  ::  ++cu:dejs:format
+      |*  [poq=gate wit=fist]        :: wet gate taking gate and fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      (need (poq (wit jon)))        :: parse JSON with .wit, then transform result with .poq, which returns a unit, and pull the value out of the unit
+    ::
     ++  cu                                              ::  transform
-      |*  [poq=gate wit=fist]
-      |=  jon=json
-      (poq (wit jon))
-    ::                                                  ::  ++di:dejs:format
+      |*  [poq=gate wit=fist]        :: wet gate taking gate and fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      (poq (wit jon))          :: parse JSON with .wit then transform result with .poq
+    ::
     ++  di                                              ::  millisecond date
-      (cu from-unix-ms:chrono:userlib ni)
-    ::                                                  ::  ++du:dejs:format
+      (cu from-unix-ms:chrono:userlib ni)      :: parse JSON as an integer, then convert the result to a @da
+    ::
     ++  du                                              ::  second date
-      (cu from-unix:chrono:userlib ni)
-    ::                                                  ::  ++mu:dejs:format
+      (cu from-unix:chrono:userlib ni)      :: parse JSON as an integer, then convert the result to a @da
+    ::
     ++  mu                                              ::  true unit
-      |*  wit=fist
-      |=  jon=json
-      ?~(jon ~ (some (wit jon)))
-    ::                                                  ::  ++ne:dejs:format
+      |*  wit=fist          :: wet gate taking fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?~(jon ~ (some (wit jon)))        :: produce '~' if JSON is null, otherwise produce a unit of JSON parsed with .wit
+    ::
     ++  ne                                              ::  number as real
-      |=  jon=json
-      ^-  @rd
-      ?>  ?=([%n *] jon)
-      (rash p.jon (cook ryld (cook royl-cell:^so json-rn)))
-    ::                                                  ::  ++ni:dejs:format
+      |=  jon=json          :: take JSON as input
+      ^-  @rd            :: return parsed real number
+      ?>  ?=([%n *] jon)          :: assert JSON is number
+      %-  rash            :: parse or crash
+        p.jon            :: JSON to parse
+        (cook ryld (cook royl-cell:^so json-rn)))    :: parse a JSON real number, then convert it to a Hoon decimal float, then convert it to a double
+    ::
     ++  ni                                              ::  number as integer
-      |=  jon=json
-      ?>  ?=([%n *] jon)
-      (rash p.jon dem)
-    ::                                                  ::  ++ns:dejs:format
-    ++  ns                                              ::  number as signed
-      |=  jon=json
-      ^-  @s
-      ?>  ?=([%n *] jon)
-      %+  rash  p.jon
-      %+  cook  new:si
-      ;~(plug ;~(pose (cold %| (jest '-')) (easy %&)) dem)
-    ::                                                  ::  ++no:dejs:format
+      |=  jon=json          :: take JSON as input
+      ?>  ?=([%n *] jon)          :: assert JSON is number
+      (rash p.jon dem)          :: parse a decimal integer
+    ::
     ++  no                                              ::  number as cord
-      |=(jon=json ?>(?=([%n *] jon) p.jon))
-    ::                                                  ::  ++nu:dejs:format
+      |=(jon=json ?>(?=([%n *] jon) p.jon))    :: take JSON as input, assert JSON is number, return int
+    ::
     ++  nu                                              ::  parse number as hex
-      |=  jon=json
-      ?>  ?=([%s *] jon)
-      (rash p.jon hex)
-    ::                                                  ::  ++of:dejs:format
+      |=  jon=json          :: take JSON as input
+      ?>  ?=([%s *] jon)          :: assert JSON is a number
+      (rash p.jon hex)          :: parse a hex integer
+    ::
     ++  of                                              ::  object as frond
-      |*  wer=(pole [cord fist])
-      |=  jon=json
-      ?>  ?=([%o [@ *] ~ ~] jon)
+      |*  wer=(pole [cord fist])        :: wet gate with faceless list of '[cord fist]' pairs
+      |=  jon=json          :: produce gate taking JSON as input
+      ?>  ?=([%o [@ *] ~ ~] jon)        :: assert JSON is object with only one item
       |-
       ?-    wer                                         :: mint-vain on empty
           :: [[key=@t wit=*] t=*]
           [[key=@t *] t=*]
-        =>  .(wer [[* wit] *]=wer)
-        ?:  =(key.wer p.n.p.jon)
-          [key.wer ~|(key+key.wer (wit.wer q.n.p.jon))]
-        ?~  t.wer  ~|(bad-key+p.n.p.jon !!)
-        ((of t.wer) jon)
+        =>  .(wer [[* wit] *]=wer)      :: rename .wer to have faces [[key wit] t]
+        ?:  =(key.wer p.n.p.jon)        :: if .key matches key of tree node of map...
+          [key.wer ~|(key+key.wer (wit.wer q.n.p.jon))]  :: return value of tree node of map parsed with .wit
+        ?~  t.wer  ~|(bad-key+p.n.p.jon !!)    :: otherwise, if tail is null crash
+        ((of t.wer) jon)          :: otherwise, try parsing json with next fist in wer
       ==
-    ::                                                  ::  ++ot:dejs:format
+    ::
     ++  ot                                              ::  object as tuple
-      |*  wer=(pole [cord fist])
-      |=  jon=json
-      ?>  ?=([%o *] jon)
-      ((ot-raw wer) p.jon)
-    ::                                                  ::  ++ot-raw:dejs:format
+      |*  wer=(pole [cord fist])        :: wet gate with faceless list of '[cord fist]' pairs
+      |=  jon=json          :: produce gate taking JSON as input
+      ?>  ?=([%o *] jon)          :: assert JSON is object
+      ((ot-raw wer) p.jon)        ::
+    ::
     ++  ot-raw                                          ::  object as tuple
-      |*  wer=(pole [cord fist])
-      |=  jom=(map @t json)
+      |*  wer=(pole [cord fist])        :: wet gate with faceless list of '[cord fist]' pairs
+      |=  jom=(map @t json)        :: produce gate taking map of cord to JSON as input
       ?-    wer                                         :: mint-vain on empty
           :: [[key=@t wit=*] t=*]
           [[key=@t *] t=*]
-        =>  .(wer [[* wit] *]=wer)
-        =/  ten  ~|(key+key.wer (wit.wer (~(got by jom) key.wer)))
-        ?~(t.wer ten [ten ((ot-raw t.wer) jom)])
+        =>  .(wer [[* wit] *]=wer)      :: rename .wer to have faces [[key wit] t]
+        =/  ten
+          ~|(key+key.wer (wit.wer (~(got by jom) key.wer))) :: parse value with key .key in .jom with fist and prepend to subject
+        ?~(t.wer ten [ten ((ot-raw t.wer) jom)])    :: if tail is null, return .ten, otherwise keep parsing
       ==
     ::
     ++  ou                                              ::  object of units
-      |*  wer=(pole [cord fist])
+      |*  wer=(pole [cord fist])        ::
       |=  jon=json
       ?>  ?=([%o *] jon)
       ((ou-raw wer) p.jon)
-    ::                                                  ::  ++ou-raw:dejs:format
+    ::
     ++  ou-raw                                          ::  object of units
-      |*  wer=(pole [cord fist])
+      |*  wer=(pole [cord fist])        :: same as ot, but with fists that produce units
       |=  jom=(map @t json)
       ?-    wer                                         :: mint-vain on empty
           :: [[key=@t wit=*] t=*]
@@ -3571,289 +3568,285 @@
         =/  ten  ~|(key+key.wer (wit.wer (~(get by jom) key.wer)))
         ?~(t.wer ten [ten ((ou-raw t.wer) jom)])
       ==
-    ::                                                  ::  ++oj:dejs:format
+    ::
     ++  oj                                              ::  object as jug
-      |*  =fist
+      |*  =fist            ::
       ^-  $-(json (jug cord _(fist *json)))
       (om (as fist))
-    ::                                                  ::  ++om:dejs:format
+    ::
     ++  om                                              ::  object as map
-      |*  wit=fist
-      |=  jon=json
-      ?>  ?=([%o *] jon)
-      (~(run by p.jon) wit)
-    ::                                                  ::  ++op:dejs:format
+      |*  wit=fist          :: wet gate with fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?>  ?=([%o *] jon)          :: assert JSON is object
+      (~(run by p.jon) wit)        :: map .wit over each value in object map and return result
+    ::
     ++  op                                              ::  parse keys of map
-      |*  [fel=rule wit=fist]
-      |=  jon=json  ^-  (map _(wonk *fel) _*wit)
-      =/  jom  ((om wit) jon)
-      %-  malt
-      %+  turn  ~(tap by jom)
-      |*  [a=cord b=*]
-      =>  .(+< [a b]=+<)
-      [(rash a fel) b]
-    ::                                                  ::  ++pa:dejs:format
+      |*  [fel=rule wit=fist]        :: wet gate taking rule and fist as input
+      |=  jon=json  ^-  (map _(wonk *fel) _*wit)    :: produce gate taking JSON as input and producing map of return type of rule to return type of fist
+      =/  jom  ((om wit) jon)        :: parse each item in object map using .wit
+      %-  malt            :: create map from list
+      %+  turn  ~(tap by jom)        :: apply gate to list of pairs in parsed object map
+      |*  [a=cord b=*]          :: gate which takes cord (object key) and something (object value)
+      =>  .(+< [a b]=+<)          :: take current subject and add faces '[a b]' to it ???
+      [(rash a fel) b]          :: create pair of [.a (object key) parsed by rule .fel, .b (object value)]
+    ::
     ++  pa                                              ::  string as path
-      (su stap)
-    ::                                                  ::  ++pe:dejs:format
+      (su stap)            :: use 'su' to parse string as path
+    ::
     ++  pe                                              ::  prefix
-      |*  [pre=* wit=fist]
-      (cu |*(* [pre +<]) wit)
-    ::                                                  ::  ++sa:dejs:format
+      |*  [pre=* wit=fist]        :: wet gate taking an atom and a fist as input
+      (cu |*(* [pre +<]) wit)        :: transform result of parsing with fist .wit by prepending input atom .pre
+    ::
     ++  sa                                              ::  string as tape
-      |=(jon=json ?>(?=([%s *] jon) (trip p.jon)))
-    ::                                                  ::  ++sd:dejs:format
+      |=(jon=json ?>(?=([%s *] jon) (trip p.jon)))  :: take JSON as input, assert input is string, convert string as cord to tape
+    ::
     ++  sd                                              ::  string @ud as date
-      |=  jon=json
-      ^-  @da
-      ?>  ?=(%s -.jon)
-      `@da`(rash p.jon dem:ag)
-    ::                                                  ::  ++se:dejs:format
+      |=  jon=json          :: take JSON as input
+      ^-  @da            :: return Hoon date
+      ?>  ?=(%s -.jon)          :: assert JSON is string
+      `@da`(rash p.jon dem:ag)        :: parse string as int and convert to date
+    ::
     ++  se                                              ::  string as aura
-      |=  aur=@tas
-      |=  jon=json
-      ?>(?=([%s *] jon) (slav aur p.jon))
-    ::                                                  ::  ++so:dejs:format
+      |=  aur=@tas          :: take term as input
+      |=  jon=json          :: produce gate which takes JSON as input
+      ?>(?=([%s *] jon) (slav aur p.jon))      :: assert JSON is string and parse string as aura .aur
+    ::
     ++  so                                              ::  string as cord
-      |=(jon=json ?>(?=([%s *] jon) p.jon))
-    ::                                                  ::  ++su:dejs:format
+      |=(jon=json ?>(?=([%s *] jon) p.jon))    :: take JSON as input, assert JSON is string, return string
+    ::
     ++  su                                              ::  parse string
-      |*  sab=rule
-      |=  jon=json  ^+  (wonk *sab)
-      ?>  ?=([%s *] jon)
-      (rash p.jon sab)
-    ::                                                  ::  ++uf:dejs:format
+      |*  sab=rule          :: wet gate taking a rule as input
+      |=  jon=json  ^+  (wonk *sab)      :: produce gate which takes JSON as input and produces whatever type .sab parses
+      ?>  ?=([%s *] jon)          :: assert JSON is string
+      (rash p.jon sab)          :: parse JSON with rule .sab
+    ::
     ++  uf                                              ::  unit fall
-      |*  [def=* wit=fist]
-      |=  jon=(unit json)
-      ?~(jon def (wit u.jon))
-    ::                                                  ::  ++un:dejs:format
+      |*  [def=* wit=fist]        :: wet gate taking atom and fist as input
+      |=  jon=(unit json)          :: produce gate taking unit of JSON as input
+      ?~(jon def (wit u.jon))        :: if JSON unit null, produce default .def, otherwise parse JSON using fist .wit
+    ::
     ++  un                                              ::  unit need
-      |*  wit=fist
-      |=  jon=(unit json)
-      (wit (need jon))
-    ::                                                  ::  ++ul:dejs:format
+      |*  wit=fist          :: wet gate taking fist as input
+      |=  jon=(unit json)          :: produce gate taking unit of JSON as input
+      (wit (need jon))          :: parse value of JSON unit using fist .wit
+    ::
     ++  ul                                              ::  null
-      |=(jon=json ?~(jon ~ !!))
+      |=(jon=json ?~(jon ~ !!))        :: take JSON as input, return if null, crash otherwise
     ::
     ++  za                                              ::  full unit pole
-      |*  pod=(pole (unit))
-      ?~  pod  &
-      ?~  -.pod  |
-      (za +.pod)
+      |*  pod=(pole (unit))        :: wet gate taking faceless list of units as input
+      ?~  pod  &            :: if list is null, return true
+      ?~  -.pod  |          :: if head of list is null, return false
+      (za +.pod)            :: otherwise, check remainder of list (basically check that there are no null entries in pole)
     ::
     ++  zl                                              ::  collapse unit list
-      |*  lut=(list (unit))
-      ?.  |-  ^-  ?
+      |*  lut=(list (unit))        :: wet gate taking list of units as input
+      ?.  |-  ^-  ?          :: if list has any null units in it...
           ?~(lut & ?~(i.lut | $(lut t.lut)))
-        ~
-      %-  some
+        ~              :: return null
+      %-  some            :: otherwise, return unit of ...
       |-
       ?~  lut  ~
-      [i=u:+.i.lut t=$(lut t.lut)]
+      [i=u:+.i.lut t=$(lut t.lut)]      :: ... list with each value pulled out of the unit
     ::
     ++  zp                                              ::  unit tuple
-      |*  but=(pole (unit))
-      ?~  but  !!
-      ?~  +.but
-        u:->.but
-      [u:->.but (zp +.but)]
+      |*  but=(pole (unit))        :: wet gate taking faceless list of units as input
+      ?~  but  !!            :: if list is null, crash
+      ?~  +.but            :: if tail of list is null...
+        u:->.but            :: return item in unit
+      [u:->.but (zp +.but)]        :: otherwise, pull the item out of the unit and recurse
     ::
     ++  zm                                              ::  collapse unit map
-      |*  lum=(map term (unit))
-      ?:  (~(rep by lum) |=([[@ a=(unit)] b=_|] |(b ?=(~ a))))
-        ~
-      (some (~(run by lum) need))
-    --  ::dejs
+      |*  lum=(map term (unit))        :: wet gate taking a map of term to unit
+      ?:  (~(rep by lum) |=([[@ a=(unit)] b=_|] |(b ?=(~ a)))) :: if any unit in map is null...
+        ~              :: return null
+      (some (~(run by lum) need))        :: otherwise, return unit of map with each of the values pulled out of the unit
+  --
   ::                                                    ::  ++dejs-soft:format
   ++  dejs-soft                                         ::  json reparse to unit
     =,  unity
     =>  |%  ++  grub  (unit *)                          ::  result
             ++  fist  $-(json grub)                     ::  reparser instance
         --  ::
-    ::
-    ::  XX: this is old code that replaced a rewritten dejs.
-    ::      the rewritten dejs rest-looped with ++redo.  the old
-    ::      code is still in revision control -- revise and replace.
-    ::
     |%
     ++  ar                                              ::  array as list
-      |*  wit=fist
-      |=  jon=json
-      ?.  ?=([%a *] jon)  ~
-      %-  zl
+      |*  wit=fist          :: wet gate taking fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%a *] jon)  ~        :: return null if JSON is not an array
+      %-  zl            :: call arm to collapse list of units on...
       |-
       ?~  p.jon  ~
-      [i=(wit i.p.jon) t=$(p.jon t.p.jon)]
+      [i=(wit i.p.jon) t=$(p.jon t.p.jon)]    :: ... list made by parsing each item in array with .wit
     ::
     ++  at                                              ::  array as tuple
-      |*  wil=(pole fist)
-      |=  jon=json
-      ?.  ?=([%a *] jon)  ~
-      ?.  =((lent wil) (lent p.jon))  ~
-      =+  raw=((at-raw wil) p.jon)
-      ?.((za raw) ~ (some (zp raw)))
+      |*  wil=(pole fist)          :: wet gate taking a faceless list of fists
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%a *] jon)  ~        :: return null if JSON is not an array
+      ?.  =((lent wil) (lent p.jon))  ~      :: return null if length of fist list doesn't match length of array
+      =+  raw=((at-raw wil) p.jon)      :: Use 'at-raw' to parse JSON array using .wil
+      ?.((za raw) ~ (some (zp raw)))      :: return null if any of the array entries failed to parse, otherwise collapse units and return unit of resulting list
     ::
     ++  at-raw                                          ::  array as tuple
-      |*  wil=(pole fist)
-      |=  jol=(list json)
-      ?~  wil  ~
-      :-  ?~(jol ~ (-.wil i.jol))
+      |*  wil=(pole fist)          :: wet gate taking a faceless list of fists
+      |=  jol=(list json)          :: produce gate taking a list of JSON as input and producing a list of whatever the fists produce
+      ?~  wil  ~            :: if fists list is null, return null
+      :-  ?~(jol ~ (-.wil i.jol))        :: otherwise, return tuple of each item in the array parsed by the corresponding fist
       ((at-raw +.wil) ?~(jol ~ t.jol))
     ::
     ++  bo                                              ::  boolean
-      |=(jon=json ?.(?=([%b *] jon) ~ [~ u=p.jon]))
+      |=(jon=json ?.(?=([%b *] jon) ~ [~ u=p.jon]))  :: take JSON as input, return null if JSON not boolean, otherwise return boolean value
     ::
     ++  bu                                              ::  boolean not
-      |=(jon=json ?.(?=([%b *] jon) ~ [~ u=!p.jon]))
+      |=(jon=json ?.(?=([%b *] jon) ~ [~ u=!p.jon]))  :: take JSON as input, return null if JSON not boolean, otherwise return opposite of boolean value
     ::
     ++  ci                                              ::  maybe transform
-      |*  [poq=gate wit=fist]
-      |=  jon=json
-      (biff (wit jon) poq)
+      |*  [poq=gate wit=fist]        :: wet gate taking a gate and a fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      (biff (wit jon) poq)        :: apply gate .poq to the unwrapped parsed value of the JSON
     ::
     ++  cu                                              ::  transform
-      |*  [poq=gate wit=fist]
-      |=  jon=json
-      (bind (wit jon) poq)
+      |*  [poq=gate wit=fist]        :: wet gate taking a gate and a fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      (bind (wit jon) poq)        :: apply gate .poq to the unwrapped parsed value of the JSON
     ::
     ++  da                                              ::  UTC date
-      |=  jon=json
-      ?.  ?=([%s *] jon)  ~
-      (bind (stud:chrono:userlib p.jon) |=(a=date (year a)))
+      |=  jon=json          :: take JSON as input
+      ?.  ?=([%s *] jon)  ~        :: return null if JSON not string
+      (bind (stud:chrono:userlib p.jon) |=(a=date (year a)))  :: parse JSON as UTC date format, then convert result to @d
     ::
     ++  dank                                            ::  tank
-      ^-  $-(json (unit tank))
-      %+  re  *tank  |.  ~+
-      %-  of  :~
-        leaf+sa
+      ^-  $-(json (unit tank))        :: take JSON as input and produce unit of tank
+      %+  re  *tank  |.  ~+        :: call .re arm with default tank and (result of of) as input
+      %-  of  :~            :: call .os arm with list of vases
+        leaf+sa            ::
         palm+(ot style+(ot mid+sa cap+sa open+sa close+sa ~) lines+(ar dank) ~)
         rose+(ot style+(ot mid+sa open+sa close+sa ~) lines+(ar dank) ~)
       ==
     ::
     ++  di                                              ::  millisecond date
-      (cu from-unix-ms:chrono:userlib ni)
+      (cu from-unix-ms:chrono:userlib ni)      :: parse JSON as integer of UNIX ms time and convert to @da
     ::
     ++  mu                                              ::  true unit
-      |*  wit=fist
-      |=  jon=json
-      ?~(jon (some ~) (bind (wit jon) some))
+      |*  wit=fist          :: wet gate taking a fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?~(jon (some ~) (bind (wit jon) some))    :: if JSON is null, produce null unit, otherwise parse JSON with fist .wit and wrap in unit
     ::
     ++  ne                                              ::  number as real
-      |=  jon=json
-      ^-  (unit @rd)
-      ?.  ?=([%n *] jon)  ~
-      (rush p.jon (cook ryld (cook royl-cell:^so json-rn)))
+      |=  jon=json          :: take JSON as input
+      ^-  (unit @rd)          :: produce unit of double
+      ?.  ?=([%n *] jon)  ~        :: return null if JSON not number
+      (rush p.jon (cook ryld (cook royl-cell:^so json-rn)))  :: parse JSON as parsed real, convert result to to a Hoon decimal format, then convert the result to double
     ::
     ++  ni                                              ::  number as integer
-      |=  jon=json
-      ?.  ?=([%n *] jon)  ~
-      (rush p.jon dem)
+      |=  jon=json          :: take JSON as input
+      ?.  ?=([%n *] jon)  ~        :: return null if JSON is not number
+      (rush p.jon dem)          :: parse JSON as decimal integer
     ::
     ++  no                                              ::  number as cord
-      |=  jon=json
-      ?.  ?=([%n *] jon)  ~
-      (some p.jon)
+      |=  jon=json          :: take JSON as input
+      ?.  ?=([%n *] jon)  ~        :: return null if JSON is not number
+      (some p.jon)          :: return JSON as unit
     ::
     ++  of                                              ::  object as frond
-      |*  wer=(pole [cord fist])
-      |=  jon=json
-      ?.  ?=([%o [@ *] ~ ~] jon)  ~
+      |*  wer=(pole [cord fist])        :: wet gate taking faceless list of '[cord fist]' pairs
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%o [@ *] ~ ~] jon)  ~      :: return null if JSON is not object with only one entry
       |-
-      ?~  wer  ~
-      ?:  =(-.-.wer p.n.p.jon)
-        ((pe -.-.wer +.-.wer) q.n.p.jon)
-      ((of +.wer) jon)
+      ?~  wer  ~            :: return null if .wer is empty
+      ?:  =(-.-.wer p.n.p.jon)        :: if cord in first pair of .wer matches first item in tree node of object map...
+        ((pe -.-.wer +.-.wer) q.n.p.jon)      :: ... prefix result of parsing JSON with fist in first pair of .wer with cord
+      ((of +.wer) jon)          :: otherwise, check next pair in .wer
     ::
     ++  ot                                              ::  object as tuple
-      |*  wer=(pole [cord fist])
-      |=  jon=json
-      ?.  ?=([%o *] jon)  ~
-      =+  raw=((ot-raw wer) p.jon)
-      ?.((za raw) ~ (some (zp raw)))
+      |*  wer=(pole [cord fist])        :: wet gate taking faceless list of '[cord fist]' pairs
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%o *] jon)  ~        :: return null if JSON not object
+      =+  raw=((ot-raw wer) p.jon)      :: parse JSON using ot-raw, and add the results to subject
+      ?.((za raw) ~ (some (zp raw)))      :: if some of the items in the object failed to parse, return null, otherwise collapse units and wrap in unit
     ::
     ++  ot-raw                                          ::  object as tuple
-      |*  wer=(pole [cord fist])
-      |=  jom=(map @t json)
-      ?~  wer  ~
-      =+  ten=(~(get by jom) -.-.wer)
-      [?~(ten ~ (+.-.wer u.ten)) ((ot-raw +.wer) jom)]
+      |*  wer=(pole [cord fist])        :: wet gate taking faceless list of '[cord fist]' pairs
+      |=  jom=(map @t json)        :: produce gate taking map of cord to JSON as input
+      ?~  wer  ~            :: if list of pairs is empty, return null
+      =+  ten=(~(get by jom) -.-.wer)      :: call get on map using cord of first pair in .wer and save to subject
+      [?~(ten ~ (+.-.wer u.ten)) ((ot-raw +.wer) jom)]  :: if no match, return null, otherwise parse result using first in first pair in .wer, then recurse
     ::
     ++  om                                              ::  object as map
-      |*  wit=fist
-      |=  jon=json
-      ?.  ?=([%o *] jon)  ~
-      (zm (~(run by p.jon) wit))
+      |*  wit=fist          :: wet gate taking fist as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%o *] jon)  ~        :: return null if JSON not an object
+      (zm (~(run by p.jon) wit))        :: parse every item in the JSON object using .wit, then collapse the units in the resulting map
     ::
     ++  op                                              ::  parse keys of map
-      |*  [fel=rule wit=fist]
-      %+  cu
-        |=  a=(list (pair _(wonk *fel) _(need *wit)))
+      |*  [fel=rule wit=fist]        :: wet gate taking rule and fist as input
+      %+  cu            :: call transform
+        |=  a=(list (pair _(wonk *fel) _(need *wit)))  :: gate constructs a map from a list of pairs of the return type of rule .fel and the return type of fist .wit
         (my:nl a)
-      %-  ci  :_  (om wit)
-      |=  a=(map cord _(need *wit))
-      ^-  (unit (list _[(wonk *fel) (need *wit)]))
-      %-  zl
-      %+  turn  ~(tap by a)
-      |=  [a=cord b=_(need *wit)]
-      =+  nit=(rush a fel)
-      ?~  nit  ~
+      %-  ci  :_  (om wit)        :: call optional transform on pair of [_, object as map], where _ is...
+      |=  a=(map cord _(need *wit))      :: ... a gate which take a map of cord to whatever .wit returns
+      ^-  (unit (list _[(wonk *fel) (need *wit)]))  :: and produces a list of pairs of the return type of rule .fel and the return type of fist .wit wrapped in a unit
+      %-  zl            :: collapse a unit list made by...
+      %+  turn  ~(tap by a)        :: ...calling a gate on every pair of the map which...
+      |=  [a=cord b=_(need *wit)]        :: ... takes a cord and the default return type of .wit as input
+      =+  nit=(rush a fel)        :: parses the cord with rule .fel
+      ?~  nit  ~            :: and returns a pair of [the parsed cord, value]
       (some [u.nit b])
     ::
     ++  pe                                              ::  prefix
-      |*  [pre=* wit=fist]
-      (cu |*(* [pre +<]) wit)
+      |*  [pre=* wit=fist]        :: wet gate taking some value and a fist as input
+      (cu |*(* [pre +<]) wit)        :: parse JSON with fist .wit and prefix the result with .pre
     ::
     ++  re                                              ::  recursive reparsers
-      |*  [gar=* sef=_|.(fist)]
+      |*  [gar=* sef=_|.(fist)]        ::
       |=  jon=json
       ^-  (unit _gar)
       ((sef) jon)
     ::
     ++  sa                                              ::  string as tape
-      |=  jon=json
-      ?.(?=([%s *] jon) ~ (some (trip p.jon)))
+      |=  jon=json          :: take JSON as input
+      ?.(?=([%s *] jon) ~ (some (trip p.jon)))    :: return null if JSON is not string, otherwise convert cord to tape
     ::
     ++  so                                              ::  string as cord
-      |=  jon=json
-      ?.(?=([%s *] jon) ~ (some p.jon))
+      |=  jon=json          :: take JSON as input
+      ?.(?=([%s *] jon) ~ (some p.jon))      :: return null if JSON is not string, otherwise return
     ::
     ++  su                                              ::  parse string
-      |*  sab=rule
-      |=  jon=json
-      ?.  ?=([%s *] jon)  ~
-      (rush p.jon sab)
+      |*  sab=rule          :: wet gate taking rule as input
+      |=  jon=json          :: produce gate taking JSON as input
+      ?.  ?=([%s *] jon)  ~        :: return null if JSON not string
+      (rush p.jon sab)          :: parse string value using rule
     ::
     ++  ul  |=(jon=json ?~(jon (some ~) ~))             ::  null
     ++  za                                              ::  full unit pole
-      |*  pod=(pole (unit))
-      ?~  pod  &
-      ?~  -.pod  |
-      (za +.pod)
+      |*  pod=(pole (unit))        :: wet gate taking faceless list of units as input
+      ?~  pod  &            :: if .pod is null, return true
+      ?~  -.pod  |          :: if head of .pod is null, return false
+      (za +.pod)            :: recurse
     ::
     ++  zl                                              ::  collapse unit list
-      |*  lut=(list (unit))
-      ?.  |-  ^-  ?
+      |*  lut=(list (unit))        :: wet gate taking list of units as input
+      ?.  |-  ^-  ?          :: if any of the units in .lut are null, return null
           ?~(lut & ?~(i.lut | $(lut t.lut)))
         ~
-      %-  some
-      |-
+      %-  some            :: otherwise,
+      |-              :: return list with all items pulled out of the units, wrapped in a unit
       ?~  lut  ~
       [i=u:+.i.lut t=$(lut t.lut)]
     ::
     ++  zp                                              ::  unit tuple
-      |*  but=(pole (unit))
-      ?~  but  !!
-      ?~  +.but
-        u:->.but
-      [u:->.but (zp +.but)]
+      |*  but=(pole (unit))        :: wet gate taking faceless list of units as input
+      ?~  but  !!            :: if list is null, crash
+      ?~  +.but            :: if tail of list is null
+        u:->.but            :: return item pulled out of unit
+      [u:->.but (zp +.but)]        :: otherwise, return tuple of item pulled out of unit and recurse
     ::
     ++  zm                                              ::  collapse unit map
-      |*  lum=(map term (unit))
-      ?:  (~(rep by lum) |=([[@ a=(unit)] b=_|] |(b ?=(~ a))))
-        ~
-      (some (~(run by lum) need))
-    --  ::dejs-soft
+      |*  lum=(map term (unit))        :: wet gate taking map of term to unit as input
+      ?:  (~(rep by lum) |=([[@ a=(unit)] b=_|] |(b ?=(~ a))))  :: if any unit in map is null...
+        ~              :: return null
+      (some (~(run by lum) need))        :: otherwise, return unit of map with each of the values pulled out of the unit
+    --
+  --
   ::
   ++  klr                                               ::  styx/stub engine
     =,  dill
