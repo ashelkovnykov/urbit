@@ -1956,6 +1956,9 @@
   =+  d=(rub c a)
   [(add 2 p.d) (need (~(get by m) q.d)) m]
 ::
+::  no checksum in jam
+::  newt = {0 byte} + {4-byte length encoding} + {jammed noun}
+::      length encoding = big endian
 ++  jam                                                 ::  pack
   ~/  %jam
   |=  a=*
@@ -1993,19 +1996,26 @@
 ::
 ++  rub                                                 ::  length-decode
   ~/  %rub
-  |=  [a=@ b=@]
-  ^-  [p=@ q=@]
-  =+  ^=  c
-      =+  [c=0 m=(met 0 b)]
-      |-  ?<  (gth c m)
-      ?.  =(0 (cut 0 [(add a c) 1] b))
-        c
-      $(c +(c))
-  ?:  =(0 c)
-    [1 0]
-  =+  d=(add a +(c))
+  |=  [a=@ b=@]                                         ::  a = bit position cursor into b
+  ^-  [p=@ q=@]                                         ::  p = # bits to advance cursor, q = encoded atom
+  =+  ^=  c                                             ::  c = # 0s until first non-0 bit (starting at a)
+      =+  [c=0 m=(met 0 b)]                             ::  c = 0, m = number of bits in b
+      |-  ?<  (gth c m)                                 ::  while c less than or equal to m...
+      ?.  =(0 (cut 0 [(add a c) 1] b))                  ::  if bit (a+c) in b is not 0
+        c                                               ::  then return c
+      $(c +(c))                                         ::  otherwise increment c
+  ?:  =(0 c)                                            ::  if next bit is 1...
+    [1 0]                                               ::  [p=1, q=0]
+  =+  d=(add a +(c))                                    ::  Otherwise, ...
   =+  e=(add (bex (dec c)) (cut 0 [d (dec c)] b))
   [(add (add c c) e) (cut 0 [(add d (dec c)) e] b)]
+:: a=0 b=1.048.752 c=4 d=5 e=(add (bex 3) (cut 0 [5 3] 1.048.752))=(add 8 5)=13
+:: p=2*c+e=21 q=(cut 0 [(add 5 3) 13] 524.376)=(cut 0 [8 13] 1.048.752)=4096
+:: 100000000000010110000
+:: |-----------||-||---|    C = # 0s; B = value in next (C-1) bits;
+:: |     A     ||B|| C |    This gives you the number of bits to read for A: 2^(C-1) + B
+::
+:: Test: (rub 0 0b101.1100) = [7 5]
 ::
 ++  fn  ::    float, infinity, or NaN
         ::
@@ -5054,7 +5064,7 @@
   |*  [rud=* raq=_=>(~ |*([a=* b=*] [a b])) fel=rule]
   ~/  %fun
   |=  tub=nail
-  ^-  (like _rud)
+  ^-  (like _rud)       ::  Return whatever rud is
   ::
   ::  lef: successful interim parse results (per .fel)
   ::  wag: initial accumulator (.rud in .tub at farthest success)
@@ -5062,19 +5072,20 @@
   =+  ^=  [lef wag]
     =|  lef=(list _(fel tub))
     |-  ^-  [_lef (pair hair [~ u=(pair _rud nail)])]
-    =+  vex=(fel tub)
-    ?~  q.vex
-      :-  lef
+    =+  vex=(fel tub)       ::  parse nail with rule
+    ?~  q.vex               ::  If parsing failed...
+      :-  lef               ::  return [successful_parse_results edge_up_to_furthest_success]
       [p.vex [~ rud tub]]
-    $(lef [vex lef], tub q.u.q.vex)
+    $(lef [vex lef], tub q.u.q.vex)  ::  Otherwise, keep parsing to failure
   ::
   ::  fold .lef into .wag, combining results with .raq
   ::
   %+  roll  lef
   |=  _[vex=(fel tub) wag=wag]  :: q.vex is always (some)
+  ::  [vex=edge wag=edge]
   ^+  wag
-  :-  (last p.vex p.wag)
-  [~ (raq p.u.+.q.vex p.u.q.wag) q.u.q.wag]
+  :-  (last p.vex p.wag)            :: get furthest hair
+  [~ (raq p.u.+.q.vex p.u.q.wag) q.u.q.wag]  :: merge parses in edge from vex and wag using function raq
 ::
 ++  stun                                                ::  parse several times
   ~/  %stun
@@ -6090,9 +6101,9 @@
         =/  result  (scry product.ref product.path)
         ?~  result
           [%1 product.path]
-        ?~  u.result
-          [%2 [%hunk product.ref product.path] trace]
-        [%0 u.u.result]
+        ?~  u.result :: fail for 1, but pass for [1 x], [1 1 x]
+          [%2 [%hunk product.ref product.path] trace] :: [1 x]
+        [%0 u.u.result] :: [1 1 x]
       ==
   ::
   ++  frag
@@ -6234,15 +6245,21 @@
 ::  +mute: untyped virtual
 ::
 ++  mute
+  ::  take trap
   |=  tap=(trap)
+  ::  return bool-tagged result or trace
   ^-  (each * (list tank))
+  ::  mook of mink with pass-through scry handler
   =/  ton  (mock [tap %9 2 %0 1] |=(a=^ ``.*(a [%12 [%0 2] %0 3])))
   ?-  -.ton
+    ::  if success, return [& result]
     %0  [%& p.ton]
   ::
+    ::  if blocked, return [| (smyt path)
     %1  =/  sof=(unit path)  ((soft path) p.ton)
         [%| ?~(sof leaf+"mute.hunk" (smyt u.sof)) ~]
   ::
+    ::  if error, return [| (mook trace)]
     %2  [%| p.ton]
   ==
 ::  +slum: slam a gate on a sample using raw nock, untyped
@@ -6250,6 +6267,7 @@
 ++  slum
   ~/  %slum
   |=  sub=[gat=* sam=*]
+  :: .*([gat with sam at axis 6] [2 [0 1] [0 2]])
   .*(sub [%9 2 %10 [6 %0 3] %0 2])
 ::  +soft: virtual clam
 ::
@@ -10328,9 +10346,19 @@
     ~%  %nest-in  ..$  ~
     |%
     ++  deem
+      ::  take two variances
       |=  [mel=vair ram=vair]
+      ::  return ____
       ^-  ?
+      ::  if:
+      ::    - mel and ram don't match
+      ::    - mel is not covariant
+      ::    - ram is not invariant
+      ::    then false
       ?.  |(=(mel ram) =(%lead mel) =(%gold ram))  |
+      ::  Otherwise:
+      ::    - if mel is bivariant then true
+      ::    -
       ?-  mel
         %lead  &
         %gold  meet
@@ -10777,13 +10805,17 @@
     ~/  %rest
     |=  leg=(list [p=type q=hoon])
     ^-  type
+    ::  if any item in leg is already in the cache, rest-loop error
+    ::    what happens if there's repetitions in leg?
     ?:  (lien leg |=([p=type q=hoon] (~(has in fan) [p q])))
       ~>(%mean.'rest-loop' !!)
+    ::  add all elements from leg to cache
     =>  .(fan (~(gas in fan) leg))
-    %-  fork
-    %~  tap  in
-    %-  ~(gas in *(set type))
-    (turn leg |=([p=type q=hoon] (play(sut p) q)))
+    %-  fork                                          ::        return a %fork type of the possible types
+    %~  tap  in                                       ::      flatten the list of types
+    %-  ~(gas in *(set type))                         ::    make a set from the list of types
+    (turn leg |=([p=type q=hoon] (play(sut p) q)))    ::  call +play on hoon q with type p as input and get back the type of the result
+                                                      ::  do this for every item in leg
   ::
   ++  sink
     ~/  %sink

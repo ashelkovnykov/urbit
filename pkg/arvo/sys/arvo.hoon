@@ -1800,6 +1800,9 @@
               [%beam omen]  :: XX unfortunate naming
           ==
       ==
+  :: [%& path]    path = [view beam]; view passed as coin
+  :: [%| %once view desk spur]   spur = path after beak ???
+  :: [%| %beam view ship desk case path]    view = [vane care] (they might be concatenated)
   ^-  (unit (cask))
   =/  hap=(unit [pat=? omen])
     ?-  nom

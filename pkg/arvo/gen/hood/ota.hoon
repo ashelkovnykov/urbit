@@ -8,11 +8,11 @@
   ::
 :-  %say
 |=  $:  [now=@da eny=@uvJ bec=beak]
-        arg=?([%disable ~] [her=@p sud=?(~ [@tas ~])])
+        arg=?([%disable ~] [her=@p sud=(unit desk)])
         ~
     ==
 :-  %kiln-install
 ?:  ?=([%disable ~] arg)
   [%base p.bec %base]
 :+  %base  her.arg
-?@(sud.arg %kids -.sud.arg)
+?~(sud.arg %kids u.sud.arg)

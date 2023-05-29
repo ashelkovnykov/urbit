@@ -137,12 +137,12 @@
       %fard  (bard hen 'khan-fyrd--' bear.p.task %| [name args]:p.task)
       %lard  (bard hen 'khan-lard--' bear.task %& shed.task)
       %fyrd
-    =*  fyd         p.task
-    =/  =beak       (get-beak bear.fyd now)
-    =/  =wire       (make-wire beak p.args.fyd)
-    =/  =dais:clay  (get-dais beak p.q.args.fyd rof)
+    =*  fyd         p.task                            :: [=bear name=term args=(pair mark page)]
+    =/  =beak       (get-beak bear.fyd now)           :: bear is beak or desk, so beak or /our/desk/now
+    =/  =wire       (make-wire beak p.args.fyd)       :: /fyrd/[beak]/[mark]
+    =/  =dais:clay  (get-dais beak p.q.args.fyd rof)  :: get processed mark core for input mark
     =/  =vase
-      (slap (vale.dais q.q.args.fyd) !,(*hoon [~ u=.]))
+      (slap (vale.dais q.q.args.fyd) !,(*hoon [~ u=.])) :: parse input hoon; perform mark conversion; lift into unit
     =-  [[hen %pass wire -]~ khan-gate]
     [%k %fard bear.fyd name.fyd p.q.args.fyd vase]
   ==
