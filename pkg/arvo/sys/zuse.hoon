@@ -3468,6 +3468,17 @@
       ?~  a  ~
       (r u.a)
     --  ::enjs
+  ::  Both dejs:format and dejs-soft:format are heavily used, though a few of their arms are unused. The comment for dejs-soft references a "rewritten dejs" that "rest-looped with ++redo" in "revision control" which should eventually replace this code. I spent a few hours combing through the old urbit/arvo repo, as well as CGY's and Anton's personal forks of said repo, and was unable to find any such branch, PR, or abandonned commit.
+  ::
+  :: Given that:
+  :: - dejs-soft was first introduced on December 2, 2016
+  :: - The comment referencing the "rewritten dejs" was made on Septemebr 6, 2017
+  :: - Urbit has gone through so many changes since both of these events, that any "rewritten" dejs would likely need to be rewritten again
+  :: - The comment doesn't articulate the issues with the current dejs: after my changes, they pass an expanded series of unit tests and some are jetted for additional performance
+  ::
+  :: I think that we should remove the comment, apply these changes, and consider further rewriting of the JSON reparser code to be a new issue.
+  ::
+  ::
   ::                                                    ::  ++dejs:format
   ++  dejs                                              ::  json reparser
     ~%  %dejs  ..part  ~
