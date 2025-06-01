@@ -1,3 +1,5 @@
+::  Stores Azimuth state for the ship
+::
 /-  eth-watcher, *dice, *hood
 /+  ethereum,
     azimuth,
@@ -16,14 +18,66 @@
 |%
 +$  app-state
   $:  %7
+      ::
+      ::
       url=@ta
+      ::  net   ->  ?(%mainnet %ropsten %goerli %local %default)
+      ::
       =net
+      ::
+      ::
       refresh=_~m5
+      ::
+      ::
       whos=(set ship)
+      ::  nas   ->  [%0 points={} operators={} dns=<||>]
+      ::    (POSSIBLY)
+      ::
       nas=^state:naive
+      ::  own   ->  owners:dice
+      ::        ->  (jug owner ship)
+      ::        ->  (jug [=proxy:naive =address:naive] ship)
+      ::        ->  (map [=proxy:naive =address:naive] (set ship))
+      ::        ->  (map [?(%own %spawn %manage %vote %transfer) @ux] (set ship))
+      ::
       own=owners
+      ::  spo   ->  sponsors:dice
+      ::        ->  (map ship [residents=(set ship) requests=(set ship)])
       spo=sponsors
+      ::  ++  event-log
+      ::    $:  ::  null for pending logs
+      ::        $=  mined  %-  unit
+      ::        $:  input=(unit @ux)
+      ::            log-index=@ud
+      ::            transaction-index=@ud
+      ::            transaction-hash=@ux
+      ::            block-number=@ud
+      ::            block-hash=@ux
+      ::            removed=?
+      ::        ==
+      ::      ::
+      ::        address=@ux
+      ::        data=@t
+      ::        ::  event data
+      ::        ::
+      ::        ::    For standard events, the first topic is the event signature
+      ::        ::    hash. For anonymous events, the first topic is the first
+      ::        ::    indexed argument.
+      ::        ::    Note that this does not support the "anonymous event with
+      ::        ::    zero topics" case. This has dubious usability, and using
+      ::        ::    +lest instead of +list saves a lot of ?~ checks.
+      ::        ::
+      ::        topics=(lest @ux)
+      ::    ==
+      ::
+      ::  ->  [mined=(unit [input=(unit @ux) ...]) address=@ux data=@t topics=(lest @ux)]
+      ::
       logs=(list =event-log:rpc:ethereum)
+      ::  sap   ->  snap-state
+      ::        ->  [%0 =id:block:jael nas=^state:naive =owners =sponsors]
+      ::        ->  [%0 id=[=hash =number] nas=^state:naive =owners =sponsors]
+      ::        ->  [%0 id=[hash=@ux number=@ud] nas=^state:naive =owners =sponsors]
+      ::
       sap=snap-state
   ==
 ::
@@ -32,6 +86,8 @@
       ::
       [%load snap=snap-state]
       ::  %listen
+      ::  TODO:
+      ::    source  ->  (each ship term)
       ::
       [%listen whos=(list ship) =source:jael]
       ::  %watch: configure node url and network

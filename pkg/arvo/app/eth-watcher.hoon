@@ -1,5 +1,8 @@
 ::  eth-watcher: ethereum event log collector
 ::
+::  Listens to the Azimuth contracts, in practice making a HTTP request to
+::  Infura every 5 min. This then goes to app/azimuth.
+::
 /-  *eth-watcher, spider
 /+  ethereum, default-agent, verb, dbug
 =,  ethereum-types

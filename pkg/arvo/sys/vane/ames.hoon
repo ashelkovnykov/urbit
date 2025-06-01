@@ -257,6 +257,7 @@
   ?~  ship=`(unit @p)`(slaw %p ship)
     ~
   `fine/[u.ship wire]
+::  HERE
 ::  +derive-symmetric-key: $symmetric-key from $private-key and $public-key
 ::
 ::    Assumes keys have a tag on them like the result of the |ex:crub core.
@@ -458,12 +459,14 @@
       ^=     origin  ~
       ^=    content  :(mix siv (lsh 7 len) (lsh [3 18] cyf))
   ==
+::  HERE
 ::  +sift-shut-packet: decrypt a $shut-packet from a $shot
 ::
 ++  sift-shut-packet
   ~/  %sift-shut-packet
   |=  [=shot =symmetric-key sndr-life=@ rcvr-life=@]
   ^-  (unit shut-packet)
+  ::  I'm assuming this is a shortcut to discard packets if one of us has breached
   ?.  ?&  =(sndr-tick.shot (mod sndr-life 16))
           =(rcvr-tick.shot (mod rcvr-life 16))
       ==
@@ -3069,6 +3072,7 @@
             (emit duct %pass /private-keys %j %private-keys ~)
             (emit duct %pass /public-keys %j %public-keys [n=our ~ ~])
         ==
+      ::  HERE
       ::  +on-priv: set our private key to jael's response
       ::
       ++  on-priv
@@ -3193,6 +3197,7 @@
             (emit unix-duct.ames-state %give %saxo ~(tap in sponsors))
           ::
           event-core
+        ::  HERE
         ::  +on-publ-rekey: handle new key for peer
         ::
         ::    TODO: assert .crypto-suite compatibility
@@ -3255,6 +3260,7 @@
             ==
           ::
           event-core
+        ::  HERE
         ::  +on-publ-full: handle new pki data for peer(s)
         ::
         ++  on-publ-full
@@ -3278,6 +3284,7 @@
               ::
               =/  old-ship-state  (~(get by peers.ames-state) ship)
               ::
+              ::  here, specifically
               =.  event-core  (insert-peer-state ship point)
               ::
               =?  event-core  ?=([~ %alien *] old-ship-state)
@@ -3347,6 +3354,7 @@
           =.  peers.ames-state
             (~(put by peers.ames-state) ship %known peer-state)
           event-core
+        ::  HERE
         ::
         ++  insert-peer-state
           |=  [=ship =point]

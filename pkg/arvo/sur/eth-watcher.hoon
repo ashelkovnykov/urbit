@@ -5,22 +5,32 @@
 |%
 +$  config
   $:  ::  url: ethereum node rpc endpoint
-      ::  eager: if true, give logs asap, send disavows in case of reorg
-      ::  refresh-rate: rate at which to check for updates
-      ::  timeout-time: time an update check is allowed to take
-      ::  from: oldest block number to look at
-      ::  to: optional newest block number to look at
-      ::  contracts: contract addresses to look at
-      ::  topics: event descriptions to look for
       ::
       url=@ta
+      ::  eager: if true, give logs asap, send disavows in case of reorg
+      ::
       eager=?
+      ::  refresh-rate: rate at which to check for updates
+      ::
       refresh-rate=@dr
+      ::  timeout-time: time an update check is allowed to take
+      ::
       timeout-time=@dr
+      ::  from: oldest block number to look at
+      ::
       from=number:block
+      ::  to: optional newest block number to look at
+      ::
       to=(unit number:block)
+      ::  contracts: contract addresses to look at
+      ::
       contracts=(list address:ethereum)
+      ::  TODO
+      ::  batchers: ???
+      ::
       batchers=(list address:ethereum)
+      ::  topics: event descriptions to look for
+      ::
       =topics
   ==
 ::

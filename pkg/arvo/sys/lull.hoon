@@ -949,6 +949,7 @@
   +$  message-blob   @udmessageblob
   +$  message-num    @udmessagenum
   +$  public-key     @uwpublickey
+  ::  HERE
   +$  symmetric-key  @uwsymmetrickey
   ::
   ::  $hoot: request packet payload

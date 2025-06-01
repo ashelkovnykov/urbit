@@ -63,6 +63,12 @@
 ::
 =/  nec-sym  (derive-symmetric-key:ames bud-pub nec-sec)
 =/  bud-sym  (derive-symmetric-key:ames nec-pub bud-sec)
+~&  'nec-sec:'
+~&  `@ux`(rsh 8 (rsh 3 nec-sec))
+~&  'nec-pub:'
+~&  `@ux`(rsh 8 (rsh 3 nec-pub))
+~&  'nec suck:'
+~&  `@ux`(suck:ed:crypto (rsh 8 (rsh 3 nec-sec)))
 ?>  =(nec-sym bud-sym)
 =/  nec-marbud-sym  (derive-symmetric-key:ames marbud-pub nec-sec)
 ::
